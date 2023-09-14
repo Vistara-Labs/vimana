@@ -1,0 +1,18 @@
+[components]
+
+# Make it similar to kedro where multiple config.toml files can be used
+[components.celestia]
+
+[components.celestia.light]
+binary = "/tmp/vimana/celestia/celestia"
+download = "da/celestia/init.sh"
+
+[components.celestia.bridge]
+binary = "/tmp/vimana/celestia/celestia"
+download = "da/celestia/init.sh"
+
+# [components.berachain]
+
+# [components.berachain.full]
+# binary = "/path/to/celestia/binary"
+# download = "https://example.com/berachain.zip"
