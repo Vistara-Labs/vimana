@@ -1,0 +1,48 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            output_file: vimana-linux-amd64.zip
+            make_command: build-linux
+          - os: macos-latest
+            output_file: vimana-macos-amd64.zip
+            make_command: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20
+
+      - name: Run tests
+        run: make test
+
+      - name: Build Vimana
+        run: make ${{ matrix.make_command }}
+
+      - name: Package Vimana into ZIP
+        run: zip ${{ matrix.output_file }} ${{ matrix.make_command == 'build' && 'vimana' || 'vimana-linux-amd64' }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.output_file }}
+          path: ${{ matrix.output_file }}
