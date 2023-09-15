@@ -39,5 +39,6 @@ install:
 build-linux:
 	@echo "Building for Linux..."
 	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-linux-amd64 -v
+	cp -r config.toml ${HOME}/.vimana/config.toml
 
 .PHONY: all build clean test install build-linux
