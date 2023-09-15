@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"vimana/vimana/cli"
+	"vimana/cli"
 
 	"github.com/spf13/cobra"
 )

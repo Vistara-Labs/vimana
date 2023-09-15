@@ -2,7 +2,7 @@ package components
 
 import (
 	"os/exec"
-	"vimana/vimana/config"
+	"vimana/config"
 )
 
 type Component interface {

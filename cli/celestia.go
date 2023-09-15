@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 	"os/exec"
-	"vimana/vimana/cmd/utils"
-	"vimana/vimana/components"
+	"vimana/cmd/utils"
+	"vimana/components"
 
 	"github.com/spf13/cobra"
 )

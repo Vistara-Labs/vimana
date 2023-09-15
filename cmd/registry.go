@@ -1,6 +1,6 @@
 package cmd
 
-import "vimana/vimana/cli"
+import "vimana/cli"
 
 // CommanderRegistry maps node types to their corresponding NodeCommander implementations.
 var CommanderRegistry = map[string]cli.NodeCommander{
