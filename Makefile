@@ -17,6 +17,8 @@ all: build
 build:
 	@echo "Building..."
 	go build ${LDFLAGS} -o ${BINARY_NAME} -v ./...
+	mkdir -p ${HOME}/.vimana
+	cp config.toml ${HOME}/.vimana/config.toml
 
 # Cleans our project: deletes binaries
 clean:
@@ -33,12 +35,14 @@ test:
 install:
 	@echo "Installing..."
 	go install ${LDFLAGS} ./...
-	cp -r config.toml ${HOME}/.vimana/config.toml
+	mkdir -p ${HOME}/.vimana
+	cp config.toml ${HOME}/.vimana/config.toml
 
 # Cross compilation
 build-linux:
 	@echo "Building for Linux..."
 	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-linux-amd64 -v
-	cp -r config.toml ${HOME}/.vimana/config.toml
+	mkdir -p ${HOME}/.vimana
+	cp config.toml ${HOME}/.vimana/config.toml
 
 .PHONY: all build clean test install build-linux
