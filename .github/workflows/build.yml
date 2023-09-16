@@ -14,17 +14,17 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, arm-mac, amd-mac]
+        os: [ubuntu-20.04]
         include:
           - os: ubuntu-20.04
             output_file: vimana-linux-amd64.zip
             make_command: build-linux
-          - os: arm-mac
-            output_file: vimana-macos-amd64.zip
-            make_command: build
-          - os: amd-mac
-            output_file: vimana-macos-amd64.zip
-            make_command: build
+          # - os: arm-mac # , arm-mac, amd-mac
+          #   output_file: vimana-macos-arm64.zip
+          #   make_command: build
+          # - os: amd-mac
+          #   output_file: vimana-macos-amd64.zip
+          #   make_command: build
 
     steps:
       - name: Checkout code
@@ -39,7 +39,7 @@ jobs:
         run: make test
 
       - name: Build Vimana
-        run: make ${{ matrix.make_command }}
+        run: make ${{ matrix.make_command }} && make build
 
       - name: Package Vimana into ZIP
         run: zip ${{ matrix.output_file }} ${{ matrix.make_command == 'build' && 'vimana' || 'vimana-linux-amd64' }}
