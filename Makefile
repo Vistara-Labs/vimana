@@ -13,10 +13,10 @@ LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
 # Default command when simply typing `make`
 all: build
 
-# Compiles the binary
+# Compiles the binary for mac
 build:
 	@echo "Building..."
-	go build ${LDFLAGS} -o ${BINARY_NAME} -v ./...
+	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME} -v ./...
 	mkdir -p ${HOME}/.vimana
 	cp config.toml ${HOME}/.vimana/config.toml
 
