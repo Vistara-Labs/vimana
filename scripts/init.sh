@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-INTERNAL_DIR="/tmp/vimana/celestias"
+INTERNAL_DIR="/tmp/vimana/celestia"
 
 # check if the binary is already installed
 if [ -f "$INTERNAL_DIR/celestia" ]; then
@@ -27,7 +27,7 @@ TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.10
 
 sudo mkdir -p "$INTERNAL_DIR"
 sudo mkdir -p "/tmp/vimcel"
-echo "💈 Downloading vimana..."
+echo "💈 Downloading Celestia..."
 # Replace this with vistara-labs repo
 sudo curl -o /tmp/vimcel/${OS}_${ARCH}.zip -L "$TGZ_URL" --progress-bar
 sudo unzip -q /tmp/vimcel/${OS}_${ARCH}.zip -d /tmp/vimcel/

@@ -32,6 +32,18 @@ func NewCelestiaComponent(root string, home string) *CelestiaComponent {
 
 func (c *CelestiaComponent) InitializeConfig() error {
 	lightNodePath := filepath.Join(os.Getenv("HOME"), c.ConfigDir+"/light-node")
+	// mkdir -p ~/.vimana/celestia/light-node
+	fmt.Println("🚀 Creating Celestia light node config dir: ", lightNodePath)
+	if _, err := os.Stat(lightNodePath); os.IsNotExist(err) {
+		err := os.MkdirAll(lightNodePath, 0755)
+		if err != nil {
+			fmt.Println("Error creating light node config dir", err)
+			return err
+		}
+		fmt.Println("🚀 Celestia light node config dir created: ", lightNodePath)
+	} else {
+		fmt.Println("🚀 Celestia light node config dir already exists: ", lightNodePath)
+	}
 
 	path, err := filepath.Abs(filepath.Join(lightNodePath + "/config.toml"))
 	if err != nil {

@@ -5,11 +5,11 @@
 
 [components.celestia.light]
 binary = "/tmp/vimana/celestia/celestia"
-download = "scripts/init.sh"
+download = "/tmp/vimana/celestia/init.sh"
 
 [components.celestia.bridge]
 binary = "/tmp/vimana/celestia/celestia"
-download = "scripts/init.sh"
+download = "/tmp/vimana/celestia/init.sh"
 
 # [components.berachain]
 
