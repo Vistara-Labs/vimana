@@ -27,9 +27,10 @@ echo "🔨 Installing vimana..."
 sudo cp "/tmp/vimana_bins/vimana-${OS}-${ARCH}/vimana" "$INTERNAL_DIR/vimana"
 sudo chmod +x "$INTERNAL_DIR/vimana"
 sudo rm -rf "/tmp/vimana_bins"
-curl -O https://vistara-labs.github.io/vimana/config.toml
+curl -O https://vistara-labs.github.io/vimana/config.toml 2>/dev/null
 sudo mkdir -p ~/.vimana && sudo mv config.toml ~/.vimana/config.toml
-curl -O https://vistara-labs.github.io/vimana/scripts/init.sh
+curl -O https://vistara-labs.github.io/vimana/scripts/init.sh 2>/dev/null
 sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.sh
 sudo chmod +x /tmp/vimana/celestia/init.sh
+sudo chmod +x ~/.vimana/celestia/
 echo "✅ vimana installed!"

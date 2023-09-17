@@ -22,10 +22,7 @@ func (c *CelestiaLightCommander) Init(cmd *cobra.Command, args []string, mode Mo
 	// } else {
 	// 	fmt.Println("Skipping download of Celestia init script from ", mode.Download)
 	// }
-	fmt.Println("Downloading Celestia from init script ", mode.Download)
-
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	fmt.Println("After from init script ", mode.Download)
 	compmanager := components.NewComponentManager("celestia", mode.Binary)
 	err := compmanager.InitializeConfig()
 	if err != nil {
