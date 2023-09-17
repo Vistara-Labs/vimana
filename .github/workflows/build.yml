@@ -42,7 +42,7 @@ jobs:
         run: make ${{ matrix.make_command }} && make build
 
       - name: Package Vimana for linux
-        run: zip ${{ matrix.output_file }} vimana-linux }}
+        run: zip ${{ matrix.output_file }} vimana-linux
 
       - name: Package Vimana for mac
         run: zip vimana-mac vimana-mac
