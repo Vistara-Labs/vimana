@@ -58,6 +58,6 @@ jobs:
       - name: Upload Artifacts Mac
         uses: actions/upload-artifact@v2
         with:
-          name: vimana-mac.zip
-          path: vimana-mac.zip
+          name: vimana-darwin-arm64.zip
+          path: vimana-darwin-arm64.zip
 
