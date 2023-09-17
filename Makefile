@@ -16,7 +16,8 @@ all: build
 # Compiles the binary for mac
 build:
 	@echo "Building for Mac..."
-	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME} -v ./...
+	mkdir -p ${BINARY_NAME}-mac
+	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-mac -v ./...
 	mkdir -p ${HOME}/.vimana
 	cp config.toml ${HOME}/.vimana/config.toml
 
