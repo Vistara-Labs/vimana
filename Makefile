@@ -16,8 +16,8 @@ all: build
 # Compiles the binary for mac
 build:
 	@echo "Building for Mac..."
-	mkdir -p ${BINARY_NAME}-mac
-	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-mac -v ./...
+	mkdir -p ${BINARY_NAME}-darwin-arm64
+	GOOS=darwin GOARCH=arm64 go build ${LDFLAGS} -o ${BINARY_NAME}-darwin-arm64 -v ./...
 	mkdir -p ${HOME}/.vimana
 	cp config.toml ${HOME}/.vimana/config.toml
 
@@ -48,3 +48,4 @@ build-linux:
 	cp config.toml ${HOME}/.vimana/config.toml
 
 .PHONY: all build clean test install build-linux
+# tar -czvf vimana_bins21.tar.gz vimana-linux-amd64/
