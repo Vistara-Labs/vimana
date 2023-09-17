@@ -52,6 +52,9 @@ jobs:
         with:
           name: ${{ matrix.output_file }}
           path: ${{ matrix.output_file }}
+
+      - name: Upload Artifacts Mac
+        uses: actions/upload-artifact@v2
         with:
           name: vimana-mac.zip
           path: vimana-mac.zip
