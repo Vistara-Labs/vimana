@@ -18,7 +18,9 @@ Vimana CLI is a comprehensive tool designed to simplify the creation and managem
 
 ## Installation
 
-*Instructions for installation will go here.*
+Install Binary:
+
+`curl -L https://vistara-labs.github.io/vimana/install.sh | bash`
 
 ## Command Structure
 

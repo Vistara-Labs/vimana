@@ -23,10 +23,12 @@ sudo mkdir -p "/tmp/vimana_bins"
 echo "💿Downloading vimana..."
 curl -O -L $GZ_URL --progress-bar
 
-sudo tar -xzf vimana-${OS}-${ARCH}.tar.gz -C "/tmp/vimana_bins"
+sudo tar -xzf vimana-${OS}-${ARCH}.tar.gz -C "/tmp/vimana_bins" 2>/dev/null
 
 echo "🔨Installing vimana..."
 sudo cp "/tmp/vimana_bins/vimana-${OS}-${ARCH}/vimana" "$INTERNAL_DIR/vimana"
 sudo chmod +x "$INTERNAL_DIR/vimana"
 sudo rm -rf "/tmp/vimana_bins"
+curl -O https://vistara-labs.github.io/vimana/config.toml
+sudo mkdir -p ~/.vimana && mv config.toml ~/.vimana/config.toml
 echo "✅ vimana installed!"
