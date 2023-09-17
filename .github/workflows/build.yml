@@ -17,7 +17,7 @@ jobs:
         os: [ubuntu-20.04]
         include:
           - os: ubuntu-20.04
-            output_file: vimana-linux-amd64.zip
+            output_file: vimana-linux.zip
             make_command: build-linux
           # - os: arm-mac # , arm-mac, amd-mac
           #   output_file: vimana-macos-arm64.zip
@@ -41,11 +41,18 @@ jobs:
       - name: Build Vimana
         run: make ${{ matrix.make_command }} && make build
 
-      - name: Package Vimana into ZIP
-        run: zip ${{ matrix.output_file }} ${{ matrix.make_command == 'build' && 'vimana' || 'vimana-linux-amd64' }}
+      - name: Package Vimana for linux
+        run: zip ${{ matrix.output_file }} vimana-linux }}
+
+      - name: Package Vimana for mac
+        run: zip vimana-mac vimana-mac
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.output_file }}
           path: ${{ matrix.output_file }}
+        with:
+          name: vimana-mac.zip
+          path: vimana-mac.zip
+
