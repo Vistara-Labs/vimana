@@ -47,7 +47,7 @@ jobs:
         run: zip ${{ matrix.output_file }} vimana-linux-amd64/vimana
 
       - name: Package Vimana for mac
-        run: zip vimana-mac.zip vimana-mac/vimana
+        run: zip vimana-darwin-arm64.zip vimana-darwin-arm64/vimana
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
