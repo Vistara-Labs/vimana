@@ -31,4 +31,5 @@ curl -O https://vistara-labs.github.io/vimana/config.toml
 sudo mkdir -p ~/.vimana && sudo mv config.toml ~/.vimana/config.toml
 curl -O https://vistara-labs.github.io/vimana/scripts/init.sh
 sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.sh
+sudo chmod +x /tmp/vimana/celestia/init.sh
 echo "✅ vimana installed!"

@@ -34,5 +34,6 @@ sudo unzip -q /tmp/vimcel/${OS}_${ARCH}.zip -d /tmp/vimcel/
 sudo mv "/tmp/vimcel/${OS}_${ARCH}"/* "$INTERNAL_DIR"
 sudo chmod +x "$INTERNAL_DIR"
 sudo rm -rf "/tmp/vimcel"
+sudo mkdir -p ~/.vimana/celestia
 ${INTERNAL_DIR}/celestia version
 echo "💈 Celestia light node version installed!"

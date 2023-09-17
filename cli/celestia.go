@@ -14,7 +14,18 @@ type CelestiaLightCommander struct {
 }
 
 func (c *CelestiaLightCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
-	utils.ExecBashCmd(exec.Command(mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	// if isValidUrl(mode.Download) {
+	// 	fmt.Println("Downloading Celestia init script from ", mode.Download)
+	// 	if err := downloadFile(mode.Download); err != nil {
+	// 		return fmt.Errorf("failed to download file: %v", err)
+	// 	}
+	// } else {
+	// 	fmt.Println("Skipping download of Celestia init script from ", mode.Download)
+	// }
+	fmt.Println("Downloading Celestia from init script ", mode.Download)
+
+	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	fmt.Println("After from init script ", mode.Download)
 	compmanager := components.NewComponentManager("celestia", mode.Binary)
 	err := compmanager.InitializeConfig()
 	if err != nil {
