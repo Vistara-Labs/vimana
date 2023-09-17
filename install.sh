@@ -32,6 +32,6 @@ sudo mkdir -p ~/.vimana && sudo mv config.toml ~/.vimana/config.toml
 curl -O https://vistara-labs.github.io/vimana/scripts/init.sh 2>/dev/null
 sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.sh
 sudo chmod +x /tmp/vimana/celestia/init.sh
-sudo mkdir -p ~/.vimana/celestia/light-node
-sudo chmod +x ~/.vimana/celestia/light-node
+mkdir -p ~/.vimana/celestia/light-node
+chmod +x ~/.vimana/celestia/light-node
 echo "✅ vimana installed!"
