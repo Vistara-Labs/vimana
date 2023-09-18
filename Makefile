@@ -8,7 +8,7 @@ VERSION=0.0.1
 BUILD_TIME=$(shell date +%FT%T%z)
 
 # Flags passed to `go build`
-LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}"
+LDFLAGS=-ldflags "-X vimana.Version=${VERSION} -X vimana.BuildTime=${BUILD_TIME}"
 
 # Default command when simply typing `make`
 all: build

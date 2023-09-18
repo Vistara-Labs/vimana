@@ -11,9 +11,6 @@ Vimana CLI is a comprehensive tool designed to simplify the creation and managem
   - [Start Nodes](#start-nodes)
   - [Stop Nodes](#stop-nodes)
   - [Node Status](#node-status)
-  - [List Nodes](#list-nodes)
-- [Flag Details](#flag-details)
-- [Potential Enhancements](#potential-enhancements)
 - [Support & Feedback](#support--feedback)
 
 ## Installation
@@ -21,6 +18,14 @@ Vimana CLI is a comprehensive tool designed to simplify the creation and managem
 Install Binary:
 
 `curl -L https://vistara-labs.github.io/vimana/install.sh | bash`
+
+Install from Source:
+
+`make build`
+
+Run celestia light node:
+
+`vimana celestia light start`
 
 ## Command Structure
 
@@ -39,63 +44,41 @@ Available subcommands:
 - `start`: Start the nodes after creation.
 - `stop`: Stop running nodes.
 - `status`: Get the status of a node.
-- `list`: List all nodes of a particular type.
 
 ## Command API
 
 ### Create Nodes
 
 **Syntax**: 
-vimana create [NODE_TYPE] [OPTIONS]
+vimana [NODE_TYPE] [OPTIONS]
 
 **Example**: 
-vimana create light-node --port=30303 --datadir=/path/to/data
+vimana celestia light init
 
 ### Start Nodes
 
 **Syntax**: 
-vimana start [NODE_TYPE] [OPTIONS]
+vimana celestia [NODE_TYPE] start [OPTIONS]
 
 **Example**: 
-vimana start light-node --id=node123
+vimana celestia light start
 
 ### Stop Nodes
 
 **Syntax**: 
-vimana stop [NODE_TYPE] [OPTIONS]
+vimana celestia [NODE_TYPE] stop [OPTIONS]
 
 **Example**: 
-vimana stop full-node --id=node456
+vimana celestia light stop
 
 ### Node Status
 
 **Syntax**: 
-vimana status [NODE_TYPE] [OPTIONS]
+vimana celestia [NODE_TYPE] status [OPTIONS]
 
 **Example**: 
-vimana status bridge-node --id=node789
-
-### List Nodes
-
-**Syntax**: 
-vimana list [NODE_TYPE]
-
-**Example**: 
-vimana list beechain
-
-
-## Flag Details
-
-- `--port`: Specify the port for the node.
-- `--datadir`: Specify the directory for node's data.
-- `--id`: Identify a specific node instance.
-
-## Potential Enhancements
-
-1. **Config Files**: Consider a configuration file approach (`.yaml` or `.json`) for detailing settings.
-2. **Logging**: Implement a `--log` or `--verbose` flag for detailed operations logs.
-3. **Node Updates**: Introduce functionality to update or modify node configurations post-creation.
+vimana celestia light status
 
 ## Support & Feedback
 
-For any issues, questions, or feedback, please contact *support-email@example.com*.
+For any issues, questions, or feedback, please contact *mayur@vistara.dev*.
