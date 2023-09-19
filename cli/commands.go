@@ -2,6 +2,8 @@ package cli
 
 import (
 	"fmt"
+	"log"
+	"vimana/components"
 
 	"github.com/BurntSushi/toml"
 	"github.com/spf13/cobra"
@@ -23,7 +25,18 @@ type NodeCommander interface {
 	Start(*cobra.Command, []string, Mode)
 	Stop(*cobra.Command, []string, Mode)
 	Status(*cobra.Command, []string, Mode)
-	// List(*cobra.Command, []string, Mode)
+}
+
+type BaseCommander struct {
+	Name         string
+	NodeType     string
+	componentMgr *components.ComponentManager
+}
+
+func (b *BaseCommander) initComponentManager(binary string) {
+	if b.componentMgr == nil {
+		b.componentMgr = components.NewComponentManager("celestia", binary, b.NodeType)
+	}
 }
 
 func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCommander) ([]*cobra.Command, error) {
@@ -34,71 +47,96 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 
 	var commands []*cobra.Command
 
-	for componentName, modes := range config.Components {
-		componentCmd := &cobra.Command{Use: componentName}
-		commands = append(commands, componentCmd)
+	runCmd := &cobra.Command{
+		Use:   "run",
+		Short: "Run a component",
+	}
 
-		for modeName, modeData := range modes {
-			modeCmd := &cobra.Command{Use: modeName}
-			componentCmd.AddCommand(modeCmd)
-			key := componentName + "-" + modeName
-			commander := commanderRegistry[key]
-			mData := modeData
+	for component, nodeTypes := range config.Components {
+		for nodeType := range nodeTypes {
+			currentComponent := component
+			currentNodeType := nodeType
 
-			if commander != nil {
-				modeCmd.AddCommand(&cobra.Command{
-					Use: "init",
-					Run: func(c *cobra.Command, args []string) {
-						commander.Init(c, args, mData)
-					},
-				})
+			subCmd := &cobra.Command{
+				Use:  fmt.Sprintf("%s-%s", currentComponent, currentNodeType),
+				Args: cobra.NoArgs,
+				Run: func(c *cobra.Command, args []string) {
+					ntype := nodeTypes[currentNodeType]
 
-				modeCmd.AddCommand(&cobra.Command{
-					Use: "start",
-					Run: func(c *cobra.Command, args []string) {
-						commander.Start(c, args, mData)
-					},
-				})
+					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
+					commander := commanderRegistry[key]
 
-				modeCmd.AddCommand(&cobra.Command{
-					Use: "stop",
-					Run: func(c *cobra.Command, args []string) {
-						commander.Stop(c, args, mData)
-					},
-				})
-
-				modeCmd.AddCommand(&cobra.Command{
-					Use: "status",
-					Run: func(c *cobra.Command, args []string) {
-						commander.Status(c, args, mData)
-					},
-				})
-
-				// modeCmd.AddCommand(&cobra.Command{
-				// 	Use: "list",
-				// 	Run: func(c *cobra.Command, args []string) {
-				// 		commander.List(c, args, modeData)
-				// 	},
-				// })
+					if commander != nil {
+						commander.Start(c, args, ntype)
+					} else {
+						log.Fatalf("Component '%s' of type '%s' not recognized", component, nodeType)
+					}
+				},
 			}
-
-			// for cmdName, cmdFunc := range commonSubCommands {
-			// 	sc := &cobra.Command{
-			// 		Use: cmdName,
-			// 		Run: makeRunFunc(cmdFunc, modeData), // <-- Here's the change, we use makeRunFunc to generate the Run function
-			// 	}
-			// 	modeCmd.AddCommand(sc)
-			// }
-
+			runCmd.AddCommand(subCmd)
 		}
 	}
-	return commands, nil
-}
+	commands = append(commands, runCmd)
 
-func makeRunFunc(cmdFunc func(*cobra.Command, []string, Mode), modeData Mode) func(*cobra.Command, []string) {
-	return func(c *cobra.Command, args []string) {
-		cmdFunc(c, args, modeData)
-	}
+	// for componentName, modes := range config.Components {
+	// 	componentCmd := &cobra.Command{Use: componentName}
+	// 	commands = append(commands, componentCmd)
+
+	// 	for modeName, modeData := range modes {
+	// 		modeCmd := &cobra.Command{Use: modeName}
+	// 		componentCmd.AddCommand(modeCmd)
+	// 		key := componentName + "-" + modeName
+	// 		commander := commanderRegistry[key]
+	// 		mData := modeData
+
+	// 		if commander != nil {
+	// 			modeCmd.AddCommand(&cobra.Command{
+	// 				Use: "init",
+	// 				Run: func(c *cobra.Command, args []string) {
+	// 					commander.Init(c, args, mData)
+	// 				},
+	// 			})
+
+	// 			modeCmd.AddCommand(&cobra.Command{
+	// 				Use: "start",
+	// 				Run: func(c *cobra.Command, args []string) {
+	// 					commander.Start(c, args, mData)
+	// 				},
+	// 			})
+
+	// 			modeCmd.AddCommand(&cobra.Command{
+	// 				Use: "stop",
+	// 				Run: func(c *cobra.Command, args []string) {
+	// 					commander.Stop(c, args, mData)
+	// 				},
+	// 			})
+
+	// 			modeCmd.AddCommand(&cobra.Command{
+	// 				Use: "status",
+	// 				Run: func(c *cobra.Command, args []string) {
+	// 					commander.Status(c, args, mData)
+	// 				},
+	// 			})
+
+	// 			// modeCmd.AddCommand(&cobra.Command{
+	// 			// 	Use: "list",
+	// 			// 	Run: func(c *cobra.Command, args []string) {
+	// 			// 		commander.List(c, args, modeData)
+	// 			// 	},
+	// 			// })
+	// 		}
+
+	// 		// for cmdName, cmdFunc := range commonSubCommands {
+	// 		// 	sc := &cobra.Command{
+	// 		// 		Use: cmdName,
+	// 		// 		Run: makeRunFunc(cmdFunc, modeData), // <-- Here's the change, we use makeRunFunc to generate the Run function
+	// 		// 	}
+	// 		// 	modeCmd.AddCommand(sc)
+	// 		// }
+
+	// 	}
+	// }
+	return commands, nil
 }
 
 func GetCommonSubCommands() map[string]func(*cobra.Command, []string, Mode) {

@@ -1,6 +1,5 @@
 [components]
 
-# Make it similar to kedro where multiple config.toml files can be used
 [components.celestia]
 
 [components.celestia.light]
