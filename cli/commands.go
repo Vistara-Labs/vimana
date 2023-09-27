@@ -69,15 +69,10 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 
 					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
 					commander := commanderRegistry[key]
-					fmt.Println("Commander:", commanderRegistry)
-					fmt.Println("Key:", key)
-
-					fmt.Println("component:", component)
-					fmt.Println("nodeType:", nodeType)
 					if commander != nil {
 						commander.Start(c, args, ntype)
 					} else {
-						log.Fatalf("Components '%s' of type '%s' not recognized", component, nodeType)
+						log.Fatalf("Components '%s' of type '%s' not recognized", component, ntype)
 					}
 				},
 			}
