@@ -6,6 +6,5 @@ package main
 import "vimana/cmd"
 
 func main() {
-	// var configFile string
 	cmd.Execute()
 }

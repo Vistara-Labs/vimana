@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os/exec"
 	"vimana/cmd/utils"
 
 	"github.com/spf13/cobra"
@@ -18,11 +19,9 @@ func NewAvailLightCommander() *AvailLightCommander {
 }
 
 func (a *AvailLightCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
-	// utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 	a.initComponentManager("avail", mode.Binary)
-	// return c.componentMgr.InitializeConfig()
-	// Initialization is in availup.sh
-	return nil
+	return a.componentMgr.InitializeConfig()
 }
 
 func (a *AvailLightCommander) Run(cmd *cobra.Command, args []string, mode Mode) {
@@ -33,7 +32,7 @@ func (a *AvailLightCommander) Run(cmd *cobra.Command, args []string, mode Mode) 
 func (a *AvailLightCommander) Start(cmd *cobra.Command, args []string, mode Mode) {
 	a.Init(cmd, args, mode)
 	fmt.Println(a.componentMgr)
-	fmt.Println(a)
+	fmt.Println("executing start command")
 	cmdexecute := a.componentMgr.GetStartCmd()
 	fmt.Println(cmdexecute)
 	utils.ExecBashCmd(cmdexecute, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
