@@ -13,7 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use: "vimana",
 	// Short: "  A Hardware Availability Network Orchestrator",
@@ -31,16 +30,14 @@ func Execute() {
 }
 
 func init() {
-	vimanaFig := figure.NewFigure("vimana", "", true)
-	vimanaFig.Print()
 	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)
 	}
 	configFile := home + "/.vimana/config.toml"
 	rootCmd := &cobra.Command{Use: "vimana"}
-
-	// rootCmd.PersistentFlags().StringVar(&configFile, "config", "$HOME/.vimana/.config.toml", "config (default is $HOME/.vimana/.config.toml)")
+	vimanaFig := figure.NewFigure("vimana", "", true)
+	vimanaFig.Print()
 
 	commands, err := cli.GetCommandsFromConfig(configFile, CommanderRegistry)
 	if err != nil {
@@ -61,8 +58,19 @@ func versionCommand() *cobra.Command {
 		Use:   "version",
 		Short: "Print the version of vimana",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("vimana version", Version)
+			fmt.Println("vimana version: ", Version)
 		},
 	}
 	return versionCmd
+}
+
+func printASCIIArt() {
+	art := `
+___    ________________  __________ _____   _________ 
+__ |  / /____  _/___   |/  /___    |___  | / /___    |
+__ | / /  __  /  __  /|_/ / __  /| |__   |/ / __  /| |
+__ |/ /  __/ /   _  /  / /  _  ___ |_  /|  /  _  ___ |
+_____/   /___/   /_/  /_/   /_/  |_|/_/ |_/   /_/  |_|
+`
+	fmt.Println(art)
 }

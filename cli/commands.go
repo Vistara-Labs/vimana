@@ -38,9 +38,6 @@ func (b *BaseCommander) initComponentManager(component config.ComponentType, bin
 	if b.componentMgr == nil {
 		b.componentMgr = components.NewComponentManager(component, binary, b.NodeType)
 	}
-	// if b.componentMgr == nil && component == "avail" {
-	// 	b.componentMgr = components.NewComponentManager("avail", binary, b.NodeType)
-	// }
 }
 
 func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCommander) ([]*cobra.Command, error) {
@@ -57,16 +54,19 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 	}
 
 	for component, nodeTypes := range config.Components {
-		for nodeType := range nodeTypes {
-			currentComponent := component
-			currentNodeType := nodeType
+		currentComponent := component
+		componentCmd := &cobra.Command{
+			Use:   currentComponent,
+			Short: fmt.Sprintf("Run the %s component", component),
+		}
 
-			subCmd := &cobra.Command{
-				Use:  fmt.Sprintf("%s-%s", currentComponent, currentNodeType),
+		for nodeType := range nodeTypes {
+			ntype := nodeTypes[nodeType]
+			currentNodeType := nodeType
+			nodeCmd := &cobra.Command{
+				Use:  nodeType + "-node",
 				Args: cobra.NoArgs,
 				Run: func(c *cobra.Command, args []string) {
-					ntype := nodeTypes[currentNodeType]
-
 					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
 					commander := commanderRegistry[key]
 					if commander != nil {
@@ -76,29 +76,11 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 					}
 				},
 			}
-			runCmd.AddCommand(subCmd)
+			componentCmd.AddCommand(nodeCmd)
 		}
+		runCmd.AddCommand(componentCmd)
+
 	}
 	commands = append(commands, runCmd)
 	return commands, nil
-}
-
-func GetCommonSubCommands() map[string]func(*cobra.Command, []string, Mode) {
-	return map[string]func(*cobra.Command, []string, Mode){
-		"init": func(cmd *cobra.Command, args []string, mode Mode) {
-			fmt.Println("Command:", cmd.Name(), "Args:", args, "Mode:", mode, "Expected: Initing")
-		},
-		"start": func(cmd *cobra.Command, args []string, mode Mode) {
-			fmt.Println("Command:", cmd.Name(), "Args:", args, "Mode:", mode, "Expected: Starting")
-		},
-		"stop": func(cmd *cobra.Command, args []string, mode Mode) {
-			fmt.Println("Command:", cmd.Name(), "Args:", args, "Mode:", mode, "Expected: Stopping")
-		},
-		"status": func(cmd *cobra.Command, args []string, mode Mode) {
-			fmt.Println("Command:", cmd.Name(), "Args:", args, "Mode:", mode, "Expected: Status")
-		},
-		"list": func(cmd *cobra.Command, args []string, mode Mode) {
-			fmt.Println("Command:", cmd.Name(), "Args:", args, "Mode:", mode, "Expected: Listing")
-		},
-	}
 }

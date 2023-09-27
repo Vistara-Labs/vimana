@@ -34,7 +34,8 @@ sudo curl -o /tmp/vimcel/${OS}_${ARCH}.zip -L "$TGZ_URL" --progress-bar
 # if OS is linux then install unzip
 if [[ "$OS" == "linux" ]]; then
     # accept default yes
-    sudo apt-get update && sudo apt-get install unzip
+    sudo apt-get update > /dev/null
+    sudo apt-get install unzip > /dev/null
 fi
 sudo unzip -q /tmp/vimcel/${OS}_${ARCH}.zip -d /tmp/vimcel/
 sudo mv "/tmp/vimcel/${OS}_${ARCH}"/* "$INTERNAL_DIR"
