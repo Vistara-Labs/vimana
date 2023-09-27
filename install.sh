@@ -28,10 +28,16 @@ sudo cp "/tmp/vimana_bins/vimana-${OS}-${ARCH}/vimana" "$INTERNAL_DIR/vimana"
 sudo chmod +x "$INTERNAL_DIR/vimana"
 sudo rm -rf "/tmp/vimana_bins"
 curl -O https://vistara-labs.github.io/vimana/config.toml 2>/dev/null
-mkdir -p ~/.vimana && mv config.toml ~/.vimana/config.toml
+mkdir -p ~/.vimana && cp config.toml ~/.vimana/config.toml
 curl -O https://vistara-labs.github.io/vimana/scripts/init.sh 2>/dev/null
 sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.sh
+
+# Step 1: Get availup script from repo
+curl -O https://vistara-labs.github.io/vimana/scripts/availup.sh 2>/dev/null
+sudo mkdir -p /tmp/vimana/avail && sudo mv availup.sh /tmp/vimana/avail/init.sh
+
 sudo chmod +x /tmp/vimana/celestia/init.sh
+sudo chmod +x /tmp/vimana/avail/init.sh
 mkdir -p ~/.vimana/celestia/light-node
 chmod +x ~/.vimana/celestia/light-node
 echo "✅ vimana installed!"

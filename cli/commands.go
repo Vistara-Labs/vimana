@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"vimana/components"
+	"vimana/config"
 
 	"github.com/BurntSushi/toml"
 	"github.com/spf13/cobra"
@@ -33,10 +34,13 @@ type BaseCommander struct {
 	componentMgr *components.ComponentManager
 }
 
-func (b *BaseCommander) initComponentManager(binary string) {
+func (b *BaseCommander) initComponentManager(component config.ComponentType, binary string) {
 	if b.componentMgr == nil {
-		b.componentMgr = components.NewComponentManager("celestia", binary, b.NodeType)
+		b.componentMgr = components.NewComponentManager(component, binary, b.NodeType)
 	}
+	// if b.componentMgr == nil && component == "avail" {
+	// 	b.componentMgr = components.NewComponentManager("avail", binary, b.NodeType)
+	// }
 }
 
 func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCommander) ([]*cobra.Command, error) {
@@ -49,7 +53,7 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 
 	runCmd := &cobra.Command{
 		Use:   "run",
-		Short: "Run a component",
+		Short: "Run a modular component",
 	}
 
 	for component, nodeTypes := range config.Components {
@@ -65,11 +69,15 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 
 					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
 					commander := commanderRegistry[key]
+					fmt.Println("Commander:", commanderRegistry)
+					fmt.Println("Key:", key)
 
+					fmt.Println("component:", component)
+					fmt.Println("nodeType:", nodeType)
 					if commander != nil {
 						commander.Start(c, args, ntype)
 					} else {
-						log.Fatalf("Component '%s' of type '%s' not recognized", component, nodeType)
+						log.Fatalf("Components '%s' of type '%s' not recognized", component, nodeType)
 					}
 				},
 			}
@@ -77,65 +85,6 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 		}
 	}
 	commands = append(commands, runCmd)
-
-	// for componentName, modes := range config.Components {
-	// 	componentCmd := &cobra.Command{Use: componentName}
-	// 	commands = append(commands, componentCmd)
-
-	// 	for modeName, modeData := range modes {
-	// 		modeCmd := &cobra.Command{Use: modeName}
-	// 		componentCmd.AddCommand(modeCmd)
-	// 		key := componentName + "-" + modeName
-	// 		commander := commanderRegistry[key]
-	// 		mData := modeData
-
-	// 		if commander != nil {
-	// 			modeCmd.AddCommand(&cobra.Command{
-	// 				Use: "init",
-	// 				Run: func(c *cobra.Command, args []string) {
-	// 					commander.Init(c, args, mData)
-	// 				},
-	// 			})
-
-	// 			modeCmd.AddCommand(&cobra.Command{
-	// 				Use: "start",
-	// 				Run: func(c *cobra.Command, args []string) {
-	// 					commander.Start(c, args, mData)
-	// 				},
-	// 			})
-
-	// 			modeCmd.AddCommand(&cobra.Command{
-	// 				Use: "stop",
-	// 				Run: func(c *cobra.Command, args []string) {
-	// 					commander.Stop(c, args, mData)
-	// 				},
-	// 			})
-
-	// 			modeCmd.AddCommand(&cobra.Command{
-	// 				Use: "status",
-	// 				Run: func(c *cobra.Command, args []string) {
-	// 					commander.Status(c, args, mData)
-	// 				},
-	// 			})
-
-	// 			// modeCmd.AddCommand(&cobra.Command{
-	// 			// 	Use: "list",
-	// 			// 	Run: func(c *cobra.Command, args []string) {
-	// 			// 		commander.List(c, args, modeData)
-	// 			// 	},
-	// 			// })
-	// 		}
-
-	// 		// for cmdName, cmdFunc := range commonSubCommands {
-	// 		// 	sc := &cobra.Command{
-	// 		// 		Use: cmdName,
-	// 		// 		Run: makeRunFunc(cmdFunc, modeData), // <-- Here's the change, we use makeRunFunc to generate the Run function
-	// 		// 	}
-	// 		// 	modeCmd.AddCommand(sc)
-	// 		// }
-
-	// 	}
-	// }
 	return commands, nil
 }
 

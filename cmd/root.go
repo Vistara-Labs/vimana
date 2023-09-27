@@ -24,8 +24,6 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	vimanaFig := figure.NewFigure("vimana", "", true)
-	vimanaFig.Print()
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
@@ -33,7 +31,8 @@ func Execute() {
 }
 
 func init() {
-	// var configFile string = "$HOME/.vimana/config.toml"
+	vimanaFig := figure.NewFigure("vimana", "", true)
+	vimanaFig.Print()
 	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)

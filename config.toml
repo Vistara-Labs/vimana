@@ -10,6 +10,12 @@ download = "/tmp/vimana/celestia/init.sh"
 binary = "/tmp/vimana/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
+[components.avail]
+
+[components.avail.light]
+binary = "avail-light"
+download = "/tmp/vimana/avail/init.sh"
+
 # [components.berachain]
 
 # [components.berachain.full]

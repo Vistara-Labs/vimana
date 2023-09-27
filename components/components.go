@@ -21,6 +21,8 @@ func NewComponentManager(componentType config.ComponentType, root string, nodeTy
 	switch componentType {
 	case config.Celestia:
 		component = NewCelestiaComponent(root, ".vimana/celestia", nodeType)
+	case config.Avail:
+		component = NewAvailComponent(root, ".vimana/avail", nodeType)
 	// case config.Berachain:
 	// 	component = berachain.NewBerachainComponent(home)
 	default:

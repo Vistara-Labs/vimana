@@ -30,7 +30,7 @@ func NewCelestiaBridgeCommander() *CelestiaBridgeCommander {
 
 func (c *CelestiaLightCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	c.initComponentManager(mode.Binary)
+	c.initComponentManager("celestia", mode.Binary)
 	return c.componentMgr.InitializeConfig()
 }
 
@@ -59,7 +59,7 @@ func (c *CelestiaLightCommander) Status(cmd *cobra.Command, args []string, mode 
 
 func (c *CelestiaBridgeCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	c.initComponentManager(mode.Binary)
+	c.initComponentManager("celestia", mode.Binary)
 	return c.componentMgr.InitializeConfig()
 }
 
