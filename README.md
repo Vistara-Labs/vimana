@@ -7,8 +7,7 @@ Vimana CLI is a comprehensive tool designed to simplify the creation and managem
 - [Installation](#installation)
 - [Command Structure](#command-structure)
 - [Command API](#command-api)
-  - [Create Nodes](#create-nodes)
-  - [Start Nodes](#start-nodes)
+  - [Run Nodes](#run-nodes)
   - [Stop Nodes](#stop-nodes)
   - [Node Status](#node-status)
 - [Support & Feedback](#support--feedback)
@@ -31,6 +30,10 @@ Run celestia light node:
 
 Main command: `vimana`
 
+Subcommand:
+
+- `run`: Initialize and run the different types of nodes.
+
 With this setup, when developers want to support new node types or components, they:
 
 1. Add the configuration to config.toml.
@@ -38,12 +41,9 @@ With this setup, when developers want to support new node types or components, t
 3. Register their implementation in the commanderRegistry.
 This provides a modular and expandable CLI framework.
 
-Available subcommands:
-
-- `run`: Initialize and run the different types of nodes.
-
 ## Command API
 
+## Run Nodes
 **Syntax**: 
 vimana run [NODE_TYPE] [OPTIONS]
 
@@ -61,6 +61,9 @@ Follow #CREATE_COMPONENT.md
 vimana run avail light-node
 ```
 
+## Stop Nodes
+
+## Node Status
 ## Support & Feedback
 
 For any issues, questions, or feedback, please contact *mayur@vistara.dev*.
