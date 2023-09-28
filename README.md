@@ -25,7 +25,7 @@ Install from Source:
 
 Run celestia light node:
 
-`vimana celestia light start`
+`vimana run celestia light-node`
 
 ## Command Structure
 
@@ -40,44 +40,26 @@ This provides a modular and expandable CLI framework.
 
 Available subcommands:
 
-- `init`: Initialize and set up the different types of nodes.
-- `start`: Start the nodes after creation.
-- `stop`: Stop running nodes.
-- `status`: Get the status of a node.
+- `run`: Initialize and run the different types of nodes.
 
 ## Command API
 
-### Create Nodes
-
 **Syntax**: 
-vimana [NODE_TYPE] [OPTIONS]
+vimana run [NODE_TYPE] [OPTIONS]
 
 **Example**: 
-vimana celestia light init
+```
+vimana run celestia light-node
+vimana run celestia bridge-node
+```
 
-### Start Nodes
+### Create a new component, avail
 
-**Syntax**: 
-vimana celestia [NODE_TYPE] start [OPTIONS]
+Follow #CREATE_COMPONENT.md
 
-**Example**: 
-vimana celestia light start
-
-### Stop Nodes
-
-**Syntax**: 
-vimana celestia [NODE_TYPE] stop [OPTIONS]
-
-**Example**: 
-vimana celestia light stop
-
-### Node Status
-
-**Syntax**: 
-vimana celestia [NODE_TYPE] status [OPTIONS]
-
-**Example**: 
-vimana celestia light status
+```
+vimana run avail light-node
+```
 
 ## Support & Feedback
 
