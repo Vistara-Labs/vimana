@@ -1,3 +1,7 @@
+#!/bin/bash
+set -e
+
+# script from https://github.com/availproject/availup
 echo "🆙 Starting Availup..."
 if [ ! -d "${HOME}/.avail" ]; then
     mkdir ~/.avail

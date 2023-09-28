@@ -16,40 +16,48 @@ import (
 var rootCmd = &cobra.Command{
 	Use: "vimana",
 	// Short: "  A Hardware Availability Network Orchestrator",
-	// Long:  `CLI to create and manage nodes on the Vistara Network.`,
-	// Run: func(cmd *cobra.Command, args []string) {
-	// 	fmt.Println("vimana: A Hardware Availability Network Manager")
-	// },
 }
 
 func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
-		os.Exit(1)
-	}
+	// err := rootCmd.Execute()
+	// if err != nil {
+	// 	os.Exit(1)
+	// }
 }
 
-func init() {
-	home, err := os.UserHomeDir()
+// Define function type for dependency injection
+type userHomeDirFunc func() (string, error)
+type getCommandsFromConfigFunc func(string, map[string]cli.NodeCommander) ([]*cobra.Command, error)
+
+var osUserHomeDir userHomeDirFunc = os.UserHomeDir
+var getCommandsFromConfig getCommandsFromConfigFunc = cli.GetCommandsFromConfig
+
+func InitCLI() error {
+	home, err := osUserHomeDir()
 	if err != nil {
 		log.Fatal(err)
 	}
 	configFile := home + "/.vimana/config.toml"
-	rootCmd := &cobra.Command{Use: "vimana"}
-	vimanaFig := figure.NewFigure("vimana", "", true)
-	vimanaFig.Print()
 
-	commands, err := cli.GetCommandsFromConfig(configFile, CommanderRegistry)
+	rootCmd = &cobra.Command{Use: "vimana"}
+
+	commands, err := getCommandsFromConfig(configFile, CommanderRegistry)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error:", err)
-		return
+		return err
 	}
-
 	rootCmd.AddCommand(commands...)
 	rootCmd.AddCommand(versionCommand())
 
-	if err := rootCmd.Execute(); err != nil {
-		log.Fatalf("Failed to execute command: %s", err)
+	return rootCmd.Execute()
+}
+
+func init() {
+	vimanaFig := figure.NewFigure("vimana", "", true)
+	vimanaFig.Print()
+
+	if err := InitCLI(); err != nil {
+		log.Fatalf("Failed to initialize CLI: %s", err)
 	}
 }
 

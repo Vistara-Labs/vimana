@@ -28,7 +28,6 @@ TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.10
 sudo mkdir -p "$INTERNAL_DIR"
 sudo mkdir -p "/tmp/vimcel"
 echo "💈 Downloading Celestia..."
-# Replace this with vistara-labs repo
 sudo curl -o /tmp/vimcel/${OS}_${ARCH}.zip -L "$TGZ_URL" --progress-bar
 
 # if OS is linux then install unzip
