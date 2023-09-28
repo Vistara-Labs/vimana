@@ -29,11 +29,11 @@ func Execute() {
 type userHomeDirFunc func() (string, error)
 type getCommandsFromConfigFunc func(string, map[string]cli.NodeCommander) ([]*cobra.Command, error)
 
-var osUserHomeDir userHomeDirFunc = os.UserHomeDir
-var getCommandsFromConfig getCommandsFromConfigFunc = cli.GetCommandsFromConfig
+var OsUserHomeDir userHomeDirFunc = os.UserHomeDir
+var GetCommandsFromConfig getCommandsFromConfigFunc = cli.GetCommandsFromConfig
 
 func InitCLI() error {
-	home, err := osUserHomeDir()
+	home, err := OsUserHomeDir()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func InitCLI() error {
 
 	rootCmd = &cobra.Command{Use: "vimana"}
 
-	commands, err := getCommandsFromConfig(configFile, CommanderRegistry)
+	commands, err := GetCommandsFromConfig(configFile, CommanderRegistry)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		return err
