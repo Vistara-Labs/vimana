@@ -11,7 +11,17 @@ if [ ! -d "${HOME}/.avail-light" ]; then
 fi
 if [ ! -f "${HOME}/.avail/config.yml" ]; then
     touch ~/.avail/config.yml
-    echo "log_level = \"info\"\nhttp_server_host = \"127.0.0.1\"\nhttp_server_port = \"7000\"\n\nsecret_key = { seed = \"${RANDOM}avail${RANDOM}\" }\nlibp2p_port = \"37000\"\nfull_node_ws = [\"wss://kate.avail.tools:443/ws\"]\napp_id = 0\nconfidence = 92.0\navail_path = \"${HOME}/.avail-light\"\nbootstraps = [[\"12D3KooWMm1c4pzeLPGkkCJMAgFbsfQ8xmVDusg272icWsaNHWzN\", \"/ip4/127.0.0.1/tcp/37000\"]]" >~/.avail/config.yml
+    echo "log_level = \"info\"
+http_server_host = \"127.0.0.1\"
+http_server_port = \"7000\"
+
+secret_key = { seed = \"${RANDOM}avail${RANDOM}\" }
+libp2p_port = \"37000\"
+full_node_ws = [\"wss://kate.avail.tools:443/ws\"]
+app_id = 0
+confidence = 92.0
+avail_path = \"${HOME}/.avail-light\"
+bootstraps = [[\"12D3KooWMm1c4pzeLPGkkCJMAgFbsfQ8xmVDusg272icWsaNHWzN\", \"/ip4/127.0.0.1/tcp/37000\"]]" > ~/.avail/config.yml
 fi
 # check if avail-light binary is installed, if yes, just run it
 if command -v avail-light >/dev/null 2>&1; then
@@ -22,9 +32,9 @@ fi
 if [ "$(uname -m)" = "x86_64" ]; then
     # check if curl is available else use wget
     if command -v curl >/dev/null 2>&1; then
-        curl -sLO https://github.com/availproject/avail-light/releases/download/v1.5.0-rc2/avail-light-linux-amd64.tar.gz
+        curl -sLO https://github.com/Vistara-Labs/vimana/releases/download/avail-v1.4.4/avail-light-linux-amd64.tar.gz
     elif command -v wget >/dev/null 2>&1; then
-        wget -qO- https://github.com/availproject/avail-light/releases/download/v1.5.0-rc2/avail-light-linux-amd64.tar.gz
+        wget -qO- https://github.com/Vistara-Labs/vimana/releases/download/avail-v1.4.4/avail-light-linux-amd64.tar.gz
     else
         echo "🚫 Neither curl nor wget are available. Please install one of these and try again."
         exit 1
@@ -37,9 +47,9 @@ if [ "$(uname -m)" = "x86_64" ]; then
 elif [ "$(uname -m)" = "aarch64" ]; then
     # check if curl is available else use wget
     if command -v curl >/dev/null 2>&1; then
-        curl -sLO https://github.com/availproject/avail-light/releases/download/v1.5.0-rc2/avail-light-linux-aarch64.tar.gz
+        curl -sLO https://github.com/Vistara-Labs/vimana/releases/download/avail-v1.4.4/avail-light-linux-aarch64.tar.gz
     elif command -v wget >/dev/null 2>&1; then
-        wget -qO- https://github.com/availproject/avail-light/releases/download/v1.5.0-rc2/avail-light-linux-aarch64.tar.gz
+        wget -qO- https://github.com/Vistara-Labs/vimana/releases/download/avail-v1.4.4/avail-light-linux-aarch64.tar.gz
     else
         echo "🚫 Neither curl nor wget are available. Please install one of these and try again."
         exit 1
@@ -49,6 +59,20 @@ elif [ "$(uname -m)" = "aarch64" ]; then
     chmod +x avail-light-linux-aarch64
     sudo mv avail-light-linux-aarch64 /usr/local/bin/avail-light
     rm avail-light-linux-aarch64.tar.gz
+elif [ "$(uname -m)" = "arm64" ]; then
+    if command -v curl >/dev/null 2>&1; then
+        curl -sLO https://github.com/Vistara-Labs/vimana/releases/download/avail-v1.4.4/avail-light-darwin-arm64.tar.gz
+    elif command -v wget >/dev/null 2>&1; then
+        wget -qO- https://github.com/Vistara-Labs/vimana/releases/download/avail-v1.4.4/avail-light-darwin-arm64.tar.gz
+    else
+        echo "🚫 Neither curl nor wget are available. Please install one of these and try again."
+        exit 1
+    fi
+    # use tar to extract the downloaded file and move it to /usr/local/bin
+    tar -xzf avail-light-darwin-arm64.tar.gz
+    chmod +x avail-light
+    sudo mv avail-light /usr/local/bin/avail-light
+    rm avail-light-darwin-arm64.tar.gz
 else
     echo "📥 No binary available for this architecture, building from source instead. This can take a while..."
     # check if cargo is not available, else attempt to install through rustup
@@ -74,5 +98,4 @@ else
 fi
 echo "✅ Availup exited successfully."
 echo "⛓️ Starting Avail. Future instances of the light client can be started by invoking avail-light -c ~/.avail/config.yml"
-#  -c ~/.avail/config.yml
-avail-light
+avail-light -c ~/.avail/config.yml

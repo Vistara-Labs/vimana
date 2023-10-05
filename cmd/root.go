@@ -32,6 +32,8 @@ type getCommandsFromConfigFunc func(string, map[string]cli.NodeCommander) ([]*co
 var OsUserHomeDir userHomeDirFunc = os.UserHomeDir
 var GetCommandsFromConfig getCommandsFromConfigFunc = cli.GetCommandsFromConfig
 
+var force bool
+
 func InitCLI() error {
 	home, err := OsUserHomeDir()
 	if err != nil {
@@ -47,6 +49,7 @@ func InitCLI() error {
 		return err
 	}
 	rootCmd.AddCommand(commands...)
+	rootCmd.AddCommand(initVimana())
 	rootCmd.AddCommand(versionCommand())
 
 	return rootCmd.Execute()
@@ -59,6 +62,18 @@ func init() {
 	if err := InitCLI(); err != nil {
 		log.Fatalf("Failed to initialize CLI: %s", err)
 	}
+}
+
+func initVimana() *cobra.Command {
+	initCmd := &cobra.Command{
+		Use:   "init",
+		Short: "Initializes and checks system resources",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return InitializeSystem(force)
+		},
+	}
+	initCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "Force initialization")
+	return initCmd
 }
 
 func versionCommand() *cobra.Command {
