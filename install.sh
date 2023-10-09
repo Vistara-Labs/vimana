@@ -7,7 +7,7 @@ if [[ "$ARCH" == "x86_64" ]]; then
 elif [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "aarch64" ]]; then
     ARCH="arm64"
 fi
-VIMANA_RELEASE_TAG="v0.0.11"
+VIMANA_RELEASE_TAG="v0.0.12"
 GZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/vimana-${VIMANA_RELEASE_TAG}/vimana-${OS}-${ARCH}.tar.gz"
 
 INTERNAL_DIR="/usr/local/bin/"

@@ -1,10 +1,7 @@
-# Basic Makefile for Go CLI project
-
-# Name of your project (binary)
 BINARY_NAME=vimana
 
 # Version and build time information
-VERSION=0.0.1
+VERSION=v0.0.12
 BUILD_TIME=$(shell date +%FT%T%z)
 
 # Flags passed to `go build`

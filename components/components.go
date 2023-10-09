@@ -15,12 +15,17 @@ type ComponentManager struct {
 	Component
 }
 
-func NewComponentManager(componentType config.ComponentType, root string, nodeType string) *ComponentManager {
+type ComponentConfig struct {
+	RPC     string
+	Network string
+}
+
+func NewComponentManager(componentType config.ComponentType, root string, nodeType string, c *ComponentConfig) *ComponentManager {
 	var component Component
 
 	switch componentType {
 	case config.Celestia:
-		component = NewCelestiaComponent(root, ".vimana/celestia", nodeType)
+		component = NewCelestiaComponent(root, ".vimana/celestia", nodeType, c.RPC, c.Network)
 	case config.Avail:
 		component = NewAvailComponent(root, ".vimana/avail", nodeType)
 	// case config.Berachain:

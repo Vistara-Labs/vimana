@@ -4,17 +4,29 @@ import (
 	"fmt"
 	"os/exec"
 	"vimana/cmd/utils"
+	"vimana/components"
 
 	"github.com/spf13/cobra"
 )
 
 type CelestiaLightCommander struct {
+	CelestiaNetwork string
+	CelestiaRPC     string
 	BaseCommander
 }
 
 type CelestiaBridgeCommander struct {
+	CelestiaNetwork string
+	CelestiaRPC     string
 	BaseCommander
 }
+
+// Reference from roller
+const (
+	CelestiaRestApiEndpoint = "https://api-arabica-9.consensus.celestia-arabica.com"
+	DefaultCelestiaRPC      = "consensus-full-arabica-9.celestia-arabica.com"
+	DefaultCelestiaNetwork  = "arabica"
+)
 
 func NewCelestiaLightCommander() *CelestiaLightCommander {
 	return &CelestiaLightCommander{
@@ -27,10 +39,23 @@ func NewCelestiaBridgeCommander() *CelestiaBridgeCommander {
 		BaseCommander: BaseCommander{NodeType: "bridge"},
 	}
 }
+func (c *CelestiaLightCommander) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&c.CelestiaNetwork, "network", DefaultCelestiaNetwork, "Specifies the Celestia network")
+	cmd.Flags().StringVar(&c.CelestiaRPC, "rpc", DefaultCelestiaRPC, "Specifies the Celestia RPC endpoint")
+}
 
 func (c *CelestiaLightCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+
+	c.config = &components.ComponentConfig{
+		RPC:     c.CelestiaRPC,
+		Network: c.CelestiaNetwork,
+	}
+
+	// c.componentMgr = components.NewComponentManager("celestia", mode.Binary, c.NodeType, config)
 	c.initComponentManager("celestia", mode.Binary)
+
+	// c.initComponentManager("celestia", mode.Binary, c.CelestiaNetwork, c.CelestiaRPC)
 	return c.componentMgr.InitializeConfig()
 }
 
@@ -57,9 +82,20 @@ func (c *CelestiaLightCommander) Status(cmd *cobra.Command, args []string, mode 
 	fmt.Println("To implement: Celestia light node status")
 }
 
+func (c *CelestiaBridgeCommander) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&c.CelestiaNetwork, "network", DefaultCelestiaNetwork, "Specifies the Celestia network")
+	cmd.Flags().StringVar(&c.CelestiaRPC, "rpc", DefaultCelestiaRPC, "Specifies the Celestia RPC endpoint")
+}
+
 func (c *CelestiaBridgeCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	c.config = &components.ComponentConfig{
+		RPC:     c.CelestiaRPC,
+		Network: c.CelestiaNetwork,
+	}
+
 	c.initComponentManager("celestia", mode.Binary)
+
 	return c.componentMgr.InitializeConfig()
 }
 

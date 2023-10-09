@@ -93,3 +93,5 @@ func (m *MockCommander) Status(cmd *cobra.Command, args []string, mode Mode) {
 
 func (m *MockCommander) Stop(cmd *cobra.Command, args []string, mode Mode) {
 }
+func (m *MockCommander) AddFlags(cmd *cobra.Command) {
+}

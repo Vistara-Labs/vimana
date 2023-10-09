@@ -7,13 +7,6 @@ import (
 	"path/filepath"
 )
 
-// Reference from roller
-const (
-	CelestiaRestApiEndpoint = "https://api-arabica-9.consensus.celestia-arabica.com"
-	DefaultCelestiaRPC      = "consensus-full-arabica-9.celestia-arabica.com"
-	DefaultCelestiaNetwork  = "arabica"
-)
-
 type CelestiaComponent struct {
 	Root            string
 	ConfigDir       string
@@ -25,20 +18,19 @@ type CelestiaComponent struct {
 	celestiaNetwork string
 }
 
-func NewCelestiaComponent(root string, home string, node string) *CelestiaComponent {
+func NewCelestiaComponent(root string, home string, node string, celestiaRPC, celestiaNetwork string) *CelestiaComponent {
 	return &CelestiaComponent{
 		Root:            root,
 		ConfigDir:       home,
 		NodeType:        node,
-		NodeStorePath:   filepath.Join(os.Getenv("HOME"), home+"/"+node+"-node"),
-		rpcEndpoint:     DefaultCelestiaRPC,
-		celestiaNetwork: DefaultCelestiaNetwork,
+		NodeStorePath:   filepath.Join(os.Getenv("HOME"), home+"/"+node+"-node"+"/"+celestiaNetwork),
+		rpcEndpoint:     celestiaRPC,
+		celestiaNetwork: celestiaNetwork,
 	}
 }
 
 func (c *CelestiaComponent) InitializeConfig() error {
 	log.Println("🚀 Creating Celestia ", c.NodeType, " node config dir: ", c.NodeStorePath)
-	// use logging instead of log.Println
 	if _, err := os.Stat(c.NodeStorePath); os.IsNotExist(err) {
 		err := os.MkdirAll(c.NodeStorePath, 0755)
 		if err != nil {
@@ -57,7 +49,7 @@ func (c *CelestiaComponent) InitializeConfig() error {
 	}
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		initLightNodeCmd := exec.Command(c.Root, c.NodeType, "init", "--p2p.network",
-			DefaultCelestiaNetwork, "--node.store", c.NodeStorePath)
+			c.celestiaNetwork, "--node.store", c.NodeStorePath)
 		err := initLightNodeCmd.Run()
 		log.Println("🚀 initLightNodeCmd", initLightNodeCmd)
 		if err != nil {
@@ -78,7 +70,7 @@ func (c *CelestiaComponent) GetStartCmd() *exec.Cmd {
 		"--node.store", c.NodeStorePath,
 		"--gateway",
 		"--gateway.deprecated-endpoints",
-		"--p2p.network", DefaultCelestiaNetwork,
+		"--p2p.network", c.celestiaNetwork,
 	}
 	if c.metricsEndpoint != "" {
 		args = append(args, "--metrics", "--metrics.endpoint", c.metricsEndpoint)

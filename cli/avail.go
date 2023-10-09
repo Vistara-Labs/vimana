@@ -18,6 +18,9 @@ func NewAvailLightCommander() *AvailLightCommander {
 	}
 }
 
+func (a *AvailLightCommander) AddFlags(cmd *cobra.Command) {
+}
+
 func (a *AvailLightCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 	a.initComponentManager("avail", mode.Binary)

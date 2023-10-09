@@ -26,6 +26,24 @@ Run celestia light node:
 
 `vimana run celestia light-node`
 
+See options for a specific node type:
+
+`vimana run celestia light-node --help`
+
+```
+Usage:
+  vimana run celestia bridge-node [flags]
+
+Flags:
+  -h, --help             help for bridge-node
+      --network string   Specifies the Celestia network (default "arabica")
+      --rpc string       Specifies the Celestia RPC endpoint (default "consensus-full-arabica-9.celestia-arabica.com")
+```
+
+You can pass in the network and rpc endpoint as flags, or default (arabica) is used if not specified.
+
+`vimana run celestia light-node --network arabica --rpc consensus-full-arabica-9.celestia-arabica.com`
+
 ## Command Structure
 
 Main command: `vimana`

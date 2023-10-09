@@ -22,6 +22,7 @@ type Mode struct {
 }
 
 type NodeCommander interface {
+	AddFlags(*cobra.Command)
 	Init(*cobra.Command, []string, Mode) error
 	Start(*cobra.Command, []string, Mode)
 	Stop(*cobra.Command, []string, Mode)
@@ -32,11 +33,12 @@ type BaseCommander struct {
 	Name         string
 	NodeType     string
 	componentMgr *components.ComponentManager
+	config       *components.ComponentConfig
 }
 
 func (b *BaseCommander) initComponentManager(component config.ComponentType, binary string) {
 	if b.componentMgr == nil {
-		b.componentMgr = components.NewComponentManager(component, binary, b.NodeType)
+		b.componentMgr = components.NewComponentManager(component, binary, b.NodeType, b.config)
 	}
 }
 
@@ -75,6 +77,9 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 						log.Fatalf("Components '%s' of type '%s' not recognized", component, ntype)
 					}
 				},
+			}
+			if commander, ok := commanderRegistry[fmt.Sprintf("%s-%s", currentComponent, nodeType)]; ok {
+				commander.AddFlags(nodeCmd)
 			}
 			componentCmd.AddCommand(nodeCmd)
 		}
