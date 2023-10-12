@@ -37,12 +37,12 @@ Usage:
 Flags:
   -h, --help             help for bridge-node
       --network string   Specifies the Celestia network (default "arabica")
-      --rpc string       Specifies the Celestia RPC endpoint (default "consensus-full-arabica-9.celestia-arabica.com")
+      --rpc string       Specifies the Celestia RPC endpoint (default "consensus-full.celestia-arabica-10.com")
 ```
 
 You can pass in the network and rpc endpoint as flags, or default (arabica) is used if not specified.
 
-`vimana run celestia light-node --network arabica --rpc consensus-full-arabica-9.celestia-arabica.com`
+`vimana run celestia light-node --network arabica --rpc consensus-full.celestia-arabica-10.com`
 
 ## Command Structure
 
