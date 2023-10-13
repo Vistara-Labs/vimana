@@ -23,8 +23,8 @@ type CelestiaBridgeCommander struct {
 
 // Reference from roller
 const (
-	CelestiaRestApiEndpoint = "https://api-arabica-9.consensus.celestia-arabica.com"
-	DefaultCelestiaRPC      = "consensus-full-arabica-9.celestia-arabica.com"
+	CelestiaRestApiEndpoint = "https://api.consensus.celestia-arabica-10.com"
+	DefaultCelestiaRPC      = "consensus-full.celestia-arabica-10.com"
 	DefaultCelestiaNetwork  = "arabica"
 )
 
