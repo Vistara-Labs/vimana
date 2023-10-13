@@ -5,11 +5,19 @@ INTERNAL_DIR="/tmp/vimana/celestia"
 
 # check if the binary is already installed
 if [ -f "$INTERNAL_DIR/celestia" ]; then
-    echo "🚀 Celestia is already installed."
-    exit 0
+    # Capture the version output
+    VERSION_OUTPUT=$("$INTERNAL_DIR/celestia" version)
+    
+    # Check if the version matches "v0.11.0-rc15-dev"
+    if [[ $VERSION_OUTPUT == *"v0.11.0-rc15"* ]]; then
+        echo "🚀 Celestia is already installed with the correct version."
+        exit 0
+    else
+        echo "🚀 Celestia is installed but with a different version."
+    fi
 fi
 
-echo "🔍  Determining OS and architecture..."
+echo "🔍 Determining OS and architecture..."
 
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m)
@@ -22,10 +30,10 @@ fi
 
 echo "💻  OS: $OS"
 echo "🏗️  ARCH: $ARCH"
-
-TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.10.4/${OS}_${ARCH}.zip"
+TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.11.0-rc15/${OS}_${ARCH}.zip"
 
 sudo mkdir -p "$INTERNAL_DIR"
+sudo rm -rf "/tmp/vimcel"
 sudo mkdir -p "/tmp/vimcel"
 echo "💈 Downloading Celestia..."
 sudo curl -o /tmp/vimcel/${OS}_${ARCH}.zip -L "$TGZ_URL" --progress-bar
@@ -43,4 +51,4 @@ sudo rm -rf "/tmp/vimcel"
 mkdir -p ~/.vimana/celestia/light-node
 chmod +x ~/.vimana/celestia/light-node
 ${INTERNAL_DIR}/celestia version
-echo "💈 Celestia light node version installed!"
+echo "💈 Celestia node version installed!"

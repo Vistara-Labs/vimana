@@ -69,7 +69,7 @@ func (c *CelestiaComponent) GetStartCmd() *exec.Cmd {
 		"--core.ip", c.rpcEndpoint,
 		"--node.store", c.NodeStorePath,
 		"--gateway",
-		"--gateway.deprecated-endpoints",
+		// "--gateway.deprecated-endpoints",
 		"--p2p.network", c.celestiaNetwork,
 	}
 	if c.metricsEndpoint != "" {
