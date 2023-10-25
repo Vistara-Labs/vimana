@@ -33,6 +33,7 @@ var OsUserHomeDir userHomeDirFunc = os.UserHomeDir
 var GetCommandsFromConfig getCommandsFromConfigFunc = cli.GetCommandsFromConfig
 
 var force bool
+var noTrack bool
 
 func InitCLI() error {
 	home, err := OsUserHomeDir()
@@ -40,7 +41,6 @@ func InitCLI() error {
 		log.Fatal(err)
 	}
 	configFile := home + "/.vimana/config.toml"
-
 	rootCmd = &cobra.Command{Use: "vimana"}
 
 	commands, err := GetCommandsFromConfig(configFile, CommanderRegistry)
@@ -69,10 +69,11 @@ func initVimana() *cobra.Command {
 		Use:   "init",
 		Short: "Initializes and checks system resources",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return InitializeSystem(force)
+			return InitializeSystem(force, noTrack)
 		},
 	}
 	initCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "Force initialization")
+	initCmd.PersistentFlags().BoolVarP(&noTrack, "no-track", "n", false, "Opt out of anonymous usage tracking")
 	return initCmd
 }
 

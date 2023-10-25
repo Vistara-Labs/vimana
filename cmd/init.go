@@ -1,18 +1,16 @@
 package cmd
 
 import (
-	"bytes"
 	"encoding/hex"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
+	"vimana/cmd/utils"
 
-	"github.com/BurntSushi/toml"
 	"github.com/ethereum/go-ethereum/crypto"
 
 	// "github.com/pelletier/go-toml"
@@ -20,17 +18,6 @@ import (
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
 )
-
-type InitConfig struct {
-	EthAddress    string  `toml:"eth_address,omitempty"`
-	ethPrivateKey string  `toml:"eth_private_key,omitempty"`
-	Kvm           bool    `toml:"kvm"`
-	CpuCount      int     `toml:"cpu_count"`
-	RamSize       float64 `toml:"ram_size"`  // in GB
-	DiskSize      float64 `toml:"disk_size"` // in GB
-	InitDate      string  `toml:"init_date"`
-	// Add other fields as required
-}
 
 var initFilePath = os.Getenv("HOME") + "/.vimana/init.toml"
 
@@ -42,22 +29,46 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-func InitializeSystem(force bool) error {
+func InitializeSystem(force bool, noTrack bool) error {
 	if err := fileExists(initFilePath); err && !force {
 		fmt.Println("Initialization has already been done. Found init.toml.")
 		return nil
 	}
-	config := InitConfig{}
-	fmt.Println("Do you want to create a new Ethereum address? (y/N)")
+	// config := InitConfig{}
+	// Determine the path to the init.toml file
+	initPath := filepath.Join(os.Getenv("HOME"), ".vimana", "init.toml")
+
+	config, err := utils.LoadVimanaConfig(initPath)
+	// config, err := LoadVimanaConfig(initPath)
+	if err != nil {
+		return err
+	}
+
+	if noTrack {
+		config.Analytics.Enabled = false
+	}
+	// Only prompt if initializing for the first time
+	if config.Analytics.Enabled {
+		fmt.Println("Vimana collects anonymous usage data to improve our software and show our network growth.")
+		var response string
+		fmt.Println("Would you like to contribute? [Y/n]")
+		fmt.Scanln(&response)
+		response = strings.ToLower(response)
+		if response == "n" {
+			config.Analytics.Enabled = false
+		}
+	}
+
+	fmt.Println("Do you want to create a new Ethereum address? (Y/n)")
 	var response string
 	fmt.Scanln(&response)
-	if strings.ToLower(response) == "y" {
+	if strings.ToLower(response) != "n" {
 		address, privateKey, err := createEthAddress()
 		if err != nil {
 			log.Fatalf("Failed to create Ethereum address: %s", err)
 		}
 		config.EthAddress = address
-		config.ethPrivateKey = privateKey
+		config.EthPrivateKey = privateKey
 		log.Printf("Ethereum address: %s", address)
 	}
 
@@ -81,7 +92,7 @@ func InitializeSystem(force bool) error {
 	log.Printf("Total Disk: %v GB\n", float64(diskInfo.Total)/(1<<30)) // Convert to GB
 	log.Printf("KVM Support: %v\n", kvmSupport)
 
-	err = saveConfig(config)
+	err = utils.SaveConfig(config, initPath)
 	if err != nil {
 		return err
 	}
@@ -97,30 +108,6 @@ func createEthAddress() (address string, privateKey string, err error) {
 	address = crypto.PubkeyToAddress(key.PublicKey).Hex()
 	privateKey = hex.EncodeToString(crypto.FromECDSA(key))
 	return address, privateKey, nil
-}
-
-func saveConfig(config InitConfig) error {
-	// conver the configuration to TOML
-	var buffer bytes.Buffer
-
-	encoder := toml.NewEncoder(&buffer)
-	err := encoder.Encode(config)
-	if err != nil {
-		return err
-	}
-	if err != nil {
-		return err
-	}
-
-	// Determine the path to the init.toml file
-	initPath := filepath.Join(os.Getenv("HOME"), ".vimana", "init.toml")
-	os.MkdirAll(filepath.Dir(initPath), 0755)
-
-	err = ioutil.WriteFile(initPath, buffer.Bytes(), 0644)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func checkKvmSupport() (bool, error) {

@@ -3,6 +3,9 @@ package cli
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
+	"vimana/cmd/utils"
 	"vimana/components"
 	"vimana/config"
 
@@ -42,9 +45,9 @@ func (b *BaseCommander) initComponentManager(component config.ComponentType, bin
 	}
 }
 
-func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCommander) ([]*cobra.Command, error) {
+func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommander) ([]*cobra.Command, error) {
 	var config Config
-	if _, err := toml.DecodeFile(filepath, &config); err != nil {
+	if _, err := toml.DecodeFile(path, &config); err != nil {
 		return nil, err
 	}
 
@@ -54,12 +57,17 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 		Use:   "run",
 		Short: "Run a modular component",
 	}
+	initPath := filepath.Join(os.Getenv("HOME"), ".vimana", "init.toml")
+	initConf, err := utils.LoadVimanaConfig(initPath)
+	if err != nil {
+		return nil, err
+	}
 
 	for component, nodeTypes := range config.Components {
 		currentComponent := component
 		componentCmd := &cobra.Command{
 			Use:   currentComponent,
-			Short: fmt.Sprintf("Run the %s component", component),
+			Short: fmt.Sprintf("Run the %s component", currentComponent),
 		}
 
 		for nodeType := range nodeTypes {
@@ -72,6 +80,10 @@ func GetCommandsFromConfig(filepath string, commanderRegistry map[string]NodeCom
 					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
 					commander := commanderRegistry[key]
 					if commander != nil {
+						initConf.SpaceCore = currentComponent
+						if initConf.Analytics.Enabled {
+							go utils.SendAnonymousData(initConf)
+						}
 						commander.Start(c, args, ntype)
 					} else {
 						log.Fatalf("Components '%s' of type '%s' not recognized", component, ntype)

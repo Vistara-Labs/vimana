@@ -12,6 +12,15 @@ Vimana CLI is a comprehensive tool designed to simplify the creation and managem
   - [Node Status](#node-status)
 - [Support & Feedback](#support--feedback)
 
+## Quick Start
+
+Open terminal and run:
+
+```bash
+  curl -L https://vistara-labs.github.io/vimana/install.sh | bash && vimana init
+  vimana run celestia light-node
+```
+
 ## Installation
 
 Install Binary:
