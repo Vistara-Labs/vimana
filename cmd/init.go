@@ -49,7 +49,7 @@ func InitializeSystem(force bool, noTrack bool) error {
 	}
 	// Only prompt if initializing for the first time
 	if config.Analytics.Enabled {
-		fmt.Println("Vimana collects anonymous usage data to improve our software and show our network growth.")
+		fmt.Println("Vimana collects usage data to improve our software and show our network growth.")
 		var response string
 		fmt.Println("Would you like to contribute? [Y/n]")
 		fmt.Scanln(&response)

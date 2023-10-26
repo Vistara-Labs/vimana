@@ -30,6 +30,18 @@ fi
 
 echo "💻  OS: $OS"
 echo "🏗️  ARCH: $ARCH"
+
+# if OS is linux then install unzip
+if [[ "$OS" == "linux" ]]; then
+    if which apt > /dev/null; then
+        sudo apt-get update > /dev/null
+        sudo apt-get install unzip > /dev/null
+    elif which apk > /dev/null; then
+        sudo apk update > /dev/null
+        sudo apk add unzip > /dev/null
+        ARCH="arm64_alpine"
+    fi
+fi
 TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.11.0-rc15/${OS}_${ARCH}.zip"
 
 sudo mkdir -p "$INTERNAL_DIR"
@@ -38,12 +50,6 @@ sudo mkdir -p "/tmp/vimcel"
 echo "💈 Downloading Celestia..."
 sudo curl -o /tmp/vimcel/${OS}_${ARCH}.zip -L "$TGZ_URL" --progress-bar
 
-# if OS is linux then install unzip
-if [[ "$OS" == "linux" ]]; then
-    # accept default yes
-    sudo apt-get update > /dev/null
-    sudo apt-get install unzip > /dev/null
-fi
 sudo unzip -q /tmp/vimcel/${OS}_${ARCH}.zip -d /tmp/vimcel/
 sudo mv "/tmp/vimcel/${OS}_${ARCH}"/* "$INTERNAL_DIR"
 sudo chmod +x "$INTERNAL_DIR"

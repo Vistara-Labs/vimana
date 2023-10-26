@@ -82,7 +82,7 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 					if commander != nil {
 						initConf.SpaceCore = currentComponent
 						if initConf.Analytics.Enabled {
-							go utils.SendAnonymousData(initConf)
+							go utils.SaveAnalyticsData(initConf)
 						}
 						commander.Start(c, args, ntype)
 					} else {
