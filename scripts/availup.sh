@@ -13,7 +13,7 @@ if [ ! -f "${HOME}/.avail/config.yml" ]; then
     touch ~/.avail/config.yml
     echo "log_level = \"info\"
 http_server_host = \"127.0.0.1\"
-http_server_port = \"7000\"
+http_server_port = 7000
 
 secret_key = { seed = \"${RANDOM}avail${RANDOM}\" }
 libp2p_port = \"37000\"
