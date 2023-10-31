@@ -9,8 +9,8 @@ if [ -f "$INTERNAL_DIR/celestia" ]; then
     VERSION_OUTPUT=$("$INTERNAL_DIR/celestia" version)
     
     # Check if the version matches "v0.11.0-rc15-dev"
-    if [[ $VERSION_OUTPUT == *"v0.11.0-rc15"* ]]; then
-        echo "🚀 Celestia is already installed with the correct version."
+    if [[ $VERSION_OUTPUT == *"v0.12"* ]]; then
+        echo "🚀 Celestia is already installed with the correct version." $VERSION_OUTPUT
         exit 0
     else
         echo "🚀 Celestia is installed but with a different version."
@@ -42,7 +42,7 @@ if [[ "$OS" == "linux" ]]; then
         ARCH="arm64_alpine"
     fi
 fi
-TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.11.0-rc15/${OS}_${ARCH}.zip"
+TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.12.0/${OS}_${ARCH}.zip"
 
 sudo mkdir -p "$INTERNAL_DIR"
 sudo rm -rf "/tmp/vimcel"

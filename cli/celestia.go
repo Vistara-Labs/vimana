@@ -23,9 +23,8 @@ type CelestiaBridgeCommander struct {
 
 // Reference from roller
 const (
-	CelestiaRestApiEndpoint = "https://api.consensus.celestia-arabica-10.com"
-	DefaultCelestiaRPC      = "consensus-validator.celestia-arabica-10.com"
-	DefaultCelestiaNetwork  = "arabica-10"
+	DefaultCelestiaRPC     = "rpc.celestia.pops.one"
+	DefaultCelestiaNetwork = "celestia"
 )
 
 func NewCelestiaLightCommander() *CelestiaLightCommander {
