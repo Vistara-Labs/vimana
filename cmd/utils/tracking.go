@@ -3,7 +3,6 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -43,7 +42,6 @@ func SaveAnalyticsData(conf *InitConfig) {
 	}
 
 	req, err := http.NewRequest("POST", APIEndpoint, bytes.NewBuffer(jsonData))
-	fmt.Println("req:", req)
 	if err != nil {
 		log.Println("Failed to create request:", err)
 		return
