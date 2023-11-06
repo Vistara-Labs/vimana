@@ -80,6 +80,56 @@ vimana run celestia light-node
 vimana run celestia bridge-node
 ```
 
+**Launch via service**
+service creation for light-node
+```
+tee /etc/systemd/system/vinama.service > /dev/null <<EOF
+[Unit]
+Description=Vinama
+After=network.target
+[Service]
+Type=simple
+User=$USER
+ExecStart=vimana run celestia light-node
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65535
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+launch
+```
+systemctl daemon-reload
+systemctl enable vinama
+systemctl restart vinama && journalctl -u vinama -f -o cat
+```
+
+service creation for bridge-node
+
+```
+tee /etc/systemd/system/vinama-bridge.service > /dev/null <<EOF
+[Unit]
+Description=Vinama
+After=network.target
+[Service]
+Type=simple
+User=$USER
+ExecStart=vimana run celestia bridge-node
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65535
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+launch
+```
+systemctl daemon-reload
+systemctl enable vinama-bridge
+systemctl restart vinama-bridge && journalctl -u vinama-bridge -f -o cat
+```
+
 ### Create a new component, avail
 
 Follow #CREATE_COMPONENT.md
