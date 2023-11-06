@@ -80,7 +80,7 @@ vimana run celestia light-node
 vimana run celestia bridge-node
 ```
 
-**Launch via service**
+**Launch via service**: <br/>
 service creation for light-node
 ```
 tee /etc/systemd/system/vinama.service > /dev/null <<EOF
