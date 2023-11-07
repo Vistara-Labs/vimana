@@ -139,8 +139,18 @@ vimana run avail light-node
 ```
 
 ## Stop Nodes
-
+```
+sudo systemctl stop vinama
+```
 ## Node Status
+```
+sudo systemctl status vinama
+```
+### Node log
+```
+sudo journalctl -u vinama.service -f 
+
+```
 ## Support & Feedback
 
 For any issues, questions, or feedback, please contact *mayur@vistara.dev*.
