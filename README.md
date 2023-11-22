@@ -43,7 +43,7 @@ For MacOS:
 
 Run celestia light node:
 
-`./vimana-linux-amd64/vimana run avail light-node`
+`./vimana-linux-amd64/vimana run celestia light-node`
 
 See options for a specific node type:
 
