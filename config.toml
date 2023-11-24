@@ -16,6 +16,10 @@ download = "/tmp/vimana/celestia/init.sh"
 binary = "avail-light"
 download = "/tmp/vimana/avail/init.sh"
 
+[components.nostream.nostream]
+binary = "nostream"
+download = "/tmp/vimana/nostream/init.sh"
+
 # [components.berachain]
 
 # [components.berachain.full]

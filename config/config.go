@@ -6,4 +6,5 @@ const (
 	Celestia  ComponentType = "celestia"
 	Berachain ComponentType = "berachain"
 	Avail     ComponentType = "avail"
+	Nostream     ComponentType = "nostream"
 )

@@ -7,4 +7,5 @@ var CommanderRegistry = map[string]cli.NodeCommander{
 	"celestia-light":  cli.NewCelestiaLightCommander(),
 	"celestia-bridge": cli.NewCelestiaBridgeCommander(),
 	"avail-light":     cli.NewAvailLightCommander(),
+	"nostream":     cli.NewNostreamCommander(),
 }

@@ -33,12 +33,13 @@ func (a *AvailLightCommander) Run(cmd *cobra.Command, args []string, mode Mode) 
 }
 
 func (a *AvailLightCommander) Start(cmd *cobra.Command, args []string, mode Mode) {
-	a.Init(cmd, args, mode)
-	fmt.Println(a.componentMgr)
-	fmt.Println("executing start command")
-	cmdexecute := a.componentMgr.GetStartCmd()
-	fmt.Println(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	fmt.Println("lololo")
+	// a.Init(cmd, args, mode)
+	// fmt.Println(a.componentMgr)
+	// fmt.Println("executing start command")
+	// cmdexecute := a.componentMgr.GetStartCmd()
+	// fmt.Println(cmdexecute)
+	// utils.ExecBashCmd(cmdexecute, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *AvailLightCommander) Stop(cmd *cobra.Command, args []string, mode Mode) {

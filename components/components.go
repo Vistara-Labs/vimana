@@ -28,6 +28,8 @@ func NewComponentManager(componentType config.ComponentType, root string, nodeTy
 		component = NewCelestiaComponent(root, ".vimana/celestia", nodeType, c.RPC, c.Network)
 	case config.Avail:
 		component = NewAvailComponent(root, ".vimana/avail", nodeType)
+	case config.Nostream:
+		component = NewNostreamComponent(root, ".vimana/nostream", nodeType)
 	// case config.Berachain:
 	// 	component = berachain.NewBerachainComponent(home)
 	default:
