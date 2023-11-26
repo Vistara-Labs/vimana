@@ -10,15 +10,19 @@ download = "/tmp/vimana/celestia/init.sh"
 binary = "/tmp/vimana/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
+
 [components.avail]
 
 [components.avail.light]
 binary = "avail-light"
-download = "/tmp/vimana/avail/init.sh"
+download = "/home/ankit/vimana/scripts/nostream.sh"
+
+
+[components.nostream]
 
 [components.nostream.nostream]
 binary = "nostream"
-download = "/tmp/vimana/nostream/init.sh"
+download = "/home/ankit/vimana/scripts/nostream.sh"
 
 # [components.berachain]
 
