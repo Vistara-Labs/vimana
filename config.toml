@@ -16,10 +16,10 @@ download = "/tmp/vimana/celestia/init.sh"
 binary = "avail-light"
 download = "/tmp/vimana/avail/init.sh"
 
-[components.rollup]
+[components.gmd]
 
-[components.rollup.light]
-binary = "rollup"
+[components.gmd.rollup]
+binary = "gmd"
 download = "/home/ankit/vimana/scripts/gmd.sh"
 
 # [components.berachain]
