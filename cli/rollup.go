@@ -34,7 +34,6 @@ func (a *RollupInitCommander) Run(cmd *cobra.Command, args []string, mode Mode) 
 
 func (a *RollupInitCommander) Start(cmd *cobra.Command, args []string, mode Mode) {
 	a.Init(cmd, args, mode)
-	fmt.Println(a.componentMgr)
 	fmt.Println("executing start command")
 	cmdexecute := a.componentMgr.GetStartCmd()
 	fmt.Println(cmdexecute)
