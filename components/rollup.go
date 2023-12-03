@@ -4,27 +4,27 @@ import (
 	"os/exec"
 )
 
-type GmdComponent struct {
+type RollupComponent struct {
 	Root      string
 	ConfigDir string
 }
 
-func NewGmdComponent(root string, home string, node string) *GmdComponent {
-	return &GmdComponent{
+func NewRollupComponent(root string, home string, node string) *RollupComponent {
+	return &RollupComponent{
 		Root:      root,
 		ConfigDir: home,
 	}
 }
 
-func (c *GmdComponent) InitializeConfig() error {
+func (c *RollupComponent) InitializeConfig() error {
 	// lightNodePath := filepath.Join(os.Getenv("HOME"), c.ConfigDir+"/"+c.NodeType+"-node")
 	// mkdir -p ~/.vimana/celestia/light-node
 	return nil
 }
 
-func (c *GmdComponent) GetStartCmd() *exec.Cmd {
+func (c *RollupComponent) GetStartCmd() *exec.Cmd {
 	args := []string{}
-	// Gmdup.sh handles this.
+	// Rollupup.sh handles this.
 	return exec.Command(
 		c.Root, args...,
 	)

@@ -74,7 +74,7 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 			ntype := nodeTypes[nodeType]
 			currentNodeType := nodeType
 			nodeCmd := &cobra.Command{
-				Use:  nodeType + "-node",
+				Use:  nodeType,
 				Args: cobra.NoArgs,
 				Run: func(c *cobra.Command, args []string) {
 					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)

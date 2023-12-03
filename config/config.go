@@ -6,5 +6,5 @@ const (
 	Celestia  ComponentType = "celestia"
 	Berachain ComponentType = "berachain"
 	Avail     ComponentType = "avail"
-	Gmd     ComponentType = "gmd"
+	Rollup     ComponentType = "rollup"
 )
