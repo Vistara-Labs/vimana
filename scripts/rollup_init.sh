@@ -1,4 +1,7 @@
 #!/bin/bash
 set -e
 
-docker run -i --platform linux/amd64 -p 26657:26657 -p 26658:26658 -p 26659:26659 ghcr.io/rollkit/local-celestia-devnet:v0.11.0
+# init light node
+# start light node
+celestia light init --p2p.network mocha
+celestia light start --core.ip rpc-mocha.pops.one --p2p.network mocha

@@ -26,7 +26,7 @@ download = "/home/chappie/vimana/scripts/rollup_init.sh"
 
 [components.rollup.start]
 binary = "rollup-start"
-download = "vimana/scripts/rollup_start.sh"
+download = "/home/chappie/vimana/scripts/rollup_mocha.sh"
 
 # [components.berachain]
 

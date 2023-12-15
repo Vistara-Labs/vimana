@@ -2,9 +2,11 @@
 
 # docker run -i -t --platform linux/amd64 -p 26657:26657 -p 26658:26658 -p 26659:26659 ghcr.io/rollkit/local-celestia-devnet:v0.11.0
 
-docker exec $(docker ps -q)  celestia bridge --node.store /home/celestia/bridge/ auth admin
-export CELESTIA_NODE_AUTH_TOKEN=$(docker exec $(docker ps -q)  celestia bridge --node.store /home/celestia/bridge/ auth admin)
-export AUTH_TOKEN=$(docker exec $(docker ps -q)  celestia bridge --node.store /home/celestia/bridge/ auth admin)
+# sudo docker exec $(docker ps -q)  celestia bridge --node.store /home/celestia/bridge/ auth admin
+# sudo export CELESTIA_NODE_AUTH_TOKEN=$(docker exec $(docker ps -q)  celestia bridge --node.store /home/celestia/bridge/ auth admin)
+# sudo export AUTH_TOKEN=$(docker exec $(docker ps -q)  celestia bridge --node.store /home/celestia/bridge/ auth admin)
+
+cel-key list --node.type bridge --keyring-backend test --p2p.network mocha
 
 
 # set variables for the chain
@@ -24,7 +26,7 @@ NAMESPACE=$(openssl rand -hex 8)
 # to allow users to interact with Celestia's nodes by querying
 # the node's state and broadcasting transactions on the Celestia
 # network. The default port is 26657.
-DA_BLOCK_HEIGHT=$(curl http://0.0.0.0:26657/block | jq -r '.result.block.header.height')
+DA_BLOCK_HEIGHT=$(curl rpc-mocha.pops.one/block | jq -r '.result.block.header.height')
 
 # echo variables for the chain
 echo -e "\n\n\n\n\n Your NAMESPACE is $NAMESPACE \n\n Your DA_BLOCK_HEIGHT is $DA_BLOCK_HEIGHT \n\n\n\n\n"
@@ -55,18 +57,20 @@ gmd collect-gentxs
 # export the Celestia light node's auth token to allow you to submit
 # PayForBlobs to Celestia's data availability network
 # this is for Arabica, if using another network, change the network name
-AUTH_TOKEN=$(docker exec $(docker ps -q)  celestia bridge --node.store /home/celestia/bridge/ auth admin)
+AUTH_TOKEN=$(celestia bridge --node.store /home/celestia/bridge/ auth admin)
+# ----------------------------> fund manually <-------------------------------------------------
 
 # create a restart-local.sh file to restart the chain later
 [ -f restart-local.sh ] && rm restart-local.sh
+echo "AUTH_TOKEN=$AUTH_TOKEN" >> restart-local.sh
 echo "DA_BLOCK_HEIGHT=$DA_BLOCK_HEIGHT" >> restart-local.sh
 echo "NAMESPACE=$NAMESPACE" >> restart-local.sh
-echo "AUTH_TOKEN=$AUTH_TOKEN" >> restart-local.sh
 
 echo "gmd start --rollkit.aggregator true --rollkit.da_layer celestia --rollkit.da_config='{\"base_url\":\"http://localhost:26658\",\"timeout\":60000000000,\"fee\":600000,\"gas_limit\":6000000,\"auth_token\":\"'\$AUTH_TOKEN'\"}' --rollkit.namespace_id \$NAMESPACE --rollkit.da_start_height \$DA_BLOCK_HEIGHT --rpc.laddr tcp://127.0.0.1:36657 --p2p.laddr \"0.0.0.0:36656\"" >> restart-local.sh
 
 # start the chain
-gmd start --rollkit.aggregator true --rollkit.da_layer celestia --rollkit.da_config='{"base_url":"http://localhost:26658","timeout":60000000000,"fee":600000,"gas_limit":6000000,"auth_token":"'$AUTH_TOKEN'"}' --rollkit.namespace_id $NAMESPACE --rollkit.da_start_height $DA_BLOCK_HEIGHT --rpc.laddr tcp://127.0.0.1:36657 --p2p.laddr "0.0.0.0:36656"
+# gmd start --rollkit.aggregator true --rollkit.da_layer celestia --rollkit.da_config='{"base_url":"http://localhost:26658","timeout":60000000000,"fee":600000,"gas_limit":6000000,"auth_token":"'$AUTH_TOKEN'"}' --rollkit.namespace_id $NAMESPACE --rollkit.da_start_height $DA_BLOCK_HEIGHT --rpc.laddr tcp://127.0.0.1:36657 --p2p.laddr "0.0.0.0:36656"
 
 # uncomment the next command if you are using lazy aggregation
 # gmd start --rollkit.aggregator true --rollkit.da_layer celestia --rollkit.da_config='{"base_url":"http://localhost:26658","timeout":60000000000,"fee":600000,"gas_limit":6000000,"auth_token":"'$AUTH_TOKEN'"}' --rollkit.namespace_id $NAMESPACE --rollkit.da_start_height $DA_BLOCK_HEIGHT --rollkit.lazy_aggregator
+gmd start --rollkit.aggregator true --rollkit.lazy_aggregator --rollkit.da_layer celestia  --rollkit.namespace_id $NAMESPACE
