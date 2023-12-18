@@ -22,11 +22,11 @@ download = "/tmp/vimana/avail/init.sh"
 
 [components.rollup.init]
 binary = "rollup-init"
-download = "/home/chappie/vimana/scripts/rollup_init.sh"
+download = "/home/ankit/vimana/scripts/rollup_init.sh"
 
 [components.rollup.start]
 binary = "rollup-start"
-download = "/home/chappie/vimana/scripts/rollup_mocha.sh"
+download = "/home/ankit/vimana/scripts/rollup_mocha.sh"
 
 # [components.berachain]
 

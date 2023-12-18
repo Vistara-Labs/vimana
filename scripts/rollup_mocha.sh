@@ -1,5 +1,10 @@
 #!/bin/sh
 
+
+# echo "Fund your celestia account"
+# ./celestia-node/cel-key list --node.type light --keyring-backend test --p2p.network mocha
+
+
 # Define the paths
 gmd_path="$HOME/go/bin/gmd"
 gm_path="$HOME/.gm"

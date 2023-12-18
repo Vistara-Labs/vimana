@@ -32,7 +32,7 @@ DA_BLOCK_HEIGHT=$(curl rpc-mocha.pops.one/block | jq -r '.result.block.header.he
 echo -e "\n\n\n\n\n Your NAMESPACE is $NAMESPACE \n\n Your DA_BLOCK_HEIGHT is $DA_BLOCK_HEIGHT \n\n\n\n\n"
 
 # build the gm chain with Rollkit
-ignite chain build
+# ignite chain build
 
 # reset any existing genesis/chain data
 gmd tendermint unsafe-reset-all
