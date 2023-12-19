@@ -1,8 +1,56 @@
 #!/bin/sh
 
+echo "Fund your celestia account"
+cel-key list --node.type light --keyring-backend test --p2p.network mocha
 
-# echo "Fund your celestia account"
-# cel-key list --node.type light --keyring-backend test --p2p.network mocha
+## install the gmd binary
+INTERNAL_DIR="/usr/local/bin"
+
+# check if the binary is already installed
+if [ -f "$INTERNAL_DIR/gmd" ]; then
+    # Capture the version output
+    VERSION_OUTPUT=$("$INTERNAL_DIR/gmd" version)
+    
+    # Check if the version matches "v0.11.0-rc15-dev"
+    echo "🚀 gmd is already installed with the correct version." $VERSION_OUTPUT
+else
+    echo "🚀 gmd is not installed..."
+    echo "🔍 Determining OS and architecture..."
+    OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+    ARCH=$(uname -m)
+
+    if [[ "$ARCH" == "x86_64" ]]; then
+        ARCH="amd64"
+    elif [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "aarch64" ]]; then
+        ARCH="arm64"
+    fi
+
+    echo "💻  OS: $OS"
+    echo "🏗️  ARCH: $ARCH"
+
+    # if OS is linux then install unzip
+    if [[ "$OS" == "linux" ]]; then
+        if which apt > /dev/null; then
+            sudo apt-get update > /dev/null
+            sudo apt-get install unzip > /dev/null
+        elif which apk > /dev/null; then
+            sudo apk update > /dev/null
+            sudo apk add unzip > /dev/null
+            ARCH="arm64_alpine"
+        fi
+    fi
+
+    TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/gmd-v0.0.1/gmd-${OS}-${ARCH}.zip"
+    sudo mkdir -p "/tmp/vimgmd"
+    echo "💈 Downloading gmd..."
+    sudo curl -o /tmp/vimgmd/gmd-${OS}-${ARCH}.zip -L "$TGZ_URL" --progress-bar
+
+    sudo unzip -q /tmp/vimgmd/gmd-${OS}-${ARCH}.zip -d /tmp/vimgmd/
+    sudo mv "/tmp/vimgmd/gmd-${OS}-${ARCH}"/* "$INTERNAL_DIR"
+    # sudo chmod +x "$INTERNAL_DIR"
+    sudo rm -rf "/tmp/vimgmd"
+fi
+
 
 
 # Define the paths
