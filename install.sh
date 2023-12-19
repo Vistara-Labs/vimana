@@ -36,9 +36,17 @@ sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.
 curl -O https://vistara-labs.github.io/vimana/scripts/availup.sh 2>/dev/null
 sudo mkdir -p /tmp/vimana/avail && sudo mv availup.sh /tmp/vimana/avail/init.sh
 
+curl -O https://vistara-labs.github.io/vimana/scripts/rollup_init.sh 2>/dev/null
+sudo mkdir -p /tmp/vimana/rollup && sudo mv rollup_init.sh /tmp/vimana/rollup/rollup_init.sh
+
+curl -O https://vistara-labs.github.io/vimana/scripts/rollup_mocha.sh 2>/dev/null
+sudo mkdir -p /tmp/vimana/rollup && sudo mv rollup_mocha.sh /tmp/vimana/rollup/rollup_mocha.sh
+
 curl https://api-api-dev.bk7bbm.oss-acorn.io/save-vimana-install > /dev/null 2>&1
 sudo chmod +x /tmp/vimana/celestia/init.sh
 sudo chmod +x /tmp/vimana/avail/init.sh
+sudo chmod +x /tmp/vimana/rollup/rollup_init.sh
+sudo chmod +x /tmp/vimana/rollup/rollup_mocha.sh
 mkdir -p ~/.vimana/celestia/light-node
 chmod +x ~/.vimana/celestia/light-node
 echo "✅ vimana installed!"
