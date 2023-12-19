@@ -2,7 +2,7 @@
 
 
 # echo "Fund your celestia account"
-# ./celestia-node/cel-key list --node.type light --keyring-backend test --p2p.network mocha
+# cel-key list --node.type light --keyring-backend test --p2p.network mocha
 
 
 # Define the paths
