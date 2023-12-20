@@ -11,7 +11,7 @@ if [ -f "$INTERNAL_DIR/celestia" ]; then
     # Check if the version matches "v0.11.0-rc15-dev"
     if [[ $VERSION_OUTPUT == *"v0.12"* ]]; then
         echo "🚀 Celestia is already installed with the correct version." $VERSION_OUTPUT
-        celestia light init --p2p.network mocha
+        # celestia light init --p2p.network mocha
         celestia light start --core.ip rpc-mocha.pops.one --p2p.network mocha
         exit 0
     else

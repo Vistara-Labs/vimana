@@ -18,15 +18,15 @@ binary = "avail-light"
 download = "/tmp/vimana/avail/init.sh"
 
 
-[components.rollup]
+[components.gmworld]
 
-[components.rollup.init]
-binary = "rollup-init"
-download = "/tmp/vimana/rollup/rollup_init.sh"
+[components.gmworld.da]
+binary = "gmworld-da"
+download = "/home/ankit/vimana/scripts/rollup_init.sh"
 
-[components.rollup.start]
-binary = "rollup-start"
-download = "/tmp/vimana/rollup/rollup_mocha.sh"
+[components.gmworld.rollup]
+binary = "gmworld-rollup"
+download = "/home/ankit/vimana/scripts/rollup_mocha.sh"
 
 # [components.berachain]
 
