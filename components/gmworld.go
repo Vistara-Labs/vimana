@@ -17,8 +17,6 @@ func NewGmworldComponent(root string, home string, node string) *GmworldComponen
 }
 
 func (c *GmworldComponent) InitializeConfig() error {
-	// lightNodePath := filepath.Join(os.Getenv("HOME"), c.ConfigDir+"/"+c.NodeType+"-node")
-	// mkdir -p ~/.vimana/celestia/light-node
 	return nil
 }
 
