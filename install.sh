@@ -35,7 +35,8 @@ sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.
 curl -O https://vistara-labs.github.io/vimana/scripts/availup.sh 2>/dev/null
 sudo mkdir -p /tmp/vimana/avail && sudo mv availup.sh /tmp/vimana/avail/init.sh
 
-curl https://api-api-dev.bk7bbm.oss-acorn.io/save-vimana-install > /dev/null 2>&1
+# once the API is fixed, remove insecure
+curl --insecure https://api-api-dev.bk7bbm.oss-acorn.io/save-vimana-install > /dev/null 2>&1
 sudo chmod +x /tmp/vimana/celestia/init.sh
 sudo chmod +x /tmp/vimana/avail/init.sh
 mkdir -p ~/.vimana/celestia/light-node
