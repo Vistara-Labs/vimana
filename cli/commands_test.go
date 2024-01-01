@@ -30,6 +30,11 @@ download = "/tmp/vimana/celestia/init.sh"
 binary = "berachain-light"
 download = "/tmp/vimana/berachain/init.sh"
 
+[components.eigen]
+
+[components.eigen.operator]
+binary = "/tmp/vimana/eigen/eigen"
+download = "/tmp/vimana/eigen/init.sh"
 `
 	// Write mockData to a temporary file
 	tmpfile, err := ioutil.TempFile("", "example.toml")
@@ -49,6 +54,7 @@ download = "/tmp/vimana/berachain/init.sh"
 		"celestia-light":  NewMockCommander(),
 		"celestia-bridge": NewMockCommander(),
 		"avail-light":     NewMockCommander(),
+		"eigen-operator":  NewMockCommander(),
 	}
 
 	// Call GetCommandsFromConfig

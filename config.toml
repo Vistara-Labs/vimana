@@ -21,3 +21,9 @@ download = "/tmp/vimana/avail/init.sh"
 # [components.berachain.full]
 # binary = "/path/to/celestia/binary"
 # download = "https://example.com/berachain.zip"
+
+[components.eigen]
+
+[components.eigen.operator]
+binary = "/tmp/vimana/eigen/eigen"
+download = "/tmp/vimana/eigen/init.sh"
