@@ -22,7 +22,7 @@ func (c *GmworldComponent) InitializeConfig() error {
 
 func (c *GmworldComponent) GetStartCmd() *exec.Cmd {
 	args := []string{}
-	// Gmworldup.sh handles this.
+	// Gmworldup.sh handles this. TODO: Move the init and start command here.
 	return exec.Command(
 		c.Root, args...,
 	)

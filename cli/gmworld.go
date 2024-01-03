@@ -23,7 +23,7 @@ func (a *GmworldDaCommander) AddFlags(cmd *cobra.Command) {
 
 func (a *GmworldDaCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	a.initComponentManager("rollup", mode.Binary)
+	a.initComponentManager("gmworld", mode.Binary)
 	return a.componentMgr.InitializeConfig()
 }
 
@@ -47,7 +47,6 @@ func (a *GmworldDaCommander) Stop(cmd *cobra.Command, args []string, mode Mode) 
 func (a *GmworldDaCommander) Status(cmd *cobra.Command, args []string, mode Mode) {
 	fmt.Println("Getting status of Celestia bridge node")
 }
-
 
 type GmworldRollupCommander struct {
 	BaseCommander

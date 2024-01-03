@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Fund your celestia account"
-cel-key list --node.type light --keyring-backend test --p2p.network mocha
+# cel-key list --node.type light --keyring-backend test --p2p.network mocha
 
 ## install the gmd binary
 INTERNAL_DIR="/usr/local/bin"
@@ -116,7 +116,7 @@ DA_BLOCK_HEIGHT=$(curl  https://rpc-mocha.pops.one/block |jq -r '.result.block.h
 echo 'DA_BLOCK_HEIGHT' $DA_BLOCK_HEIGHT
 
 # build the gm chain with Rollkit
-ignite chain build
+# ignite chain build
 
 # reset any existing genesis/chain data
 gmd tendermint unsafe-reset-all
