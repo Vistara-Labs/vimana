@@ -31,7 +31,7 @@ func NewComponentManager(componentType config.ComponentType, root string, nodeTy
 	// case config.Berachain:
 	// 	component = berachain.NewBerachainComponent(home)
 	case config.Eigen:
-		component = NewEigenComponent(root, ".vimana/avail", nodeType)
+		component = NewEigenComponent(root, ".vimana/eigen", nodeType)
 	default:
 		panic("Unknown component type")
 	}

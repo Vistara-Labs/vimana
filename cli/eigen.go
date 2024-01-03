@@ -23,7 +23,7 @@ func (a *EigenOperatorCommander) AddFlags(cmd *cobra.Command) {
 
 func (a *EigenOperatorCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	a.initComponentManager("avail", mode.Binary)
+	a.initComponentManager("eigen", mode.Binary)
 	return a.componentMgr.InitializeConfig()
 }
 
