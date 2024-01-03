@@ -17,11 +17,11 @@ func TestGetCommandsFromConfig(t *testing.T) {
 [components.celestia]
 
 [components.celestia.blah]
-binary = "/tmp/vimana/celestia/celestia"
+binary = "/usr/local/bin/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
 [components.celestia.bridge]
-binary = "/tmp/vimana/celestia/celestia"
+binary = "/usr/local/bin/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
 [components.berachain]
@@ -33,7 +33,7 @@ download = "/tmp/vimana/berachain/init.sh"
 [components.eigen]
 
 [components.eigen.operator]
-binary = "/tmp/vimana/eigen/eigen"
+binary = "/usr/local/bin/eigen/eigen"
 download = "/tmp/vimana/eigen/init.sh"
 `
 	// Write mockData to a temporary file

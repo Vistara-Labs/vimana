@@ -3,11 +3,11 @@
 [components.celestia]
 
 [components.celestia.light]
-binary = "/tmp/vimana/celestia/celestia"
+binary = "/usr/local/bin/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
 [components.celestia.bridge]
-binary = "/tmp/vimana/celestia/celestia"
+binary = "/usr/local/bin/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
 [components.avail]
@@ -25,5 +25,5 @@ download = "/tmp/vimana/avail/init.sh"
 [components.eigen]
 
 [components.eigen.operator]
-binary = "/tmp/vimana/eigen/eigen"
+binary = "/usr/local/bin/eigen/eigen"
 download = "/tmp/vimana/eigen/init.sh"

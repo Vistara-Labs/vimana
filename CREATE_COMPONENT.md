@@ -12,7 +12,7 @@ e.g.
 [components.dymension]
 
 [components.dymension.full]
-binary = "/tmp/vimana/dymension/dymd"
+binary = "/usr/local/bin/dymension/dymd"
 download = "/tmp/vimana/dymension/init.sh"
 ```
 
