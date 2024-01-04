@@ -47,22 +47,20 @@ fi
 
 # Download celestia binary
 
-# TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.12.0/${OS}_${ARCH}.zip"
-# sudo mkdir -p "/tmp/vimcel"
-# echo "💈 Downloading Celestia..."
-# sudo curl -o /tmp/vimcel/${OS}_${ARCH}.zip -L "$TGZ_URL" --progress-bar
+TGZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/celestia-v0.12.0/${OS}_${ARCH}.zip"
+sudo mkdir -p "/tmp/vimcel"
+echo "💈 Downloading Celestia..."
+sudo curl -o /tmp/vimcel/${OS}_${ARCH}.zip -L "$TGZ_URL" --progress-bar
 
-# sudo unzip -q /tmp/vimcel/${OS}_${ARCH}.zip -d /tmp/vimcel/
-# sudo mv "/tmp/vimcel/${OS}_${ARCH}"/* "$INTERNAL_DIR"
-# sudo chmod +x "$INTERNAL_DIR"
-# sudo rm -rf "/tmp/vimcel
+sudo unzip -q /tmp/vimcel/${OS}_${ARCH}.zip -d /tmp/vimcel/
+sudo mv "/tmp/vimcel/${OS}_${ARCH}"/* "$INTERNAL_DIR"
+sudo chmod +x "$INTERNAL_DIR"
+sudo rm -rf "/tmp/vimcel"
 
 if [ ! -f "$HOME/.vimana/gmdcelestia/config.yml" ]; then
     # This should be handled in the InitializeConfig code
     celestia bridge init --core.ip rpc-mocha.pops.one --p2p.network mocha --node.store ~/.vimana/gmdcelestia/
 fi
 
-# init light node
-# start light node
-# Handle in GetStartCmd
+# Handle this in GetStartCmd
 celestia bridge start --core.ip rpc-mocha.pops.one --p2p.network mocha --node.store ~/.vimana/gmdcelestia/

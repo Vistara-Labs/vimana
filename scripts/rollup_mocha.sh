@@ -91,9 +91,6 @@ install_jq() {
 # Check for dependencies
 install_jq
 
-# Exit if a command fails
-# set -e
-
 # set variables for the chain
 VALIDATOR_NAME=validator1
 CHAIN_ID=gm
@@ -151,4 +148,4 @@ export AUTH_TOKEN=$(celestia light auth write --p2p.network mocha)
 
 # start the chain
 # gmd start --rollkit.aggregator true --rollkit.lazy_aggregator --rollkit.da_layer celestia --rollkit.da_config='{"base_url":"http://localhost:26658","timeout":60000000000,"fee":600000,"gas_limit":6000000,"auth_token":"'$AUTH_TOKEN'"}' --rollkit.namespace_id $NAMESPACE --rollkit.da_start_height $DA_BLOCK_HEIGHT
-gmd start --rollkit.aggregator true  --rollkit.da_layer celestia --rollkit.da_config='{"base_url":"http://localhost:26658","timeout":60000000000,"fee":600000,"gas_limit":6000000,"auth_token":"'$AUTH_TOKEN'"}' --rollkit.namespace_id $NAMESPACE --rollkit.da_start_height $DA_BLOCK_HEIGHT
+gmd start --rollkit.aggregator true --rollkit.lazy_aggregator --rollkit.da_layer celestia --rollkit.da_config='{"base_url":"http://localhost:26658","timeout":60000000000,"fee":600000,"gas_limit":6000000,"auth_token":"'$AUTH_TOKEN'"}' --rollkit.namespace_id $NAMESPACE --rollkit.da_start_height $DA_BLOCK_HEIGHT
