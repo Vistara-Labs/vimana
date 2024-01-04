@@ -16,6 +16,17 @@ download = "/tmp/vimana/celestia/init.sh"
 binary = "avail-light"
 download = "/tmp/vimana/avail/init.sh"
 
+
+[components.gmworld]
+
+[components.gmworld.da]
+binary = "gmworld-da"
+download = "/tmp/vimana/gmd/rollup_init.sh"
+
+[components.gmworld.rollup]
+binary = "gmworld-rollup"
+download = "/tmp/vimana/gmd/rollup_mocha.sh"
+
 # [components.berachain]
 
 # [components.berachain.full]

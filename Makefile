@@ -15,6 +15,8 @@ build:
 	@echo "Building for Mac..."
 	mkdir -p ${BINARY_NAME}-darwin-arm64
 	GOOS=darwin GOARCH=arm64 go build ${LDFLAGS} -o ${BINARY_NAME}-darwin-arm64 -v ./...
+	mkdir -p ${BINARY_NAME}-darwin-amd64
+	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-darwin-amd64 -v ./...
 	mkdir -p ${HOME}/.vimana
 	cp config.toml ${HOME}/.vimana/config.toml
 
