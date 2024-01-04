@@ -7,7 +7,7 @@ if [[ "$ARCH" == "x86_64" ]]; then
 elif [[ "$ARCH" == "arm64" ]] || [[ "$ARCH" == "aarch64" ]]; then
     ARCH="arm64"
 fi
-VIMANA_RELEASE_TAG="v0.0.14"
+VIMANA_RELEASE_TAG="v0.0.15"
 GZ_URL="https://github.com/Vistara-Labs/vimana/releases/download/vimana-${VIMANA_RELEASE_TAG}/vimana-${OS}-${ARCH}.tar.gz"
 
 INTERNAL_DIR="/usr/local/bin/"
@@ -36,7 +36,8 @@ sudo mkdir -p /tmp/vimana/celestia && sudo cp scripts/init.sh /tmp/vimana/celest
 curl -O https://vistara-labs.github.io/vimana/scripts/availup.sh 2>/dev/null
 sudo mkdir -p /tmp/vimana/avail && sudo mv availup.sh /tmp/vimana/avail/init.sh
 
-curl https://api-api-dev.bk7bbm.oss-acorn.io/save-vimana-install > /dev/null 2>&1
+# once the API is fixed, remove insecure
+curl --insecure https://api-api-dev.bk7bbm.oss-acorn.io/save-vimana-install > /dev/null 2>&1
 sudo chmod +x /tmp/vimana/celestia/init.sh
 sudo chmod +x /tmp/vimana/avail/init.sh
 mkdir -p ~/.vimana/celestia/light-node
