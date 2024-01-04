@@ -25,5 +25,5 @@ download = "/tmp/vimana/avail/init.sh"
 [components.eigen]
 
 [components.eigen.operator]
-binary = "/usr/local/bin/eigen/eigen"
+binary = "/usr/local/bin/eigen/eigenlayer"
 download = "/tmp/vimana/eigen/init.sh"

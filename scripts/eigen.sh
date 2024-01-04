@@ -28,7 +28,9 @@ parse_args() {
   #BINDIR is ./bin unless set be ENV
   # over-ridden by flag below
 
-  BINDIR=${BINDIR:-~/bin}
+  #BINDIR=${BINDIR:-~/bin}
+  BINDIR=${BINDIR:-/usr/local/bin/eigen}
+  sudo mkdir -p "$BINDIR"
   while getopts "b:ndh?x" arg; do
     case "$arg" in
       b) BINDIR="$OPTARG" ;;
@@ -58,7 +60,7 @@ execute() {
     if [ "$OS" = "windows" ]; then
       binexe="${binexe}.exe"
     fi
-    install "${tmpdir}/${binexe}" "${BINDIR}/"
+    sudo install "${tmpdir}/${binexe}" "${BINDIR}/"
     log_info "installed ${BINDIR}/${binexe}"
   done
   rm -rf "${tmpdir}"
