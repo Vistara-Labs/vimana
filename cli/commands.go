@@ -78,6 +78,8 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 				Args: cobra.NoArgs,
 				Run: func(c *cobra.Command, args []string) {
 					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
+					fmt.Println("commander component", key)
+
 					commander := commanderRegistry[key]
 					if commander != nil {
 						initConf.SpaceCore = currentComponent
