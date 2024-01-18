@@ -51,6 +51,7 @@ func InitCLI() error {
 	rootCmd.AddCommand(commands...)
 	rootCmd.AddCommand(initVimana())
 	rootCmd.AddCommand(versionCommand())
+	rootCmd.AddCommand(migrateCommand())
 
 	return rootCmd.Execute()
 }
