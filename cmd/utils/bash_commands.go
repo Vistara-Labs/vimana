@@ -22,14 +22,25 @@ func WithErrorsToStderr() CommandOption {
 	}
 }
 
-func ExecBashCmd(cmd *exec.Cmd, options ...CommandOption) error {
+func ExecBashCmd(cmd *exec.Cmd, node_info string, options ...CommandOption) error {
 	for _, option := range options {
 		option(cmd)
 	}
-	err := cmd.Run()
+	err := cmd.Start()
 	if err != nil {
 		return fmt.Errorf("command execution failed: %w", err)
 	}
+
+	pid := cmd.Process.Pid
+	PIDFile := GetPIDFileName(node_info)
+	savePID(pid, PIDFile)
+
+	// use goroutine waiting, manage process
+	// this is important, otherwise the process becomes in S mode
+	go func() {
+		err = cmd.Wait()
+		fmt.Printf("Command finished with error: %v", err)
+	}()
 	fmt.Println("Command execution completed", cmd)
 	return nil
 }

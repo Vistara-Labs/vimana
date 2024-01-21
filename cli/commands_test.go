@@ -51,10 +51,10 @@ download = "/tmp/vimana/eigen/init.sh"
 
 	// Define a mock commanderRegistry
 	var mockCommanderRegistry = map[string]NodeCommander{
-		"celestia-light":  NewMockCommander(),
-		"celestia-bridge": NewMockCommander(),
-		"avail-light":     NewMockCommander(),
-		"eigen-operator":  NewMockCommander(),
+		"celestia-light":  NewMockCommander("light"),
+		"celestia-bridge": NewMockCommander("bridge"),
+		"avail-light":     NewMockCommander("light"),
+		"eigen-operator":  NewMockCommander("operator"),
 	}
 
 	// Call GetCommandsFromConfig
@@ -80,24 +80,24 @@ download = "/tmp/vimana/eigen/init.sh"
 
 type MockCommander struct{ BaseCommander }
 
-func NewMockCommander() *MockCommander {
+func NewMockCommander(node_type string) *MockCommander {
 	return &MockCommander{
-		BaseCommander: BaseCommander{NodeType: "light"},
+		BaseCommander: BaseCommander{NodeType: node_type},
 	}
 }
 
-func (m *MockCommander) Init(cmd *cobra.Command, args []string, mode Mode) error {
+func (m *MockCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	fmt.Println("MockCommander.Init() called")
 	return nil
 }
 
-func (m *MockCommander) Start(cmd *cobra.Command, args []string, mode Mode) {
+func (m *MockCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 }
 
-func (m *MockCommander) Status(cmd *cobra.Command, args []string, mode Mode) {
+func (m *MockCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 }
 
-func (m *MockCommander) Stop(cmd *cobra.Command, args []string, mode Mode) {
+func (m *MockCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 }
 func (m *MockCommander) AddFlags(cmd *cobra.Command) {
 }

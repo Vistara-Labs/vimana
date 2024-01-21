@@ -5,26 +5,108 @@ import (
 	"log"
 	"os"
 	"strings"
+	"vimana/cli"
 	"vimana/cmd/utils"
 
+	"github.com/BurntSushi/toml"
 	"github.com/asmcos/requests"
 	"github.com/shirou/gopsutil/host"
 	"github.com/spf13/cobra"
 )
 
-func migrateCommand() *cobra.Command {
-	migrateCmd := &cobra.Command{
-		Use:   "migrate",
-		Short: "upgrade vimana to latest version",
+func repoCommand() *cobra.Command {
+	repoCmd := &cobra.Command{
+		Use:   "repo",
+		Short: "add repo to vimana",
+	}
+
+	addCmd := &cobra.Command{
+		Use:   "add",
+		Short: "add x.y spacecore to vimana",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("vimana version: ", Version)
-			upgradeVimana()
+			if len(args) == 0 {
+				fmt.Println("lack of parmater")
+			} else {
+				fmt.Println(args)
+				param := strings.Split(args[0], ".")
+				component := param[0]
+				param = strings.Split(param[1], "-")
+				node_type := param[0]
+				fmt.Println(component, node_type)
+
+				// prompt user input repo url
+				prompter := utils.NewPrompter()
+				repo_url, err := prompter.InputString(
+					"Enter your github repo address:",
+					"",
+					"",
+					func(s string) error {
+						return nil
+					},
+				)
+				if err != nil {
+					return
+				}
+				fmt.Println(repo_url)
+
+				// prompt user input node binary
+				binary_file, err := prompter.InputString(
+					"Enter your binary file name:",
+					"",
+					"",
+					func(s string) error {
+						return nil
+					},
+				)
+				if err != nil {
+					return
+				}
+				fmt.Println(binary_file)
+
+				configFile := os.Getenv("HOME") + "/.vimana/config.toml"
+				var config cli.Config
+				if _, err := toml.DecodeFile(configFile, &config); err != nil {
+					return
+				}
+				for component, nodeTypes := range config.Components {
+					fmt.Println(component)
+					for nodeType := range nodeTypes {
+						fmt.Println(nodeType, nodeTypes[nodeType])
+						fmt.Println(nodeTypes[nodeType].Binary)
+						fmt.Println(nodeTypes[nodeType].Download)
+					}
+				}
+				if _, ok := config.Components[component]; !ok {
+					var m cli.Mode
+					m.Binary = "/usr/local/bin/" + component + "/" + binary_file
+					m.Download = "/tmp/vimana/" + component + "/init.sh"
+					new_component := make(map[string]cli.Mode, 1)
+					new_component[node_type] = m
+					config.Components[component] = new_component
+
+				}
+
+				for component, nodeTypes := range config.Components {
+					fmt.Println(component)
+					for nodeType := range nodeTypes {
+						fmt.Println(nodeType, nodeTypes[nodeType])
+						fmt.Println(nodeTypes[nodeType].Binary)
+						fmt.Println(nodeTypes[nodeType].Download)
+					}
+				}
+
+				cli.WriteConf(config)
+			}
+
 		},
 	}
-	return migrateCmd
+
+	repoCmd.AddCommand(addCmd)
+
+	return repoCmd
 }
 
-func upgradeVimana() {
+func repoVimana() {
 	resp, err := requests.Get("https://api.github.com/repos/Vistara-Labs/vimana/releases")
 	if err != nil {
 		return
