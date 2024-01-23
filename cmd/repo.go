@@ -2,8 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"vimana/cli"
 	"vimana/cmd/utils"
@@ -80,6 +83,42 @@ func repoCommand() *cobra.Command {
 					var m cli.Mode
 					m.Binary = "/usr/local/bin/" + component + "/" + binary_file
 					m.Download = "/tmp/vimana/" + component + "/init.sh"
+
+					res, err := http.Get(repo_url + "/init.sh")
+					if err != nil {
+						fmt.Errorf("file init.sh download error, check file address: %v", err)
+						return
+					}
+					os.MkdirAll("/tmp/vimana/"+component, 0755)
+					f, err := os.Create(m.Download)
+					if err != nil {
+						fmt.Println(f, err)
+						return
+					}
+					_, err = io.Copy(f, res.Body)
+					if err != nil {
+						fmt.Errorf("file save error: %v", err)
+						return
+					}
+					//download start.sh
+					res, err = http.Get(repo_url + "/start.sh")
+					if err != nil {
+						fmt.Errorf("file start.sh download error, check file address: %v", err)
+						return
+					}
+					os.MkdirAll("/tmp/vimana/"+component, 0755)
+					f, err = os.Create("/tmp/vimana/" + component + "/start.sh")
+					_, err = io.Copy(f, res.Body)
+					//download stop.sh
+					res, err = http.Get(repo_url + "/stop.sh")
+					if err != nil {
+						fmt.Errorf("file start.sh download error, check file address: %v", err)
+						return
+					}
+					os.MkdirAll("/tmp/vimana/"+component, 0755)
+					f, err = os.Create("/tmp/vimana/" + component + "/stop.sh")
+					_, err = io.Copy(f, res.Body)
+
 					new_component := make(map[string]cli.Mode, 1)
 					new_component[node_type] = m
 					config.Components[component] = new_component
