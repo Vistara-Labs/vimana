@@ -1,4 +1,4 @@
-# Vimana CLI 
+# Vimana CLI
 
 Vimana CLI is a comprehensive tool designed to simplify the creation and management of different types of nodes, including the data availability layer light node, full node, bridge node, and full nodes for Ethereum-like berachain.
 
@@ -27,13 +27,23 @@ Install Binary:
 
 `curl -L https://vistara-labs.github.io/vimana/install.sh | bash`
 
+Run celestia light node:
+
+`vimana run celestia light-node`
+
 Install from Source:
+
+For Linux:
+
+`make build-linux`
+
+For MacOS:
 
 `make build`
 
 Run celestia light node:
 
-`vimana run celestia light-node`
+`./vimana-linux-amd64/vimana run celestia light-node`
 
 See options for a specific node type:
 
@@ -66,15 +76,17 @@ With this setup, when developers want to support new node types or components, t
 1. Add the configuration to config.toml.
 2. Implement the NodeCommander interface for that component and mode.
 3. Register their implementation in the commanderRegistry.
-This provides a modular and expandable CLI framework.
+   This provides a modular and expandable CLI framework.
 
 ## Command API
 
 ## Run Nodes
-**Syntax**: 
+
+**Syntax**:
 vimana run [NODE_TYPE] [OPTIONS]
 
-**Example**: 
+**Example**:
+
 ```
 vimana run celestia light-node
 vimana run celestia bridge-node
@@ -82,6 +94,7 @@ vimana run celestia bridge-node
 
 **Launch via service**: <br/>
 service creation for light-node
+
 ```
 tee /etc/systemd/system/vinama.service > /dev/null <<EOF
 [Unit]
@@ -98,7 +111,9 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOF
 ```
+
 launch
+
 ```
 systemctl daemon-reload
 systemctl enable vinama
@@ -123,7 +138,9 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOF
 ```
+
 launch
+
 ```
 systemctl daemon-reload
 systemctl enable vinama-bridge
@@ -139,18 +156,24 @@ vimana run avail light-node
 ```
 
 ## Stop Nodes
+
 ```
 sudo systemctl stop vinama
 ```
+
 ## Node Status
+
 ```
 sudo systemctl status vinama
 ```
+
 ### Node log
-```
-sudo journalctl -u vinama.service -f 
 
 ```
+sudo journalctl -u vinama.service -f
+
+```
+
 ## Support & Feedback
 
 For any issues, questions, or feedback, please contact *mayur@vistara.dev*.
