@@ -2,7 +2,10 @@ package cli
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"vimana/cmd/utils"
 
@@ -45,6 +48,42 @@ func (a *EigenOperatorCommander) Start(cmd *cobra.Command, args []string, mode M
 
 func (a *EigenOperatorCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	fmt.Println("Stopping Eigen operator node")
+	PIDFile := utils.GetPIDFileName(node_info)
+	if _, err := os.Stat(PIDFile); err == nil {
+		data, err := ioutil.ReadFile(PIDFile)
+		if err != nil {
+			fmt.Println("Not running")
+			return
+		}
+		ProcessID, err := strconv.Atoi(string(data))
+
+		if err != nil {
+			fmt.Println("Unable to read and parse process id found in ", PIDFile)
+			return
+		}
+
+		process, err := os.FindProcess(ProcessID)
+
+		if err != nil {
+			fmt.Printf("Unable to find process ID [%v] with error %v \n", ProcessID, err)
+			return
+		}
+		// remove PID file
+		os.Remove(PIDFile)
+
+		node_info_arr := strings.Split(node_info, "-")
+		fmt.Println("Stopping " + node_info_arr[0] + " " + node_info_arr[1] + " node")
+		// kill process and exit immediately
+		err = process.Kill()
+
+		if err != nil {
+			fmt.Printf("Unable to kill process ID [%v] with error %v \n", ProcessID, err)
+		} else {
+			fmt.Printf("Killed process ID [%v]\n", ProcessID)
+		}
+	} else {
+		fmt.Println("Not running.")
+	}
 }
 
 func (a *EigenOperatorCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
