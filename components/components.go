@@ -36,7 +36,7 @@ func NewComponentManager(componentType config.ComponentType, root string, nodeTy
 		component = NewEigenComponent(root, ".vimana/eigen", nodeType)
 	default:
 		//panic("Unknown component type")
-		component = NewUniveralComponent(root, ".vimana/"+string(componentType), nodeType)
+		component = NewUniversalComponent(root, ".vimana/"+string(componentType), nodeType)
 	}
 
 	return &ComponentManager{

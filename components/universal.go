@@ -4,25 +4,25 @@ import (
 	"os/exec"
 )
 
-type UniveralComponent struct {
+type UniversalComponent struct {
 	Root      string
 	ConfigDir string
 }
 
-func NewUniveralComponent(root string, home string, node string) *UniveralComponent {
-	return &UniveralComponent{
+func NewUniversalComponent(root string, home string, node string) *UniversalComponent {
+	return &UniversalComponent{
 		Root:      root,
 		ConfigDir: home,
 	}
 }
 
-func (c *UniveralComponent) InitializeConfig() error {
+func (c *UniversalComponent) InitializeConfig() error {
 	// lightNodePath := filepath.Join(os.Getenv("HOME"), c.ConfigDir+"/"+c.NodeType+"-node")
 	// mkdir -p ~/.vimana/celestia/light-node
 	return nil
 }
 
-func (c *UniveralComponent) GetStartCmd() *exec.Cmd {
+func (c *UniversalComponent) GetStartCmd() *exec.Cmd {
 	args := []string{}
 	// Univeralup.sh handles this.
 	return exec.Command(
