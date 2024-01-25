@@ -33,7 +33,7 @@ func (a *GmworldDaCommander) Init(cmd *cobra.Command, args []string, mode Mode, 
 
 func (a *GmworldDaCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	cmdexecute := a.componentMgr.GetStartCmd()
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *GmworldDaCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -42,7 +42,7 @@ func (a *GmworldDaCommander) Start(cmd *cobra.Command, args []string, mode Mode,
 	fmt.Println("executing start command")
 	cmdexecute := a.componentMgr.GetStartCmd()
 	fmt.Println(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *GmworldDaCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -74,7 +74,7 @@ func (a *GmworldRollupCommander) Init(cmd *cobra.Command, args []string, mode Mo
 
 func (a *GmworldRollupCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	cmdexecute := a.componentMgr.GetStartCmd()
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *GmworldRollupCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -91,7 +91,7 @@ func (a *GmworldRollupCommander) Start(cmd *cobra.Command, args []string, mode M
 	fmt.Println("executing start command")
 	cmdexecute := a.componentMgr.GetStartCmd()
 	fmt.Println(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *GmworldRollupCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {

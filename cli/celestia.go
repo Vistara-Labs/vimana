@@ -66,7 +66,7 @@ func (c *CelestiaLightCommander) Run(cmd *cobra.Command, args []string, mode Mod
 	node_info_arr := strings.Split(node_info, "-")
 	c.Init(cmd, args, mode, node_info_arr[0])
 	cmdexecute := c.componentMgr.GetStartCmd()
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (c *CelestiaLightCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -82,7 +82,7 @@ func (c *CelestiaLightCommander) Start(cmd *cobra.Command, args []string, mode M
 	c.Init(cmd, args, mode, node_info_arr[0])
 	cmdexecute := c.componentMgr.GetStartCmd()
 	fmt.Println(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (c *CelestiaLightCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -173,8 +173,8 @@ func (c *CelestiaBridgeCommander) Start(cmd *cobra.Command, args []string, mode 
 	c.Init(cmd, args, mode, node_info_arr[0])
 	// fmt.Println("Starting Celestia bridge node", c)
 	cmdexecute := c.componentMgr.GetStartCmd()
-	fmt.Println(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	fmt.Println("Start: ", cmdexecute)
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (c *CelestiaBridgeCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {

@@ -33,7 +33,7 @@ func (a *AvailLightCommander) Init(cmd *cobra.Command, args []string, mode Mode,
 
 func (a *AvailLightCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	cmdexecute := a.componentMgr.GetStartCmd()
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *AvailLightCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {

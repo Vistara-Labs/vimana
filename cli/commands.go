@@ -70,22 +70,14 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 
 	// update commanderRegistry
 	for component, nodeTypes := range config.Components {
-		fmt.Println(component)
 		for nodeType := range nodeTypes {
-			fmt.Println(nodeType, nodeTypes[nodeType])
-			fmt.Println(nodeTypes[nodeType].Binary)
-			fmt.Println(nodeTypes[nodeType].Download)
 			cmd_key := component + "-" + nodeType
-			fmt.Println(cmd_key)
-
 			commander := commanderRegistry[cmd_key]
 			if commander == nil {
 				commanderRegistry[cmd_key] = NewUniversalCommander(nodeType)
 			}
 		}
 	}
-
-	fmt.Println(len(commanderRegistry))
 
 	//
 	var commands []*cobra.Command
@@ -123,7 +115,7 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 						if initConf.Analytics.Enabled {
 							go utils.SaveAnalyticsData(initConf)
 						}
-						commander.Start(c, args, ntype, currentComponent)
+						commander.Start(c, args, ntype, key)
 					} else {
 						log.Fatalf("Components '%s' of type '%s' not recognized", component, ntype)
 					}

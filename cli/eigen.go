@@ -33,7 +33,7 @@ func (a *EigenOperatorCommander) Init(cmd *cobra.Command, args []string, mode Mo
 
 func (a *EigenOperatorCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	cmdexecute := a.componentMgr.GetStartCmd()
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *EigenOperatorCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -43,7 +43,7 @@ func (a *EigenOperatorCommander) Start(cmd *cobra.Command, args []string, mode M
 	fmt.Println("executing start command")
 	cmdexecute := a.componentMgr.GetStartCmd()
 	fmt.Println(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *EigenOperatorCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -88,4 +88,18 @@ func (a *EigenOperatorCommander) Stop(cmd *cobra.Command, args []string, mode Mo
 
 func (a *EigenOperatorCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	fmt.Println("Getting status of Eigen operator node")
+	node_info_arr := strings.Split(node_info, "-")
+	fmt.Println("Getting status of " + node_info_arr[0] + " " + node_info_arr[1] + " node")
+
+	PIDFile := utils.GetPIDFileName(node_info)
+	if _, err := os.Stat(PIDFile); err == nil {
+		_, err := ioutil.ReadFile(PIDFile)
+		if err != nil {
+			fmt.Println("Not running")
+		} else {
+			fmt.Println(node_info_arr[0] + " " + node_info_arr[1] + " node is running")
+		}
+	} else {
+		fmt.Println("Not running.")
+	}
 }
