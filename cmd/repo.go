@@ -108,15 +108,26 @@ func repoCommand() *cobra.Command {
 					os.MkdirAll("/tmp/vimana/"+component, 0755)
 					f, err = os.Create("/tmp/vimana/" + component + "/start.sh")
 					_, err = io.Copy(f, res.Body)
+
 					//download stop.sh
-					res, err = http.Get(repo_url + "/stop.sh")
+					res, err = http.Get(repo_url + "/install.sh")
 					if err != nil {
 						fmt.Errorf("file start.sh download error, check file address: %v", err)
 						return
 					}
 					os.MkdirAll("/tmp/vimana/"+component, 0755)
-					f, err = os.Create("/tmp/vimana/" + component + "/stop.sh")
+					f, err = os.Create("/tmp/vimana/" + component + "/install.sh")
 					_, err = io.Copy(f, res.Body)
+
+					//download Binary
+					//res, err = http.Get(repo_url + binary_file)
+					//if err != nil {
+					//	fmt.Errorf("file start.sh download error, check file address: %v", err)
+					//	return
+					//}
+					//os.MkdirAll("/usr/local/bin/" + component + "/", 0755)
+					//f, err = os.Create("/usr/local/bin/" + component + "/" + binary_file)
+					//_, err = io.Copy(f, res.Body)
 
 					new_component := make(map[string]cli.Mode, 1)
 					new_component[node_type] = m
