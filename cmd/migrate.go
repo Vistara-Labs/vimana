@@ -150,7 +150,7 @@ func upgradeVimana() {
 	} else {
 		fmt.Println("Upgrade vimana succesfully")
 	}
-
+	os.Chmod(VIMANA_BIN_PATH, os.FileMode(0755))
 	os.RemoveAll("./vimana-" + OS + "-" + ARCH + "/")
 	//
 
