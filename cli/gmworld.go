@@ -25,6 +25,10 @@ func NewGmworldDaCommander(node_type string) *GmworldDaCommander {
 func (a *GmworldDaCommander) AddFlags(cmd *cobra.Command) {
 }
 
+func (a *GmworldDaCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	return
+}
+
 func (a *GmworldDaCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 	a.initComponentManager("gmworld", mode.Binary)
@@ -64,6 +68,9 @@ func NewGmworldRollupCommander(node_type string) *GmworldRollupCommander {
 }
 
 func (a *GmworldRollupCommander) AddFlags(cmd *cobra.Command) {
+}
+
+func (a *GmworldRollupCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 }
 
 func (a *GmworldRollupCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {

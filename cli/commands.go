@@ -22,6 +22,8 @@ type Component map[string]Mode
 type Mode struct {
 	Binary   string `toml:"binary"`
 	Download string `toml:"download"`
+	Install  string `toml:"install"`
+	Start    string `toml:"start"`
 }
 
 func WriteConf(conf Config) error {
@@ -47,6 +49,7 @@ type NodeCommander interface {
 	Start(*cobra.Command, []string, Mode, string)
 	Stop(*cobra.Command, []string, Mode, string)
 	Status(*cobra.Command, []string, Mode, string)
+	Install(*cobra.Command, []string, Mode, string)
 }
 
 type BaseCommander struct {
@@ -130,6 +133,94 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 
 	}
 	commands = append(commands, runCmd)
+
+	//init command
+	initCmd := &cobra.Command{
+		Use:   "init-node",
+		Short: "init a modular component",
+	}
+	for component, nodeTypes := range config.Components {
+		currentComponent := component
+		componentCmd := &cobra.Command{
+			Use:   currentComponent,
+			Short: fmt.Sprintf("init the %s component", currentComponent),
+		}
+
+		for nodeType := range nodeTypes {
+			ntype := nodeTypes[nodeType]
+			currentNodeType := nodeType
+			nodeCmd := &cobra.Command{
+				Use:  nodeType + "-node",
+				Args: cobra.NoArgs,
+				Run: func(c *cobra.Command, args []string) {
+					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
+					fmt.Println("commander component", key)
+
+					commander := commanderRegistry[key]
+					if commander != nil {
+						initConf.SpaceCore = currentComponent
+						if initConf.Analytics.Enabled {
+							go utils.SaveAnalyticsData(initConf)
+						}
+						commander.Init(c, args, ntype, key)
+					} else {
+						log.Fatalf("Components '%s' of type '%s' not recognized", component, ntype)
+					}
+				},
+			}
+			if commander, ok := commanderRegistry[fmt.Sprintf("%s-%s", currentComponent, nodeType)]; ok {
+				commander.AddFlags(nodeCmd)
+			}
+			componentCmd.AddCommand(nodeCmd)
+		}
+		initCmd.AddCommand(componentCmd)
+
+	}
+	commands = append(commands, initCmd)
+
+	//install command
+	installCmd := &cobra.Command{
+		Use:   "install",
+		Short: "install a modular component",
+	}
+	for component, nodeTypes := range config.Components {
+		currentComponent := component
+		componentCmd := &cobra.Command{
+			Use:   currentComponent,
+			Short: fmt.Sprintf("install the %s component", currentComponent),
+		}
+
+		for nodeType := range nodeTypes {
+			ntype := nodeTypes[nodeType]
+			currentNodeType := nodeType
+			nodeCmd := &cobra.Command{
+				Use:  nodeType + "-node",
+				Args: cobra.NoArgs,
+				Run: func(c *cobra.Command, args []string) {
+					key := fmt.Sprintf("%s-%s", currentComponent, currentNodeType)
+					fmt.Println("commander component", key)
+
+					commander := commanderRegistry[key]
+					if commander != nil {
+						initConf.SpaceCore = currentComponent
+						if initConf.Analytics.Enabled {
+							go utils.SaveAnalyticsData(initConf)
+						}
+						commander.Install(c, args, ntype, key)
+					} else {
+						log.Fatalf("Components '%s' of type '%s' not recognized", component, ntype)
+					}
+				},
+			}
+			if commander, ok := commanderRegistry[fmt.Sprintf("%s-%s", currentComponent, nodeType)]; ok {
+				commander.AddFlags(nodeCmd)
+			}
+			componentCmd.AddCommand(nodeCmd)
+		}
+		installCmd.AddCommand(componentCmd)
+
+	}
+	commands = append(commands, installCmd)
 
 	// start command
 	startCmd := &cobra.Command{

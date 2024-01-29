@@ -26,7 +26,17 @@ func NewUniversalCommander(node_type string) *UniversalCommander {
 func (a *UniversalCommander) AddFlags(cmd *cobra.Command) {
 }
 
+func (a *UniversalCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+
+	fmt.Println(a.componentMgr)
+	fmt.Println("executing install command")
+	//cmdexecute := a.componentMgr.GetStartCmd()
+	//fmt.Println(cmdexecute)
+	utils.ExecBashCmd(exec.Command("bash", mode.Install), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+}
+
 func (a *UniversalCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
+
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 	node_info_arr := strings.Split(node_info, "-")
 	a.initComponentManager(config.ComponentType(node_info_arr[0]), mode.Binary)
@@ -47,13 +57,13 @@ func (a *UniversalCommander) Start(cmd *cobra.Command, args []string, mode Mode,
 		return
 	}
 
-	node_info_arr := strings.Split(node_info, "-")
-	a.Init(cmd, args, mode, node_info_arr[0])
+	//node_info_arr := strings.Split(node_info, "-")
+	//a.Init(cmd, args, mode, node_info_arr[0])
 	fmt.Println(a.componentMgr)
 	fmt.Println("executing start command")
-	cmdexecute := a.componentMgr.GetStartCmd()
-	fmt.Println(cmdexecute)
-	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	//cmdexecute := a.componentMgr.GetStartCmd()
+	//fmt.Println(cmdexecute)
+	utils.ExecBinaryCmd(exec.Command("bash", mode.Start), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *UniversalCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
@@ -65,7 +75,7 @@ func (a *UniversalCommander) Stop(cmd *cobra.Command, args []string, mode Mode, 
 			return
 		}
 		ProcessID, err := strconv.Atoi(string(data))
-
+		ProcessID = ProcessID + 1
 		if err != nil {
 			fmt.Println("Unable to read and parse process id found in ", PIDFile)
 			return
