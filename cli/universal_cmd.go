@@ -64,10 +64,11 @@ func (a *UniversalCommander) Start(cmd *cobra.Command, args []string, mode Mode,
 	fmt.Println(a.componentMgr)
 	fmt.Println("executing start command")
 	binaryPath := string([]rune(mode.Binary)[0:strings.LastIndex(mode.Binary, "/")])
+	binaryName := string([]rune(mode.Binary)[strings.LastIndex(mode.Binary, "/")+1:])
 	fmt.Println(binaryPath)
 	//cmdexecute := a.componentMgr.GetStartCmd()
 	//fmt.Println(cmdexecute)
-	utils.ExecBinaryCmd(exec.Command("bash", mode.Start, binaryPath), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(exec.Command("bash", mode.Start, binaryPath, binaryName), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (a *UniversalCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
