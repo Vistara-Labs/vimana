@@ -99,5 +99,9 @@ func (m *MockCommander) Status(cmd *cobra.Command, args []string, mode Mode, nod
 
 func (m *MockCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 }
+
+func (m *MockCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+}
+
 func (m *MockCommander) AddFlags(cmd *cobra.Command) {
 }
