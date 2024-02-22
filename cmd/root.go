@@ -53,6 +53,7 @@ func InitCLI() error {
 	rootCmd.AddCommand(versionCommand())
 	rootCmd.AddCommand(migrateCommand())
 	rootCmd.AddCommand(repoCommand())
+	rootCmd.AddCommand(registryCommand())
 
 	return rootCmd.Execute()
 }
