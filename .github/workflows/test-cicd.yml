@@ -26,5 +26,5 @@ jobs:
     - name: Build
       run: go build -o vimana
 
-    - name: get version
-      run: ./vimana version
+    - name: test run
+      run: ./vimana
