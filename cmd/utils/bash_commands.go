@@ -38,7 +38,6 @@ func ExecBinaryCmd(cmd *exec.Cmd, node_info string, options ...CommandOption) er
 	for _, option := range options {
 		option(cmd)
 	}
-	fmt.Println(cmd.String())
 
 	// open the out file for writing
 	outfile, err := os.Create("/tmp/" + node_info + ".log")

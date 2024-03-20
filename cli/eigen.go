@@ -25,6 +25,10 @@ func NewEigenOperatorCommander(node_type string) *EigenOperatorCommander {
 func (a *EigenOperatorCommander) AddFlags(cmd *cobra.Command) {
 }
 
+func (a *EigenOperatorCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	return
+}
+
 func (a *EigenOperatorCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 	a.initComponentManager("eigen", mode.Binary)

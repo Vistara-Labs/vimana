@@ -79,7 +79,8 @@ func repoCommand() *cobra.Command {
 					var m cli.Mode
 					m.Binary = "/usr/local/bin/" + component + "/" + binary_file
 					m.Download = "/tmp/vimana/" + component + "/init.sh"
-
+					m.Install = "/tmp/vimana/" + component + "/install.sh"
+					m.Start = "/usr/local/bin/" + component + "/start.sh"
 					res, err := http.Get(repo_url + "/init.sh")
 					if err != nil {
 						fmt.Errorf("file init.sh download error, check file address: %v", err)
@@ -102,8 +103,8 @@ func repoCommand() *cobra.Command {
 						fmt.Errorf("file start.sh download error, check file address: %v", err)
 						return
 					}
-					os.MkdirAll("/tmp/vimana/"+component, 0755)
-					f, err = os.Create("/tmp/vimana/" + component + "/start.sh")
+					os.MkdirAll("/usr/local/bin/"+component, 0755)
+					f, err = os.Create(m.Start)
 					_, err = io.Copy(f, res.Body)
 
 					//download stop.sh
@@ -113,7 +114,7 @@ func repoCommand() *cobra.Command {
 						return
 					}
 					os.MkdirAll("/tmp/vimana/"+component, 0755)
-					f, err = os.Create("/tmp/vimana/" + component + "/install.sh")
+					f, err = os.Create(m.Install)
 					_, err = io.Copy(f, res.Body)
 
 					//download Binary

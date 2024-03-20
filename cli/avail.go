@@ -110,3 +110,7 @@ func (a *AvailLightCommander) Status(cmd *cobra.Command, args []string, mode Mod
 		fmt.Println("Not running.")
 	}
 }
+
+func (a *AvailLightCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	return
+}

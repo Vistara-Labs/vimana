@@ -47,6 +47,10 @@ func (c *CelestiaLightCommander) AddFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&c.CelestiaRPC, "rpc", DefaultCelestiaRPC, "Specifies the Celestia RPC endpoint")
 }
 
+func (a *CelestiaLightCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	return
+}
+
 func (c *CelestiaLightCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 
@@ -146,6 +150,10 @@ func (c *CelestiaLightCommander) Status(cmd *cobra.Command, args []string, mode 
 func (c *CelestiaBridgeCommander) AddFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVar(&c.CelestiaNetwork, "network", DefaultCelestiaNetwork, "Specifies the Celestia network")
 	cmd.Flags().StringVar(&c.CelestiaRPC, "rpc", DefaultCelestiaRPC, "Specifies the Celestia RPC endpoint")
+}
+
+func (a *CelestiaBridgeCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	return
 }
 
 func (c *CelestiaBridgeCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {

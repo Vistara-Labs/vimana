@@ -39,7 +39,7 @@ func (c *DymensionFullCommander) Init(cmd *cobra.Command, args []string, mode Mo
 func (c *DymensionFullCommander) Run(cmd *cobra.Command, args []string, mode Mode) {
 	c.Init(cmd, args, mode)
 	cmdexecute := c.componentMgr.GetStartCmd()
-	utils.ExecBashCmd(cmdexecute, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 ```
 
