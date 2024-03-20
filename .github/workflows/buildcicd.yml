@@ -24,4 +24,6 @@ jobs:
       run: go get
       
     - name: Build
-      run: go build -o vimana
+      run: |
+          make build-linux
+          
