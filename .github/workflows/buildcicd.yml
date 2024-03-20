@@ -25,4 +25,3 @@ jobs:
       
     - name: Build
       run: go build -o vimana
-           ./vimana
