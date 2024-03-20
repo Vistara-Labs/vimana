@@ -30,7 +30,7 @@ jobs:
     - name: version
       run: |
           cd vimana-linux-amd64/
-          vimana version
+          ./vimana version
 
     
           
