@@ -24,4 +24,11 @@ jobs:
       run: go get
       
     - name: Build
-      run: go build -o vimana
+      run: |
+        make build-linux
+
+    - name: version
+      run: |
+        cd vimana-linux-amd64/
+        ./vimana version
+
