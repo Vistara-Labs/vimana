@@ -22,7 +22,7 @@ func WithErrorsToStderr() CommandOption {
 	}
 }
 
-func ExecBashCmd(cmd *exec.Cmd, options ...CommandOption) error {
+func ExecBashCmd(cmd *exec.Cmd, node_info string, options ...CommandOption) error {
 	for _, option := range options {
 		option(cmd)
 	}
@@ -30,6 +30,39 @@ func ExecBashCmd(cmd *exec.Cmd, options ...CommandOption) error {
 	if err != nil {
 		return fmt.Errorf("command execution failed: %w", err)
 	}
+	fmt.Println("Command execution completed", cmd)
+	return nil
+}
+
+func ExecBinaryCmd(cmd *exec.Cmd, node_info string, options ...CommandOption) error {
+	for _, option := range options {
+		option(cmd)
+	}
+
+	// open the out file for writing
+	outfile, err := os.Create("/tmp/" + node_info + ".log")
+	if err != nil {
+		panic(err)
+	}
+	defer outfile.Close()
+	cmd.Stdout = outfile
+	cmd.Stderr = outfile
+
+	err = cmd.Start()
+	if err != nil {
+		return fmt.Errorf("command execution failed: %w", err)
+	}
+
+	pid := cmd.Process.Pid
+	PIDFile := GetPIDFileName(node_info)
+	savePID(pid, PIDFile)
+
+	// use goroutine waiting, manage process
+	// this is important, otherwise the process becomes in S mode
+	go func() {
+		err = cmd.Wait()
+		fmt.Printf("Command finished with error: %v", err)
+	}()
 	fmt.Println("Command execution completed", cmd)
 	return nil
 }

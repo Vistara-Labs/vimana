@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-INTERNAL_DIR="/tmp/vimana/celestia"
+INTERNAL_DIR="/usr/local/bin/celestia"
 
 # check if the binary is already installed
 if [ -f "$INTERNAL_DIR/celestia" ]; then

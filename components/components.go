@@ -32,8 +32,11 @@ func NewComponentManager(componentType config.ComponentType, root string, nodeTy
 		component = NewGmworldComponent(root, ".vimana/gmd", nodeType)
 	// case config.Berachain:
 	// 	component = berachain.NewBerachainComponent(home)
+	case config.Eigen:
+		component = NewEigenComponent(root, ".vimana/eigen", nodeType)
 	default:
-		panic("Unknown component type")
+		//panic("Unknown component type")
+		component = NewUniversalComponent(root, ".vimana/"+string(componentType), nodeType)
 	}
 
 	return &ComponentManager{
