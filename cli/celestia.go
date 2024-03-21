@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"vimana/cmd/utils"
@@ -48,6 +49,24 @@ func (c *CelestiaLightCommander) AddFlags(cmd *cobra.Command) {
 }
 
 func (a *CelestiaLightCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	_, err := os.Stat(mode.Download)
+	if err == nil {
+		// true
+		utils.ExecBinaryCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	} else if os.IsNotExist(err) {
+		// false
+		currentDir, err := os.Getwd()
+		if err != nil {
+			fmt.Println("Error getting current directory:", err)
+			return
+		}
+		parentDir := filepath.Dir(currentDir)
+		utils.ExecBinaryCmd(exec.Command("bash", parentDir+"/scripts/init.sh"), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	} else {
+
+		fmt.Printf("error：%v\n", err)
+	}
+	return
 	return
 }
 
