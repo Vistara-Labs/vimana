@@ -26,10 +26,11 @@ echo "🔨 Installing vimana..."
 sudo cp "/tmp/vimana_bins/vimana-${OS}-${ARCH}/vimana" "$INTERNAL_DIR/vimana"
 sudo chmod +x "$INTERNAL_DIR/vimana"
 sudo rm -rf "/tmp/vimana_bins"
-curl -O https://vistara-labs.github.io/vimana/config.toml 2>/dev/null
+# curl -O https://vistara-labs.github.io/vimana/config.toml 2>/dev/null
 mkdir -p ~/.vimana && cp config.toml ~/.vimana/config.toml
-curl -O https://vistara-labs.github.io/vimana/scripts/init.sh 2>/dev/null
-sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.sh
+# curl -O https://vistara-labs.github.io/vimana/scripts/init.sh 2>/dev/null
+#sudo mkdir -p /tmp/vimana/celestia && sudo mv init.sh /tmp/vimana/celestia/init.sh
+sudo mkdir -p /tmp/vimana/celestia && sudo cp scripts/init.sh /tmp/vimana/celestia/init.sh
 
 # Get availup script from repo
 curl -O https://vistara-labs.github.io/vimana/scripts/availup.sh 2>/dev/null
@@ -41,11 +42,17 @@ sudo mkdir -p /tmp/vimana/gmd && sudo mv rollup_init.sh /tmp/vimana/gmd/rollup_i
 curl -O https://vistara-labs.github.io/vimana/scripts/rollup_mocha.sh 2>/dev/null
 sudo mkdir -p /tmp/vimana/gmd && sudo mv rollup_mocha.sh /tmp/vimana/gmd/rollup_mocha.sh
 
+
+# Get eigen script from repo
+curl -O https://vistara-labs.github.io/vimana/scripts/eigen.sh 2>/dev/null
+sudo mkdir -p /tmp/vimana/eigen && sudo mv eigen.sh /tmp/vimana/eigen/init.sh
+
 curl https://api-api-dev.bk7bbm.oss-acorn.io/save-vimana-install > /dev/null 2>&1
 sudo chmod +x /tmp/vimana/celestia/init.sh
 sudo chmod +x /tmp/vimana/avail/init.sh
 sudo chmod +x /tmp/vimana/gmd/rollup_init.sh
 sudo chmod +x /tmp/vimana/gmd/rollup_mocha.sh
+sudo chmod +x /tmp/vimana/eigen/init.sh
 mkdir -p ~/.vimana/celestia/light-node
 chmod +x ~/.vimana/celestia/light-node
 echo "✅ vimana installed!"

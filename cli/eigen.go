@@ -12,50 +12,46 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type AvailLightCommander struct {
+type EigenOperatorCommander struct {
 	BaseCommander
 }
 
-func NewAvailLightCommander(node_type string) *AvailLightCommander {
-	return &AvailLightCommander{
-		BaseCommander: BaseCommander{NodeType: "light"},
+func NewEigenOperatorCommander(node_type string) *EigenOperatorCommander {
+	return &EigenOperatorCommander{
+		BaseCommander: BaseCommander{NodeType: "operator"},
 	}
 }
 
-func (a *AvailLightCommander) AddFlags(cmd *cobra.Command) {
+func (a *EigenOperatorCommander) AddFlags(cmd *cobra.Command) {
 }
 
-func (a *AvailLightCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
+func (a *EigenOperatorCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	return
+}
+
+func (a *EigenOperatorCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	a.initComponentManager("avail", mode.Binary)
+	a.initComponentManager("eigen", mode.Binary)
 	return a.componentMgr.InitializeConfig()
 }
 
-func (a *AvailLightCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+func (a *EigenOperatorCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	cmdexecute := a.componentMgr.GetStartCmd()
 	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
-func (a *AvailLightCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	// check if daemon already running.
-	PIDFile := utils.GetPIDFileName(node_info)
-	if _, err := os.Stat(PIDFile); err == nil {
-		fmt.Println("Already running or " + PIDFile + " file exist.")
-		return
-	}
-
+func (a *EigenOperatorCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	node_info_arr := strings.Split(node_info, "-")
 	a.Init(cmd, args, mode, node_info_arr[0])
 	fmt.Println(a.componentMgr)
 	fmt.Println("executing start command")
 	cmdexecute := a.componentMgr.GetStartCmd()
 	fmt.Println(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
-func (a *AvailLightCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	fmt.Println("Stopping Celestia bridge node")
-
+func (a *EigenOperatorCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	fmt.Println("Stopping Eigen operator node")
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
 		data, err := ioutil.ReadFile(PIDFile)
@@ -94,7 +90,8 @@ func (a *AvailLightCommander) Stop(cmd *cobra.Command, args []string, mode Mode,
 	}
 }
 
-func (a *AvailLightCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+func (a *EigenOperatorCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	fmt.Println("Getting status of Eigen operator node")
 	node_info_arr := strings.Split(node_info, "-")
 	fmt.Println("Getting status of " + node_info_arr[0] + " " + node_info_arr[1] + " node")
 
@@ -109,8 +106,4 @@ func (a *AvailLightCommander) Status(cmd *cobra.Command, args []string, mode Mod
 	} else {
 		fmt.Println("Not running.")
 	}
-}
-
-func (a *AvailLightCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	return
 }
