@@ -38,6 +38,7 @@ jobs:
       run: |
         cd vimana-linux-amd64/
         ./vimana install celestia light-node
+        sleep 10s
         ./vimana stop celestia light-node
         ./vimana start celestia light-node
         ./vimana status celestia light-node
