@@ -25,12 +25,21 @@ jobs:
       
     - name: Build
       run: |
-          make build-linux
-          
+        make build-linux
+
     - name: version
       run: |
-          cd vimana-linux-amd64/
-          ./vimana version
+        cd vimana-linux-amd64/
+        ./vimana version
+        ./vimana registry list
+        ./vimana registry search
 
-    
-          
+    - name: celestia run
+      run: |
+        cd vimana-linux-amd64/
+        ./vimana install celestia light-node
+        ./vimana stop celestia light-node
+        ./vimana start celestia light-node
+        ./vimana status celestia light-node
+        ./vimana stop celestia light-node
+        tail -n 500 /tmp/celestia-light.log
