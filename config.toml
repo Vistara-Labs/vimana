@@ -3,11 +3,11 @@
 [components.celestia]
 
 [components.celestia.light]
-binary = "/usr/local/bin/celestia/celestia"
+binary = "/usr/local/bin/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
 [components.celestia.bridge]
-binary = "/usr/local/bin/celestia/celestia"
+binary = "/usr/local/bin/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
 [components.avail]
@@ -15,26 +15,3 @@ download = "/tmp/vimana/celestia/init.sh"
 [components.avail.light]
 binary = "avail-light"
 download = "/tmp/vimana/avail/init.sh"
-
-
-[components.gmworld]
-
-[components.gmworld.da]
-binary = "gmworld-da"
-download = "/tmp/vimana/gmd/rollup_init.sh"
-
-[components.gmworld.rollup]
-binary = "gmworld-rollup"
-download = "/tmp/vimana/gmd/rollup_mocha.sh"
-
-# [components.berachain]
-
-# [components.berachain.full]
-# binary = "/path/to/celestia/binary"
-# download = "https://example.com/berachain.zip"
-
-#[components.eigen]
-
-#[components.eigen.operator]
-#binary = "/usr/local/bin/eigen/eigenlayer"
-#download = "/tmp/vimana/eigen/init.sh"
