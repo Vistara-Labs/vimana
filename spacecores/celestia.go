@@ -1,4 +1,4 @@
-package components
+package spacecores
 
 import (
 	"log"
@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-type CelestiaComponent struct {
+type CelestiaSpacecore struct {
 	Root            string
 	ConfigDir       string
 	rpcEndpoint     string
@@ -18,8 +18,8 @@ type CelestiaComponent struct {
 	celestiaNetwork string
 }
 
-func NewCelestiaComponent(root string, home string, node string, celestiaRPC, celestiaNetwork string) *CelestiaComponent {
-	return &CelestiaComponent{
+func NewCelestiaSpacecore(root string, home string, node string, celestiaRPC, celestiaNetwork string) *CelestiaSpacecore {
+	return &CelestiaSpacecore{
 		Root:            root,
 		ConfigDir:       home,
 		NodeType:        node,
@@ -29,7 +29,7 @@ func NewCelestiaComponent(root string, home string, node string, celestiaRPC, ce
 	}
 }
 
-func (c *CelestiaComponent) InitializeConfig() error {
+func (c *CelestiaSpacecore) InitializeConfig() error {
 	log.Println("🚀 Creating Celestia ", c.NodeType, " node config dir: ", c.NodeStorePath)
 	if _, err := os.Stat(c.NodeStorePath); os.IsNotExist(err) {
 		err := os.MkdirAll(c.NodeStorePath, 0755)
@@ -63,7 +63,7 @@ func (c *CelestiaComponent) InitializeConfig() error {
 	return nil
 }
 
-func (c *CelestiaComponent) GetStartCmd() *exec.Cmd {
+func (c *CelestiaSpacecore) GetStartCmd() *exec.Cmd {
 	args := []string{
 		c.NodeType, "start",
 		"--core.ip", c.rpcEndpoint,

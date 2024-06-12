@@ -1,28 +1,28 @@
-package components
+package spacecores
 
 import (
 	"os/exec"
 )
 
-type EigenComponent struct {
+type EigenSpacecore struct {
 	Root      string
 	ConfigDir string
 }
 
-func NewEigenComponent(root string, home string, node string) *EigenComponent {
-	return &EigenComponent{
+func NewEigenSpacecore(root string, home string, node string) *EigenSpacecore {
+	return &EigenSpacecore{
 		Root:      root,
 		ConfigDir: home,
 	}
 }
 
-func (c *EigenComponent) InitializeConfig() error {
+func (c *EigenSpacecore) InitializeConfig() error {
 	// lightNodePath := filepath.Join(os.Getenv("HOME"), c.ConfigDir+"/"+c.NodeType+"-node")
 	// mkdir -p ~/.vimana/celestia/light-node
 	return nil
 }
 
-func (c *EigenComponent) GetStartCmd() *exec.Cmd {
+func (c *EigenSpacecore) GetStartCmd() *exec.Cmd {
 	args := []string{}
 	// eigenup.sh handles this.
 	return exec.Command(

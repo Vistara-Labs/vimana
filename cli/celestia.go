@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -9,7 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"vimana/cmd/utils"
-	"vimana/components"
+	"vimana/log"
+	"vimana/spacecores"
 
 	"github.com/spf13/cobra"
 )
@@ -49,6 +49,7 @@ func (c *CelestiaLightCommander) AddFlags(cmd *cobra.Command) {
 }
 
 func (a *CelestiaLightCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	logger := log.GetLogger(cmd.Context())
 	_, err := os.Stat(mode.Download)
 	if err == nil {
 		// true
@@ -57,112 +58,110 @@ func (a *CelestiaLightCommander) Install(cmd *cobra.Command, args []string, mode
 		// false
 		currentDir, err := os.Getwd()
 		if err != nil {
-			fmt.Println("Error getting current directory:", err)
+			logger.Info("Error getting current directory:", err)
 			return
 		}
 		parentDir := filepath.Dir(currentDir)
 		utils.ExecBinaryCmd(exec.Command("bash", parentDir+"/scripts/init.sh"), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 	} else {
 
-		fmt.Printf("error：%v\n", err)
+		logger.Infof("error：%v\n", err)
 	}
-	return
 	return
 }
 
 func (c *CelestiaLightCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 
-	c.config = &components.ComponentConfig{
+	c.config = &spacecores.SpacecoreConfig{
 		RPC:     c.CelestiaRPC,
 		Network: c.CelestiaNetwork,
 	}
 
-	// c.componentMgr = components.NewComponentManager("celestia", mode.Binary, c.NodeType, config)
-	c.initComponentManager("celestia", mode.Binary)
+	c.initSpacecoreManager("celestia", mode.Binary)
 
-	// c.initComponentManager("celestia", mode.Binary, c.CelestiaNetwork, c.CelestiaRPC)
-	return c.componentMgr.InitializeConfig()
+	// c.initSpacecoreManager("celestia", mode.Binary, c.CelestiaNetwork, c.CelestiaRPC)
+	return c.spacecoresMgr.InitializeConfig()
 }
 
 func (c *CelestiaLightCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	node_info_arr := strings.Split(node_info, "-")
 	c.Init(cmd, args, mode, node_info_arr[0])
-	cmdexecute := c.componentMgr.GetStartCmd()
+	cmdexecute := c.spacecoresMgr.GetStartCmd()
 	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (c *CelestiaLightCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-
+	logger := log.GetLogger(cmd.Context())
 	// check if daemon already running.
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
-		fmt.Println("Already running or " + PIDFile + " file exist.")
+		logger.Info("Already running or " + PIDFile + " file exist.")
 		return
 	}
 
 	node_info_arr := strings.Split(node_info, "-")
 	c.Init(cmd, args, mode, node_info_arr[0])
-	cmdexecute := c.componentMgr.GetStartCmd()
-	fmt.Println(cmdexecute)
+	cmdexecute := c.spacecoresMgr.GetStartCmd()
+	logger.Info(cmdexecute)
 	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (c *CelestiaLightCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	// Implementation for "start" command for Celestia light node
+	logger := log.GetLogger(cmd.Context())
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
 		data, err := ioutil.ReadFile(PIDFile)
 		if err != nil {
-			fmt.Println("Not running")
+			logger.Info("Not running")
 			return
 		}
 		ProcessID, err := strconv.Atoi(string(data))
 
 		if err != nil {
-			fmt.Println("Unable to read and parse process id found in ", PIDFile)
+			logger.Info("Unable to read and parse process id found in ", PIDFile)
 			return
 		}
 
 		process, err := os.FindProcess(ProcessID)
 
 		if err != nil {
-			fmt.Printf("Unable to find process ID [%v] with error %v \n", ProcessID, err)
+			logger.Infof("Unable to find process ID [%v] with error %v \n", ProcessID, err)
 			return
 		}
 		// remove PID file
 		os.Remove(PIDFile)
 
 		node_info_arr := strings.Split(node_info, "-")
-		fmt.Println("Stopping " + node_info_arr[0] + " " + node_info_arr[1] + " node")
+		logger.Info("Stopping " + node_info_arr[0] + " " + node_info_arr[1] + " node")
 		// kill process and exit immediately
 		err = process.Kill()
 
 		if err != nil {
-			fmt.Printf("Unable to kill process ID [%v] with error %v \n", ProcessID, err)
+			logger.Infof("Unable to kill process ID [%v] with error %v \n", ProcessID, err)
 		} else {
-			fmt.Printf("Killed process ID [%v]\n", ProcessID)
+			logger.Infof("Killed process ID [%v]\n", ProcessID)
 		}
 	} else {
-		fmt.Println("Not running.")
+		logger.Info("Not running.")
 	}
 }
 
 func (c *CelestiaLightCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	// Implementation for "start" command for Celestia light node
+	logger := log.GetLogger(cmd.Context())
 	node_info_arr := strings.Split(node_info, "-")
-	fmt.Println("Getting status of " + node_info_arr[0] + " " + node_info_arr[1] + " node")
+	logger.Info("Getting status of " + node_info_arr[0] + " " + node_info_arr[1] + " node")
 
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
 		_, err := ioutil.ReadFile(PIDFile)
 		if err != nil {
-			fmt.Println("Not running")
+			logger.Info("Not running")
 		} else {
-			fmt.Println(node_info_arr[0] + " " + node_info_arr[1] + " node is running")
+			logger.Info(node_info_arr[0] + " " + node_info_arr[1] + " node is running")
 		}
 	} else {
-		fmt.Println("Not running.")
+		logger.Info("Not running.")
 	}
 }
 
@@ -172,93 +171,94 @@ func (c *CelestiaBridgeCommander) AddFlags(cmd *cobra.Command) {
 }
 
 func (a *CelestiaBridgeCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+
 	return
 }
 
 func (c *CelestiaBridgeCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	c.config = &components.ComponentConfig{
+	c.config = &spacecores.SpacecoreConfig{
 		RPC:     c.CelestiaRPC,
 		Network: c.CelestiaNetwork,
 	}
 
-	c.initComponentManager("celestia", mode.Binary)
+	c.initSpacecoreManager("celestia", mode.Binary)
 
-	return c.componentMgr.InitializeConfig()
+	return c.spacecoresMgr.InitializeConfig()
 }
 
 func (c *CelestiaBridgeCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-
+	logger := log.GetLogger(cmd.Context())
 	// check if daemon already running.
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
-		fmt.Println("Already running or " + PIDFile + " file exist.")
+		logger.Info("Already running or " + PIDFile + " file exist.")
 		return
 	}
 
 	node_info_arr := strings.Split(node_info, "-")
 	c.Init(cmd, args, mode, node_info_arr[0])
-	// fmt.Println("Starting Celestia bridge node", c)
-	cmdexecute := c.componentMgr.GetStartCmd()
-	fmt.Println("Start: ", cmdexecute)
+	// logger.Info("Starting Celestia bridge node", c)
+	cmdexecute := c.spacecoresMgr.GetStartCmd()
+	logger.Info("Start: ", cmdexecute)
 	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
 func (c *CelestiaBridgeCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	// Implementation for "start" command for Celestia light node
-	fmt.Println("Stopping Celestia bridge node")
+	logger := log.GetLogger(cmd.Context())
+	logger.Info("Stopping Celestia bridge node")
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
 		data, err := ioutil.ReadFile(PIDFile)
 		if err != nil {
-			fmt.Println("Not running")
+			logger.Info("Not running")
 			return
 		}
 		ProcessID, err := strconv.Atoi(string(data))
 
 		if err != nil {
-			fmt.Println("Unable to read and parse process id found in ", PIDFile)
+			logger.Info("Unable to read and parse process id found in ", PIDFile)
 			return
 		}
 
 		process, err := os.FindProcess(ProcessID)
 
 		if err != nil {
-			fmt.Printf("Unable to find process ID [%v] with error %v \n", ProcessID, err)
+			logger.Infof("Unable to find process ID [%v] with error %v \n", ProcessID, err)
 			return
 		}
 		// remove PID file
 		os.Remove(PIDFile)
 
 		node_info_arr := strings.Split(node_info, "-")
-		fmt.Println("Stopping " + node_info_arr[0] + " " + node_info_arr[1] + " node")
+		logger.Info("Stopping " + node_info_arr[0] + " " + node_info_arr[1] + " node")
 		// kill process and exit immediately
 		err = process.Kill()
 
 		if err != nil {
-			fmt.Printf("Unable to kill process ID [%v] with error %v \n", ProcessID, err)
+			logger.Infof("Unable to kill process ID [%v] with error %v \n", ProcessID, err)
 		} else {
-			fmt.Printf("Killed process ID [%v]\n", ProcessID)
+			logger.Infof("Killed process ID [%v]\n", ProcessID)
 		}
 	} else {
-		fmt.Println("Not running.")
+		logger.Info("Not running.")
 	}
 }
 
 func (c *CelestiaBridgeCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	// Implementation for "start" command for Celestia light node
+	logger := log.GetLogger(cmd.Context())
 	node_info_arr := strings.Split(node_info, "-")
-	fmt.Println("Getting status of " + node_info_arr[0] + " " + node_info_arr[1] + " node")
+	logger.Info("Getting status of " + node_info_arr[0] + " " + node_info_arr[1] + " node")
 
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
 		_, err := ioutil.ReadFile(PIDFile)
 		if err != nil {
-			fmt.Println("Not running")
+			logger.Info("Not running")
 		} else {
-			fmt.Println(node_info_arr[0] + " " + node_info_arr[1] + " node is running")
+			logger.Info(node_info_arr[0] + " " + node_info_arr[1] + " node is running")
 		}
 	} else {
-		fmt.Println("Not running.")
+		logger.Info("Not running.")
 	}
 }

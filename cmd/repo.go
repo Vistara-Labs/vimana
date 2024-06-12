@@ -8,12 +8,15 @@ import (
 	"strings"
 	"vimana/cli"
 	"vimana/cmd/utils"
+	"vimana/log"
 
 	"github.com/BurntSushi/toml"
+
 	"github.com/spf13/cobra"
 )
 
 func repoCommand() *cobra.Command {
+
 	repoCmd := &cobra.Command{
 		Use:   "repo",
 		Short: "add repo to vimana",
@@ -23,15 +26,19 @@ func repoCommand() *cobra.Command {
 		Use:   "add",
 		Short: "add x.y spacecore to vimana",
 		Run: func(cmd *cobra.Command, args []string) {
+
+			logger := log.GetLogger(cmd.Context())
 			if len(args) == 0 {
-				fmt.Println("lack of parmater")
+				logger.Infof(
+					"Please provide the spacecore and node type to add. e.g. vimana repo add x.y-node-type",
+				)
 			} else {
-				fmt.Println(args)
+				logger.Info(args)
 				param := strings.Split(args[0], ".")
-				component := param[0]
+				spacecore := param[0]
 				param = strings.Split(param[1], "-")
 				node_type := param[0]
-				fmt.Println(component, node_type)
+				logger.Info(spacecore, node_type)
 
 				// prompt user input repo url
 				prompter := utils.NewPrompter()
@@ -46,7 +53,7 @@ func repoCommand() *cobra.Command {
 				if err != nil {
 					return
 				}
-				fmt.Println(repo_url)
+				logger.Info(repo_url)
 
 				// prompt user input node binary
 				binary_file, err := prompter.InputString(
@@ -60,36 +67,38 @@ func repoCommand() *cobra.Command {
 				if err != nil {
 					return
 				}
-				fmt.Println(binary_file)
+				logger.Info(binary_file)
 
 				configFile := os.Getenv("HOME") + "/.vimana/config.toml"
 				var config cli.Config
 				if _, err := toml.DecodeFile(configFile, &config); err != nil {
 					return
 				}
-				for component, nodeTypes := range config.Components {
-					fmt.Println(component)
+				for spacecore, nodeTypes := range config.Spacecores {
+					logger.Info(spacecore)
 					for nodeType := range nodeTypes {
-						fmt.Println(nodeType, nodeTypes[nodeType])
-						fmt.Println(nodeTypes[nodeType].Binary)
-						fmt.Println(nodeTypes[nodeType].Download)
+						logger.Info(nodeType, nodeTypes[nodeType])
+						logger.Info(nodeTypes[nodeType].Binary)
+						logger.Info(nodeTypes[nodeType].Download)
 					}
 				}
-				if _, ok := config.Components[component]; !ok {
+				if _, ok := config.Spacecores[spacecore]; !ok {
 					var m cli.Mode
-					m.Binary = "/usr/local/bin/" + component + "/" + binary_file
-					m.Download = "/tmp/vimana/" + component + "/init.sh"
-					m.Install = "/tmp/vimana/" + component + "/install.sh"
-					m.Start = "/usr/local/bin/" + component + "/start.sh"
+					m.Binary = "/usr/local/bin/" + spacecore + "/" + binary_file
+					m.Download = "/tmp/vimana/" + spacecore + "/init.sh"
+					m.Install = "/tmp/vimana/" + spacecore + "/install.sh"
+					m.Start = "/usr/local/bin/" + spacecore + "/start.sh"
+
+					logger.Infof("m mode is  %v\n\n", m)
 					res, err := http.Get(repo_url + "/init.sh")
 					if err != nil {
 						fmt.Errorf("file init.sh download error, check file address: %v", err)
 						return
 					}
-					os.MkdirAll("/tmp/vimana/"+component, 0755)
+					os.MkdirAll("/tmp/vimana/"+spacecore, 0755)
 					f, err := os.Create(m.Download)
 					if err != nil {
-						fmt.Println(f, err)
+						logger.Info(f, err)
 						return
 					}
 					_, err = io.Copy(f, res.Body)
@@ -103,7 +112,7 @@ func repoCommand() *cobra.Command {
 						fmt.Errorf("file start.sh download error, check file address: %v", err)
 						return
 					}
-					os.MkdirAll("/usr/local/bin/"+component, 0755)
+					os.MkdirAll("/usr/local/bin/"+spacecore, 0755)
 					f, err = os.Create(m.Start)
 					_, err = io.Copy(f, res.Body)
 
@@ -113,7 +122,7 @@ func repoCommand() *cobra.Command {
 						fmt.Errorf("file start.sh download error, check file address: %v", err)
 						return
 					}
-					os.MkdirAll("/tmp/vimana/"+component, 0755)
+					os.MkdirAll("/tmp/vimana/"+spacecore, 0755)
 					f, err = os.Create(m.Install)
 					_, err = io.Copy(f, res.Body)
 
@@ -123,22 +132,22 @@ func repoCommand() *cobra.Command {
 					//	fmt.Errorf("file start.sh download error, check file address: %v", err)
 					//	return
 					//}
-					//os.MkdirAll("/usr/local/bin/" + component + "/", 0755)
-					//f, err = os.Create("/usr/local/bin/" + component + "/" + binary_file)
+					//os.MkdirAll("/usr/local/bin/" + spacecore + "/", 0755)
+					//f, err = os.Create("/usr/local/bin/" + spacecore + "/" + binary_file)
 					//_, err = io.Copy(f, res.Body)
 
-					new_component := make(map[string]cli.Mode, 1)
-					new_component[node_type] = m
-					config.Components[component] = new_component
+					new_spacecore := make(map[string]cli.Mode, 1)
+					new_spacecore[node_type] = m
+					config.Spacecores[spacecore] = new_spacecore
 
 				}
 
-				for component, nodeTypes := range config.Components {
-					fmt.Println(component)
+				for spacecore, nodeTypes := range config.Spacecores {
+					logger.Infof("spacecore %s\n\n", spacecore)
 					for nodeType := range nodeTypes {
-						fmt.Println(nodeType, nodeTypes[nodeType])
-						fmt.Println(nodeTypes[nodeType].Binary)
-						fmt.Println(nodeTypes[nodeType].Download)
+						logger.Info(nodeType, nodeTypes[nodeType])
+						logger.Info(nodeTypes[nodeType].Binary)
+						logger.Info(nodeTypes[nodeType].Download)
 					}
 				}
 
@@ -150,5 +159,45 @@ func repoCommand() *cobra.Command {
 
 	repoCmd.AddCommand(addCmd)
 
+	importCmd := &cobra.Command{
+		Use:   "import",
+		Short: "import repo from vimana",
+		Run: func(cmd *cobra.Command, args []string) {
+			logger := log.GetLogger(cmd.Context())
+			logger.Info("import repo")
+			// prompt user input repo url
+
+			prompter := utils.NewPrompter()
+			repo_url, err := prompter.InputString(
+				"Enter your github repo address:",
+				"",
+				"",
+				func(s string) error {
+					return nil
+				},
+			)
+			if err != nil {
+				return
+			}
+			logger.Info(repo_url)
+
+			// Download the spaceocre from the source url
+			// Verify the downloaded content (checksum)
+			// Register the spacecore in the Vimana system
+			// Add the spacecore to the config.toml file
+			// Return a success message to the user and any errors
+
+			// this is the approach used for vimana repo add cmd.
+			// res, err := http.Get(repo_url + "/init.sh")
+			// if err != nil {
+			// 	fmt.Errorf("file init.sh download error, check file address: %v", err)
+			// 	return
+			// }
+			// os.MkdirAll("/tmp/vimana/"+repo_url, 0755)
+
+		},
+	}
+
+	repoCmd.AddCommand(importCmd)
 	return repoCmd
 }

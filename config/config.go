@@ -1,11 +1,11 @@
 package config
 
-type ComponentType string
+type SpacecoreType string
 
 const (
-	Celestia  ComponentType = "celestia"
-	Berachain ComponentType = "berachain"
-	Avail     ComponentType = "avail"
-	Gmworld   ComponentType = "gmworld"
-	Eigen     ComponentType = "eigen"
+	Celestia  SpacecoreType = "celestia"
+	Berachain SpacecoreType = "berachain"
+	Avail     SpacecoreType = "avail"
+	Gmworld   SpacecoreType = "gmworld"
+	Eigen     SpacecoreType = "eigen"
 )

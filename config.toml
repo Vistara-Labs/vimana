@@ -1,17 +1,17 @@
-[components]
+[spacecores]
 
-[components.celestia]
+[spacecores.celestia]
 
-[components.celestia.light]
+[spacecores.celestia.light]
 binary = "/usr/local/bin/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
-[components.celestia.bridge]
+[spacecores.celestia.bridge]
 binary = "/usr/local/bin/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
-[components.avail]
+[spacecores.avail]
 
-[components.avail.light]
+[spacecores.avail.light]
 binary = "avail-light"
 download = "/tmp/vimana/avail/init.sh"

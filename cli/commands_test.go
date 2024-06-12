@@ -1,44 +1,41 @@
 package cli
 
 import (
-	"fmt"
-	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"vimana/log"
+
+	"github.com/spf13/cobra"
 )
 
 func TestGetCommandsFromConfig(t *testing.T) {
 	// Mocking the TOML config data
 	mockData := `
-[components]
+[spacecores]
 
-[components.celestia]
+[spacecores.celestia]
 
-[components.celestia.light]
+[spacecores.celestia.blah]
 binary = "/usr/local/bin/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
-[components.celestia.bridge]
+[spacecores.celestia.bridge]
 binary = "/usr/local/bin/celestia/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
-[components.avail]
+[spacecores.berachain]
 
-[components.avail.light]
-binary = "avail-light"
-download = "/tmp/vimana/avail/init.sh"
+[spacecores.berachain.light]
+binary = "berachain-light"
+download = "/tmp/vimana/berachain/init.sh"
 
+[spacecores.eigen]
 
-[components.gmworld]
-
-[components.gmworld.da]
-binary = "gmworld-da"
-download = "/tmp/vimana/gmd/rollup_init.sh"
-
-[components.gmworld.rollup]
-binary = "gmworld-rollup"
-download = "/tmp/vimana/gmd/rollup_mocha.sh"
+[spacecores.eigen.operator]
+binary = "/usr/local/bin/eigen/eigen"
+download = "/tmp/vimana/eigen/init.sh"
 `
 	// Write mockData to a temporary file
 	tmpfile, err := ioutil.TempFile("", "example.toml")
@@ -69,7 +66,6 @@ download = "/tmp/vimana/gmd/rollup_mocha.sh"
 	}
 
 	/*	if len(commands) != 1 {
-		print(commands)
 		t.Fatalf("Expected 1 main command but got %d", len(commands))
 	}*/
 
@@ -80,7 +76,7 @@ download = "/tmp/vimana/gmd/rollup_mocha.sh"
 
 	/*
 		if len(runCmd.Commands()) != 2 {
-			t.Fatalf("Expected 2 component commands but got %d", len(runCmd.Commands()))
+			t.Fatalf("Expected 2 spacecore commands but got %d", len(runCmd.Commands()))
 		}
 	*/
 }
@@ -94,7 +90,8 @@ func NewMockCommander(node_type string) *MockCommander {
 }
 
 func (m *MockCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
-	fmt.Println("MockCommander.Init() called")
+	logger := log.GetLogger(cmd.Context())
+	logger.Info("MockCommander.Init() called")
 	return nil
 }
 
@@ -107,7 +104,7 @@ func (m *MockCommander) Status(cmd *cobra.Command, args []string, mode Mode, nod
 func (m *MockCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 }
 
-func (m *MockCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+func (m *MockCommander) Logs(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 }
 
 func (m *MockCommander) AddFlags(cmd *cobra.Command) {
