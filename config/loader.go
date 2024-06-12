@@ -2,18 +2,18 @@ package config
 
 import "github.com/BurntSushi/toml"
 
-// type Component struct {
+// type Spacecore struct {
 // 	Modes    []string
 // 	Binary   string
 // 	Download string
 // }
 
 type Config struct {
-	// Components map[string]Component
-	Components map[string]Component `toml:"components"`
+	// Spacecores map[string]Spacecore
+	Spacecores map[string]Spacecore `toml:"spacecores"`
 }
 
-type Component map[string]Mode
+type Spacecore map[string]Mode
 
 type Mode struct {
 	Binary   string `toml:"binary"`

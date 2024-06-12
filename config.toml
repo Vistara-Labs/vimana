@@ -1,34 +1,17 @@
-[components]
+[spacecores]
 
-[components.celestia]
+[spacecores.celestia]
 
-[components.celestia.light]
-binary = "/tmp/vimana/celestia/celestia"
+[spacecores.celestia.light]
+binary = "/usr/local/bin/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
-[components.celestia.bridge]
-binary = "/tmp/vimana/celestia/celestia"
+[spacecores.celestia.bridge]
+binary = "/usr/local/bin/celestia"
 download = "/tmp/vimana/celestia/init.sh"
 
-[components.avail]
+[spacecores.avail]
 
-[components.avail.light]
+[spacecores.avail.light]
 binary = "avail-light"
 download = "/tmp/vimana/avail/init.sh"
-
-
-[components.gmworld]
-
-[components.gmworld.da]
-binary = "gmworld-da"
-download = "/tmp/vimana/gmd/rollup_init.sh"
-
-[components.gmworld.rollup]
-binary = "gmworld-rollup"
-download = "/tmp/vimana/gmd/rollup_mocha.sh"
-
-# [components.berachain]
-
-# [components.berachain.full]
-# binary = "/path/to/celestia/binary"
-# download = "https://example.com/berachain.zip"

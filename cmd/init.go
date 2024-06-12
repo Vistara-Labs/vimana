@@ -12,8 +12,6 @@ import (
 	"vimana/cmd/utils"
 
 	"github.com/ethereum/go-ethereum/crypto"
-
-	// "github.com/pelletier/go-toml"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
@@ -31,7 +29,7 @@ func fileExists(filename string) bool {
 
 func InitializeSystem(force bool, noTrack bool) error {
 	if err := fileExists(initFilePath); err && !force {
-		fmt.Println("Initialization has already been done. Found init.toml.")
+		fmt.Print("Initialization has already been done. Found init.toml.\n")
 		return nil
 	}
 	// config := InitConfig{}

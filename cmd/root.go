@@ -11,6 +11,8 @@ import (
 
 	"github.com/common-nighthawk/go-figure"
 	"github.com/spf13/cobra"
+
+	logger "vimana/log"
 )
 
 var rootCmd = &cobra.Command{
@@ -41,6 +43,14 @@ func InitCLI() error {
 		log.Fatal(err)
 	}
 	configFile := home + "/.vimana/config.toml"
+
+	// configure logging
+	logger.Configure(&logger.Config{
+		Verbosity: logger.LogVerbosityInfo,
+		Format:    logger.LogFormatText,
+		Output:    "stderr",
+	})
+
 	rootCmd = &cobra.Command{Use: "vimana"}
 
 	commands, err := GetCommandsFromConfig(configFile, CommanderRegistry)
@@ -48,9 +58,16 @@ func InitCLI() error {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		return err
 	}
+
 	rootCmd.AddCommand(commands...)
 	rootCmd.AddCommand(initVimana())
 	rootCmd.AddCommand(versionCommand())
+	rootCmd.AddCommand(migrateCommand())
+	rootCmd.AddCommand(repoCommand())
+	rootCmd.AddCommand(registryCommand())
+	rootCmd.AddCommand(pluginCommand())
+
+	logger.AddFlagsToCommand(rootCmd, &logger.Config{})
 
 	return rootCmd.Execute()
 }
@@ -82,19 +99,8 @@ func versionCommand() *cobra.Command {
 		Use:   "version",
 		Short: "Print the version of vimana",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("vimana version: ", Version)
+			fmt.Printf("vimana version: %s\n", Version)
 		},
 	}
 	return versionCmd
-}
-
-func printASCIIArt() {
-	art := `
-___    ________________  __________ _____   _________ 
-__ |  / /____  _/___   |/  /___    |___  | / /___    |
-__ | / /  __  /  __  /|_/ / __  /| |__   |/ / __  /| |
-__ |/ /  __/ /   _  /  / /  _  ___ |_  /|  /  _  ___ |
-_____/   /___/   /_/  /_/   /_/  |_|/_/ |_/   /_/  |_|
-`
-	fmt.Println(art)
 }

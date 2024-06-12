@@ -9,7 +9,7 @@ import (
 )
 
 // record usage data if user agrees to contribute
-const APIEndpoint = "https://api-api-dev.bk7bbm.oss-acorn.io/save-vimana-usage"
+const APIEndpoint = "https://api.vimana.global/v1/usage/record"
 
 type APIVimanaUsage struct {
 	EthAddress string  `json:"eth_address,omitempty"`

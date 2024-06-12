@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./proto";
+
+// I want to have start, stop, logs, and status for running plugins
+
+service ScPlugin {
+    // I want to have start, stop, logs, and status for running plugins
+    rpc Start(StartRequest) returns (StartResponse) {}
+    rpc Stop(StopRequest) returns (StopResponse) {}
+    rpc Logs(LogsRequest) returns (LogsResponse) {}
+    rpc Status(StatusRequest) returns (StatusResponse) {}
+}
+
+message StartRequest {
+    string plugin_id = 1;
+}
+
+message StartResponse {
+    string plugin_id = 1;
+    string status = 2;
+}
+
+message StopRequest {
+    string plugin_id = 1;
+}
+
+message StopResponse {
+    string plugin_id = 1;
+    string status = 2;
+}
+
+message LogsRequest {
+    string plugin_id = 1;
+}
+
+message LogsResponse {
+    string plugin_id = 1;
+    repeated string logs = 2;
+}
+
+message StatusRequest {
+    string plugin_id = 1;
+}
+
+message StatusResponse {
+    string plugin_id = 1;
+    string status = 2;
+}

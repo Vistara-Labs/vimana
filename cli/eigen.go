@@ -9,56 +9,51 @@ import (
 	"vimana/cmd/utils"
 	"vimana/log"
 
-	// "github.com/moby/moby/daemon/logger"
 	"github.com/spf13/cobra"
 )
 
-type AvailLightCommander struct {
+type EigenOperatorCommander struct {
 	BaseCommander
 }
 
-func NewAvailLightCommander(node_type string) *AvailLightCommander {
-	return &AvailLightCommander{
-		BaseCommander: BaseCommander{NodeType: "light"},
+func NewEigenOperatorCommander(node_type string) *EigenOperatorCommander {
+	return &EigenOperatorCommander{
+		BaseCommander: BaseCommander{NodeType: "operator"},
 	}
 }
 
-func (a *AvailLightCommander) AddFlags(cmd *cobra.Command) {
+func (a *EigenOperatorCommander) AddFlags(cmd *cobra.Command) {
 }
 
-func (a *AvailLightCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
+func (a *EigenOperatorCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+	return
+}
+
+func (a *EigenOperatorCommander) Init(cmd *cobra.Command, args []string, mode Mode, node_info string) error {
 	utils.ExecBashCmd(exec.Command("bash", mode.Download), node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
-	a.initSpacecoreManager("avail", mode.Binary)
+	a.initSpacecoreManager("eigen", mode.Binary)
 	return a.spacecoresMgr.InitializeConfig()
 }
 
-func (a *AvailLightCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+func (a *EigenOperatorCommander) Run(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	cmdexecute := a.spacecoresMgr.GetStartCmd()
 	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
-func (a *AvailLightCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+func (a *EigenOperatorCommander) Start(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	logger := log.GetLogger(cmd.Context())
-	// check if daemon already running.
-	PIDFile := utils.GetPIDFileName(node_info)
-	if _, err := os.Stat(PIDFile); err == nil {
-		logger.Info("Already running or " + PIDFile + " file exist.")
-		return
-	}
-
 	node_info_arr := strings.Split(node_info, "-")
 	a.Init(cmd, args, mode, node_info_arr[0])
 	logger.Info(a.spacecoresMgr)
 	logger.Info("executing start command")
 	cmdexecute := a.spacecoresMgr.GetStartCmd()
 	logger.Info(cmdexecute)
-	utils.ExecBashCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
+	utils.ExecBinaryCmd(cmdexecute, node_info, utils.WithOutputToStdout(), utils.WithErrorsToStderr())
 }
 
-func (a *AvailLightCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+func (a *EigenOperatorCommander) Stop(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	logger := log.GetLogger(cmd.Context())
-	logger.Info("Stopping Celestia bridge node")
-
+	logger.Info("Stopping Eigen operator node")
 	PIDFile := utils.GetPIDFileName(node_info)
 	if _, err := os.Stat(PIDFile); err == nil {
 		data, err := ioutil.ReadFile(PIDFile)
@@ -97,8 +92,9 @@ func (a *AvailLightCommander) Stop(cmd *cobra.Command, args []string, mode Mode,
 	}
 }
 
-func (a *AvailLightCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
+func (a *EigenOperatorCommander) Status(cmd *cobra.Command, args []string, mode Mode, node_info string) {
 	logger := log.GetLogger(cmd.Context())
+
 	node_info_arr := strings.Split(node_info, "-")
 	logger.Info("Getting status of " + node_info_arr[0] + " " + node_info_arr[1] + " node")
 
@@ -113,8 +109,4 @@ func (a *AvailLightCommander) Status(cmd *cobra.Command, args []string, mode Mod
 	} else {
 		logger.Info("Not running.")
 	}
-}
-
-func (a *AvailLightCommander) Install(cmd *cobra.Command, args []string, mode Mode, node_info string) {
-	return
 }
