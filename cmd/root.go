@@ -66,6 +66,8 @@ func InitCLI() error {
 	rootCmd.AddCommand(repoCommand())
 	rootCmd.AddCommand(registryCommand())
 	rootCmd.AddCommand(pluginCommand())
+	// rootCmd.AddCommand(scaffoldCmd())
+	rootCmd.AddCommand(ScaffoldNew)
 
 	logger.AddFlagsToCommand(rootCmd, &logger.Config{})
 
@@ -73,7 +75,7 @@ func InitCLI() error {
 }
 
 func init() {
-	vimanaFig := figure.NewFigure("vimana", "", true)
+	vimanaFig := figure.NewFigure("vimana", "isometric1", true)
 	vimanaFig.Print()
 
 	if err := InitCLI(); err != nil {

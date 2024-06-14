@@ -8,4 +8,5 @@ const (
 	Avail     SpacecoreType = "avail"
 	Gmworld   SpacecoreType = "gmworld"
 	Eigen     SpacecoreType = "eigen"
+	RepoBase  string        = "https://github.com/vistara-labs/spacecore-template.git"
 )

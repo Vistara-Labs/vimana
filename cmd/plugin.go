@@ -46,6 +46,7 @@ func pluginCommand() *cobra.Command {
 				logger.Error("Error getting spacecore plugin:", err)
 				responses <- "Error getting spacecore plugin" + err.Error()
 			}
+
 			switch cmd.Name {
 			case StartPluginCmdName:
 				logger.Infof("Starting plugin inside goroutine %s", cmd.PluginPath)
@@ -68,6 +69,19 @@ func pluginCommand() *cobra.Command {
 			case RestartPluginCmdName:
 				logger.Info("Restarting plugin")
 				responses <- "Plugin restarted"
+
+			case LogsPluginCmdName:
+				logger.Info("Getting logs of plugin")
+				msg, err := spacecore.Logs(context.Background(), &proto.LogsRequest{})
+				if err != nil {
+					logger.Infof("Error getting logs: %s", err)
+					responses <- "Error getting logs" + err.Error()
+				}
+
+				logger.Infof("Plugin ID: %s, logs: %s", msg.GetPluginId(), msg.GetLogs())
+				responses <- "Plugin logs"
+				// select {}
+
 			case StatusPluginCmdName:
 				logger.Info("Getting status of plugin")
 
@@ -93,19 +107,28 @@ func pluginCommand() *cobra.Command {
 				return
 			}
 			action := args[1]
+
+			requestedAction := ""
 			switch action {
 			case "start":
-				commands <- PluginCommander{Name: StartPluginCmdName, PluginPath: args[0]}
+				requestedAction = StartPluginCmdName
+				// commands <- PluginCommander{Name: StartPluginCmdName, PluginPath: args[0]}
 			case "stop":
-				commands <- PluginCommander{Name: StopPluginCmdName, PluginPath: args[0]}
+				requestedAction = StopPluginCmdName
+				// commands <- PluginCommander{Name: StopPluginCmdName, PluginPath: args[0]}
 			case "restart":
-				commands <- PluginCommander{Name: RestartPluginCmdName, PluginPath: args[0]}
+				requestedAction = RestartPluginCmdName
+				// commands <- PluginCommander{Name: RestartPluginCmdName, PluginPath: args[0]}
 			case "status":
-				commands <- PluginCommander{Name: StatusPluginCmdName, PluginPath: args[0]}
+				requestedAction = StatusPluginCmdName
+				// commands <- PluginCommander{Name: StatusPluginCmdName, PluginPath: args[0]}
+			case "logs":
+				requestedAction = LogsPluginCmdName
+				// commands <- PluginCommander{Name: LogsPluginCmdName, PluginPath: args[0]}
 			}
 
 			// pass the plugin name i.e. plugin path to the goroutine
-			// commands <- PluginCommander{Name: StartPluginCmdName, PluginPath: args[0]}
+			commands <- PluginCommander{Name: requestedAction, PluginPath: args[0]}
 
 			// wait for a response from the plugin
 			resp := <-responses
@@ -114,48 +137,3 @@ func pluginCommand() *cobra.Command {
 	}
 	return pluginCmd
 }
-
-// started, err := pg.Start(context.Background(), &proto.StartRequest{})
-
-// if err != nil {
-// 	logger.Info("Error starting plugin:", err)
-// }
-
-// logger.Info("Plugin is now running. Press CTRL+C to exit")
-
-// should there be a way to keep the plugin running?
-// if so, how?
-// should we just keep the plugin running until the user exits?
-// or should we have a way to keep the plugin running in the background?
-
-// we should have a way to keep the plugin running in the background
-// so that the user can interact with it
-
-// we should also have a way to stop the plugin
-
-// we should also have a way to restart the plugin
-
-// we should also have a way to get the status of the plugin
-
-// we should also have a way to get the logs of the plugin
-
-// we should also have a way to get the metrics of the plugin
-
-// the plugin needs to keep running in the background
-
-// if started.GetStatus() == "started" {
-// 	logger.Info("Plugin started successfully")
-
-// 	// keep the plugin running
-// 	<-make(chan struct{})
-
-// } else {
-// 	logger.Info("Error starting plugin")
-// }
-
-// msg, err := pg.Status(context.Background(), &proto.StatusRequest{})
-// if err != nil {
-// 	logger.Info("Error getting status:", err)
-// }
-// // show status of the plugin
-// logger.Infof("PG ID: %s, status: %s", msg.GetPluginId(), msg.GetStatus())
