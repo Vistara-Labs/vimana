@@ -2,11 +2,14 @@ package cmd
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
 	"vimana/plugins"
 	"vimana/plugins/proto"
 
-	"vimana/log"
-
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -27,113 +30,111 @@ const (
 )
 
 func pluginCommand() *cobra.Command {
-	// logger := log.GetLogger(ctx)
-
-	// setup logging
-	logger := log.GetLogger(context.Background())
-
-	// create a channel for sending and receiving commands to the plugin
-	commands := make(chan PluginCommander)
-	responses := make(chan string)
-
-	// Get the plugin in a separate goroutine and pass the commands channel to it
-	go func() {
-
-		for cmd := range commands {
-			client := plugins.GetPluginClient(cmd.PluginPath)
-			spacecore, err := plugins.SpacecoreGRPCClient(client)
-			if err != nil {
-				logger.Error("Error getting spacecore plugin:", err)
-				responses <- "Error getting spacecore plugin" + err.Error()
-			}
-
-			switch cmd.Name {
-			case StartPluginCmdName:
-				logger.Infof("Starting plugin inside goroutine %s", cmd.PluginPath)
-				msg, err := spacecore.Start(context.Background(), &proto.StartRequest{})
-
-				if err != nil {
-					responses <- "Error starting plugin" + err.Error()
-				}
-
-				logger.Infof("Plugin ID: %s, status: %s", msg.GetPluginId(), msg.GetStatus())
-				logger.Info("Plugin is now running. Press CTRL+C to exit")
-				responses <- "Plugin started"
-
-			case StopPluginCmdName:
-				logger.Info("Stopping plugin")
-				client.Kill()
-
-				responses <- "Plugin stopped"
-
-			case RestartPluginCmdName:
-				logger.Info("Restarting plugin")
-				responses <- "Plugin restarted"
-
-			case LogsPluginCmdName:
-				logger.Info("Getting logs of plugin")
-				msg, err := spacecore.Logs(context.Background(), &proto.LogsRequest{})
-				if err != nil {
-					logger.Infof("Error getting logs: %s", err)
-					responses <- "Error getting logs" + err.Error()
-				}
-
-				logger.Infof("Plugin ID: %s, logs: %s", msg.GetPluginId(), msg.GetLogs())
-				responses <- "Plugin logs"
-				// select {}
-
-			case StatusPluginCmdName:
-				logger.Info("Getting status of plugin")
-
-				msg, err := spacecore.Status(context.Background(), &proto.StatusRequest{})
-				if err != nil {
-					logger.Infof("Error getting status: %s", err)
-					responses <- "Error getting status" + err.Error()
-				}
-
-				logger.Infof("Plugin ID: %s, status: %s", msg.GetPluginId(), msg.GetStatus())
-				responses <- "Plugin status"
-			}
-		}
-	}()
-
 	pluginCmd := &cobra.Command{
-		Use:   "plugin [plugin] [action]",
-		Short: "Run a spacecore plugin",
+		Use:   "plugin [command] [plugin]",
+		Short: "Manage spacecore plugins",
 		Args:  cobra.MinimumNArgs(2),
 		Run: func(c *cobra.Command, args []string) {
-			if len(args) == 0 {
-				logger.Info("Please provide a plugin name")
-				return
-			}
-			action := args[1]
+			commands := make(chan PluginCommander)
+			responses := make(chan string)
 
-			requestedAction := ""
-			switch action {
-			case "start":
-				requestedAction = StartPluginCmdName
-				// commands <- PluginCommander{Name: StartPluginCmdName, PluginPath: args[0]}
-			case "stop":
-				requestedAction = StopPluginCmdName
-				// commands <- PluginCommander{Name: StopPluginCmdName, PluginPath: args[0]}
-			case "restart":
-				requestedAction = RestartPluginCmdName
-				// commands <- PluginCommander{Name: RestartPluginCmdName, PluginPath: args[0]}
-			case "status":
-				requestedAction = StatusPluginCmdName
-				// commands <- PluginCommander{Name: StatusPluginCmdName, PluginPath: args[0]}
-			case "logs":
-				requestedAction = LogsPluginCmdName
-				// commands <- PluginCommander{Name: LogsPluginCmdName, PluginPath: args[0]}
-			}
+			pluginPath := args[0]
+			pluginCmd := args[1]
+			pluginName := filepath.Base(pluginPath)
+			logger := setupLogger(pluginName)
+
+			// Start the goroutine to hande the plugin command
+			go func() {
+				for cmd := range commands {
+					response := executePluginCommand(cmd, logger)
+					responses <- response
+				}
+			}()
 
 			// pass the plugin name i.e. plugin path to the goroutine
-			commands <- PluginCommander{Name: requestedAction, PluginPath: args[0]}
 
-			// wait for a response from the plugin
-			resp := <-responses
-			logger.Info("Response from plugin:", resp)
+			// Send the plugin command to the channel
+			commands <- PluginCommander{Name: pluginCmd, PluginPath: pluginPath}
+
+			// Wait for a response from the plugin
+			response := <-responses
+			logger.Info(response)
+			fmt.Println(response)
+
 		},
 	}
 	return pluginCmd
+
+}
+
+func executePluginCommand(cmd PluginCommander, logger *logrus.Entry) string {
+
+	client := plugins.GetPluginClient(cmd.PluginPath)
+	spacecore, err := plugins.SpacecoreGRPCClient(client)
+	if err != nil {
+		logger.Error("Error getting spacecore plugin s: ", err)
+		return "Error getting spacecore plugin: " + err.Error()
+	}
+
+	switch cmd.Name {
+	case StartPluginCmdName:
+		logger.Infof("Starting plugin %s", cmd.PluginPath)
+		msg, err := spacecore.Start(context.Background(), &proto.StartRequest{})
+		if err != nil {
+			return "Error starting plugin: " + err.Error()
+		}
+		logger.Infof("Plugin ID: %s, status: %s", msg.GetPluginId(), msg.GetStatus())
+
+		return msg.GetStatus()
+	case StopPluginCmdName:
+		logger.Infof("Stopping plugin %s", cmd.PluginPath)
+		msg, err := spacecore.Stop(context.Background(), &proto.StopRequest{})
+		if err != nil {
+			return "Error stopping plugin: " + err.Error()
+		}
+		logger.Infof("Plugin status: %s", msg.GetStatus())
+		return "Plugin stopped"
+	case StatusPluginCmdName:
+		logger.Infof("Checking status of plugin %s", cmd.PluginPath)
+		msg, err := spacecore.Status(context.Background(), &proto.StatusRequest{})
+		if err != nil {
+			return "Error checking plugin status: " + err.Error()
+		}
+		logger.Infof("Plugin status: %s", msg.GetStatus())
+		return "Plugin status: " + msg.GetStatus()
+	case LogsPluginCmdName:
+		logger.Infof("Fetching logs of plugin %s", cmd.PluginPath)
+		msg, err := spacecore.Logs(context.Background(), &proto.LogsRequest{})
+		if err != nil {
+			return "Error fetching plugin logs: " + err.Error()
+		}
+		logs := concatenateLogs(msg.GetLogs())
+		logger.Infof("Plugin logs: \n%s", logs)
+		return logs
+	default:
+		return "Unknown command: " + cmd.Name
+	}
+}
+
+func concatenateLogs(logs []string) string {
+	return strings.Join(logs, "\n")
+}
+
+func setupLogger(pluginName string) *logrus.Entry {
+	logFileName := fmt.Sprintf("/tmp/%s.log", pluginName)
+	logFile, err := os.OpenFile(logFileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("Error opening log file: %v\n", err)
+		os.Exit(1)
+	}
+
+	// our log.Configure is throwing bad file descriptor, fix later
+	logger := logrus.New()
+	logger.SetOutput(logFile)
+	logger.SetLevel(logrus.DebugLevel)
+	logger.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp: true,
+	})
+
+	return logger.WithFields(logrus.Fields{"plugin": pluginName})
 }
