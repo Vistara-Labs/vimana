@@ -3,9 +3,7 @@ package scaffold
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os"
-	"path/filepath"
 	"text/template"
 )
 
@@ -93,49 +91,4 @@ func WriteBytes(filepath string, data []byte) error {
 		return err
 	}
 	return nil
-}
-
-// func genFile() {
-// 	templateName := "grpc"
-
-// 	var t *template.Template
-// 	var err error
-// 	// tplPath can be taken from arguments
-// 	// if tplPath == "" {
-// 	// 	t, err = template.ParseFS(tpl.CreateTemplateFS, fmt.Sprintf("create/%s.tpl", c.CreateType))
-// 	// } else {
-// 	// 	t, err = template.ParseFiles(path.Join(tplPath, fmt.Sprintf("%s.tpl", c.CreateType)))
-// 	// }
-
-// 	t, err = template.ParseFS(createTemplateFS, fmt.Sprintf("templates/%s.gotmpl", templateName))
-
-// 	fmt.Printf("templateName %s\n", templateName)
-// 	fmt.Printf("template parsed fs %v\n", t)
-
-// 	if err != nil {
-// 		log.Fatalf("create %s error: %s", templateName, err.Error())
-// 	}
-// 	err = t.Execute(f, c)
-// 	if err != nil {
-// 		log.Fatalf("create %s error: %s", c.CreateType, err.Error())
-// 	}
-// 	log.Printf("Created new %s: %s", c.CreateType, filePath+strings.ToLower(c.FileName)+".go")
-
-// }
-func createFile(dirPath string, filename string) *os.File {
-	filePath := filepath.Join(dirPath, filename)
-	err := os.MkdirAll(dirPath, os.ModePerm)
-	if err != nil {
-		log.Fatalf("Failed to create dir %s: %v", dirPath, err)
-	}
-	stat, _ := os.Stat(filePath)
-	if stat != nil {
-		return nil
-	}
-	file, err := os.Create(filePath)
-	if err != nil {
-		log.Fatalf("Failed to create file %s: %v", filePath, err)
-	}
-
-	return file
 }
