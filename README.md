@@ -1,16 +1,26 @@
-# Vimana CLI 
+# Vimana
 
-Vimana CLI is a comprehensive tool designed to simplify the creation and management of different types of nodes, including the data availability layer light node, full node, bridge node, and full nodes for Ethereum-like berachain.
+Vimana is an orchestration client that enables developers to build and deploy networks in the Vistara ecosystem. It simplifies network orchestration by abstracting the complexities of network management and providing a simple interface for developers to build and deploy networks in the Vistara ecosystem.
 
-## Table of Contents
+The goal of Vimana is to focus on efficiency and ease of use, enabling developers to quickly build and deploy networks without having to worry about the underlying infrastructure. By leveraging the power of open-source development, Vimana can drive adoption and participation in networks that were previously only accessible through managed SaaS products or a team of network engineers.
 
-- [Installation](#installation)
-- [Command Structure](#command-structure)
-- [Command API](#command-api)
-  - [Run Nodes](#run-nodes)
-  - [Stop Nodes](#stop-nodes)
-  - [Node Status](#node-status)
-- [Support & Feedback](#support--feedback)
+Vimana is designed to be a fun, functional, and easy way to build and deploy distributed networks. It is extremely flexible and can be used by developers of all skill levels to create and deploy networks in the Vistara ecosystem. With Vimana, developers can quickly build and deploy networks with just one command.
+
+Vimana means "flying machine" in Sanskrit, and it is a fitting name for an orchestration client in the Vistara ecosystem. Just as the Vimana was a flying machine that enabled ancient civilizations to explore and discover new worlds, Vimana enables developers to explore and discover new networks that scale and grow with their needs.
+
+## Features
+
+- Scaffold a new Spacecore - a programming plugin that enables developers to build and deploy their networks on Vistara.
+- Lifecycle management of Spacecores - start, stop, status, logs.
+- Manage Spacecore plugins - spacecore developer will just implement the plugin interface in this protobuf file: `plugins/proto/sc.proto`.
+- Leverages Hashicorp's Nomad for scheduling and running Spacecores.
+- Leverages Hashicorp's go-plugin for enabling plugin architecture.
+
+Additional features include:
+- Search or list registries.
+- Add a repository to `vimana`.
+- Initialize and check system resources.
+- Run a Celestia light node Spacecore.
 
 ## Quick Start
 
@@ -27,130 +37,161 @@ Install Binary:
 
 `curl -L https://vistara-labs.github.io/vimana/install.sh | bash`
 
-Install from Source:
+Install from Source: `make build`
 
-`make build`
+### Usage
 
-Run celestia light node:
+- **scaffold**: Scaffold a new Spacecore - a programming plugin that enables developers to build and deploy their networks on Vistara.
+```sh
+vimana scaffold
 
-`vimana run celestia light-node`
-
-See options for a specific node type:
-
-`vimana run celestia light-node --help`
-
-```
-Usage:
-  vimana run celestia bridge-node [flags]
-
-Flags:
-  -h, --help             help for bridge-node
-      --network string   Specifies the Celestia network (default "arabica")
-      --rpc string       Specifies the Celestia RPC endpoint (default "consensus-validator.celestia-arabica-10.com")
+# ? Enter the spacecore name: [tinygpu-spacecore]
 ```
 
-You can pass in the network and rpc endpoint as flags, or default (arabica) is used if not specified.
+## Spacecore Development
 
-`vimana run celestia light-node --network arabica --rpc consensus-validator.celestia-arabica-10.com`
+Spacecore is a programming plugin that enables developers to build and deploy their networks on Vistara. Vimana simplifies the process of building and deploying Spacecores by providing ready-to-go templates and tools that make it easy for developers to get started.
 
-## Command Structure
+The Spacecore development is a key part of the Vistara ecosystem. It implements Hashicorp's go-plugin for enabling plugin architecture. Developers can implement the plugin interface in the `plugins/proto/sc.proto` file to create their own Spacecores. Vimana provides lifecycle management of Spacecores, including starting, stopping, checking status, and viewing logs.
 
-Main command: `vimana`
+This makes it super easy for developers to focus on the business logic of how the Spacecore should work, without having to worry about the underlying infrastructure or network management.
 
-Subcommand:
+To start, developers can `scaffold` a new Spacecore using Vimana. This creates a new Spacecore with a programming plugin that can be deployed amywhere. Developers can then use Vimana to manage the lifecycle of the Spacecore, including starting, stopping, checking status, and viewing logs.
+You can build a Spacecore in any modern programming language. Currently, scaffold command bootstraps a new Spacecore as a Go project. It clones the Spacecore template from https://github.com/vistara-labs/spacecore-template and customizes it with your environment.
 
-- `run`: Initialize and run the different types of nodes.
+Scalfolding a new Spacecore:
 
-With this setup, when developers want to support new node types or components, they:
+```sh
+vimana scaffold
 
-1. Add the configuration to config.toml.
-2. Implement the NodeCommander interface for that component and mode.
-3. Register their implementation in the commanderRegistry.
-This provides a modular and expandable CLI framework.
-
-## Command API
-
-## Run Nodes
-**Syntax**: 
-vimana run [NODE_TYPE] [OPTIONS]
-
-**Example**: 
+# ? Enter the spacecore name: [aiops-spacecore]
 ```
+
+
+The structure of the Spacecore template is as follows:
+
+```sh
+.
+├── README.md
+├── bin
+│   └── aiopsd # generated Spacecore plugin binary
+├── buf.gen.yaml # buf configuration to generate protobuf files
+├── go.mod
+├── go.sum
+├── grpc.go # grpc server implementation
+├── helper.go
+├── main.go # main entry point
+├── plugin.go # this is where the plugin interface needs to be implemented
+└── proto
+    ├── sc.pb.go # generated protobuf file
+    ├── sc.proto # spacecore plugin .proto interface
+    └── sc_grpc.pb.go # grpc generated file
+```
+
+Once the Spacecore is scaffolded, developers can implement the plugin interface in the `plugin.go` file. This is where the core functionality of the Spacecore operations is implemented. Most of the boilerplate code is already generated by scaffolding, so developers only implement the lifecycle methods of the Spacecore.
+
+Interface methods that need to be implemented:
+```go
+type SpacecorePlugin interface {
+  Start(ctx context.Context, req *StartRequest) (*StartResponse, error)
+  Stop(ctx context.Context, req *StopRequest) (*StopResponse, error)
+  Status(ctx context.Context, req *StatusRequest) (*StatusResponse, error)
+  Logs(ctx context.Context, req *LogsRequest) (*LogsResponse, error)
+}
+```
+
+This means that spacecores can be developed by anyone with some programming experience, and they can be deployed and managed easily using Vimana. The go-plugin can communicate several ways like gRPC, RPC, etc. The aiops-spacecore can be used as a reference to build your own Spacecore.
+
+Developers just have to implement the SpacecorePlugin interface expressing the behavior of the Spacecore like starting, stopping, checking status, and viewing logs. 
+
+Then just build the spacecore binary and run it using Vimana.
+
+```sh
+go build -o bin/aiopsd .
+
+./bin/aiopsd
+# will give an error which is expected as it is a plugin that exposes a gRPC server so it needs to be called from a gRPC client
+```
+
+To run the Spacecore:
+
+```sh
+./bin/vimana plugin $PWD/bin/aiopsd start
+
+```
+
+This will start the Spacecore and you can check the status and logs using Vimana.
+
+
+Vimana also provides a `plugin` command to manage Spacecore plugins. Developers can add new plugins as Spacecore, where the plugin code is in a separate repository. This makes the development process more modular and flexible, enabling developers to extend the functionality of their network and add new features.
+
+Vimana leverages Hashicorp's Nomad for scheduling and running Spacecores. This ensures that Spacecores are deployed and managed efficiently, with the ability to scale and grow as needed. By using Nomad, Vimana can provide a reliable and scalable platform for developers to build and deploy networks in the Vistara ecosystem.
+
+Nomad by Hashicorp is a flexible and highly scalable workload orchestrator that can deploy and manage containers, non-containerized applications, and virtualized workloads across a variety of infrastructure environments. It is designed to be simple to use and operate, with a focus on ease of use and flexibility.
+
+
+## Orchestrating Networks with Vimana
+
+Integrating Nomad with Vimana can enhance the orchestration and management capabilities of the Vistara network. Here are some ways in which Vimana can be used to orchestrate networks with Nomad:
+
+1. Orchestration Spacecores: Use Nomad to schedule and manage the deployment of Spacecores across the Vistara network. This can ensure efficient utilization of resources and high availability.
+2. Nomad’s resource allocation and management features can be leveraged to optimize the performance of microVMs and workloads running on Vimana.
+3. Deploy Spacecores across different cloud providers and regions, leveraging Nomad’s multi-cloud capabilities to create a resilient and scalable network.
+
+
+- Lifecycle management of Spacecores.
+```sh
+vimana start [tinygpu-spacecore]
+
+vimana status [tinygpu-spacecore]
+
+vimana stop [tinygpu-spacecore]
+
+vimana logs [tinygpu-spacecore]
+```
+
+- **plugin**: Manage Spacecore plugins.
+```sh
+vimana plugin [subcommand] [plugin_name]
+```
+
+## Vimana Repo:
+
+Let's explore each module of Vimana:
+
+- **cli**: Spacecore lifecycle management commands implementation.
+- **cmd**: Main entry point for Vimana.
+- **plugins**: Spacecore plugin interface definition.
+- **scaffold**: Scaffold that uses embed and text/template to generate a new Spacecore.
+- **spacecores**: Spacecore lifecycle management implementation.
+
+## 
+
+Additional commands:
+
+- **registry**: Search or list registries.
+```sh
+vimana registry [search|list]
+```
+
+- **init**: Initialize and check system resources.
+```sh
+vimana init
+```
+
+- **repo**: Add a repository to `vimana`.
+```sh
+vimana repo add [repo_name] [repo_url]
+```
+
+- **run**: Run a Celestia light node Spacecore.
+```sh
 vimana run celestia light-node
-vimana run celestia bridge-node
 ```
 
-**Launch via service**: <br/>
-service creation for light-node
-```
-tee /etc/systemd/system/vinama.service > /dev/null <<EOF
-[Unit]
-Description=Vinama
-After=network.target
-[Service]
-Type=simple
-User=$USER
-ExecStart=vimana run celestia light-node
-Restart=on-failure
-RestartSec=10
-LimitNOFILE=65535
-[Install]
-WantedBy=multi-user.target
-EOF
-```
-launch
-```
-systemctl daemon-reload
-systemctl enable vinama
-systemctl restart vinama && journalctl -u vinama -f -o cat
-```
+- **Warning**:
+Vimana is still experimental software.
 
-service creation for bridge-node
+## Contributing
 
-```
-tee /etc/systemd/system/vinama-bridge.service > /dev/null <<EOF
-[Unit]
-Description=Vinama
-After=network.target
-[Service]
-Type=simple
-User=$USER
-ExecStart=vimana run celestia bridge-node
-Restart=on-failure
-RestartSec=10
-LimitNOFILE=65535
-[Install]
-WantedBy=multi-user.target
-EOF
-```
-launch
-```
-systemctl daemon-reload
-systemctl enable vinama-bridge
-systemctl restart vinama-bridge && journalctl -u vinama-bridge -f -o cat
-```
-
-### Create a new component, avail
-
-Follow #CREATE_COMPONENT.md
-
-```
-vimana run avail light-node
-```
-
-## Stop Nodes
-```
-sudo systemctl stop vinama
-```
-## Node Status
-```
-sudo systemctl status vinama
-```
-### Node log
-```
-sudo journalctl -u vinama.service -f 
-
-```
-## Support & Feedback
-
-For any issues, questions, or feedback, please contact *mayur@vistara.dev*.
+We welcome all contributions to Vimana! Create an issue or open a pull request to get started.

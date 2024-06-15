@@ -48,7 +48,7 @@ func run(cmd *cobra.Command, args []string) {
 
 	if len(args) == 0 {
 		spacecore, err := prompter.InputString(
-			"Enter the spacecore name:",
+			"Name your Spacecore:",
 			"",
 			"",
 			func(s string) error {
