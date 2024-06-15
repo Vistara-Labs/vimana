@@ -37,9 +37,7 @@ jobs:
     - name: celestia run
       run: |
         cd vimana-linux-amd64/
-        ./vimana install celestia light-node
-        sleep 10s
-        ./vimana stop celestia light-node
         ./vimana start celestia light-node
+        sleep 10s
         ./vimana status celestia light-node
         ./vimana stop celestia light-node
