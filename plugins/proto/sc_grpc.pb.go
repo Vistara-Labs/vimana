@@ -29,7 +29,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ScPluginClient interface {
-	// I want to have start, stop, logs, and status for running plugins
 	Start(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartResponse, error)
 	Stop(ctx context.Context, in *StopRequest, opts ...grpc.CallOption) (*StopResponse, error)
 	Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsResponse, error)
@@ -84,7 +83,6 @@ func (c *scPluginClient) Status(ctx context.Context, in *StatusRequest, opts ...
 // All implementations should embed UnimplementedScPluginServer
 // for forward compatibility
 type ScPluginServer interface {
-	// I want to have start, stop, logs, and status for running plugins
 	Start(context.Context, *StartRequest) (*StartResponse, error)
 	Stop(context.Context, *StopRequest) (*StopResponse, error)
 	Logs(context.Context, *LogsRequest) (*LogsResponse, error)

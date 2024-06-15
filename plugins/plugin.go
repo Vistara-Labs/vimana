@@ -38,7 +38,7 @@ func (p *SpacecorePluginIm) GRPCClient(ctx context.Context, broker *plugin.GRPCB
 func (p *GRPCClient) Start(ctx context.Context, req *proto.StartRequest) (*proto.StartResponse, error) {
 	logger := log.GetLogger(ctx)
 	msg, err := p.client.Start(ctx, req)
-	logger.Infof("the Start method on the plugin\n msg is %v\n %v\n", msg, err)
+	logger.Infof("plugin start msg: %v\n", msg)
 	return msg, err
 }
 

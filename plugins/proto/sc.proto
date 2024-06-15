@@ -4,10 +4,7 @@ package proto;
 
 option go_package = "./proto";
 
-// I want to have start, stop, logs, and status for running plugins
-
 service ScPlugin {
-    // I want to have start, stop, logs, and status for running plugins
     rpc Start(StartRequest) returns (StartResponse) {}
     rpc Stop(StopRequest) returns (StopResponse) {}
     rpc Logs(LogsRequest) returns (LogsResponse) {}

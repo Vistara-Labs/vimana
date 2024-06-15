@@ -1,0 +1,23 @@
+package main
+
+import (
+	"log"
+	"{{ .PackageName }}/pkg/config"
+
+	"github.com/hashicorp/go-plugin"
+)
+
+func main() {
+	log.Println("Plugin starting...")
+	hConfig := config.HandshakeConfig
+	pluginMap := config.PluginMap
+
+	plugin.Serve(&plugin.ServeConfig{
+		HandshakeConfig: hConfig,
+		Plugins:         pluginMap,
+		GRPCServer:      plugin.DefaultGRPCServer,
+	})
+
+	log.Println("Plugin server started successfully.")
+	select {}
+}
