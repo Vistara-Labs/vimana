@@ -1,5 +1,7 @@
 # Vimana
 
+[![build](https://github.com/Vistara-Labs/vimana/actions/workflows/buildcicd.yml/badge.svg)](https://github.com/Vistara-Labs/vimana/actions/workflows/buildcicd.yml)
+
 Vimana is an orchestration client that enables developers to build and deploy networks in the Vistara ecosystem. It simplifies network orchestration by abstracting the complexities of network management and providing a simple interface for developers to build and deploy networks in the Vistara ecosystem.
 
 The goal of Vimana is to focus on efficiency and ease of use, enabling developers to quickly build and deploy networks without having to worry about the underlying infrastructure. By leveraging the power of open-source development, Vimana can drive adoption and participation in networks that were previously only accessible through managed SaaS products or a team of network engineers.
