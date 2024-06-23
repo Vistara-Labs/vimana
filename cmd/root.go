@@ -60,14 +60,13 @@ func InitCLI() error {
 	}
 
 	rootCmd.AddCommand(commands...)
+	rootCmd.AddCommand(ScaffoldNew)
+	rootCmd.AddCommand(pluginCommand())
+	rootCmd.AddCommand(registryCommand())
 	rootCmd.AddCommand(initVimana())
+	rootCmd.AddCommand(repoCommand())
 	rootCmd.AddCommand(versionCommand())
 	rootCmd.AddCommand(migrateCommand())
-	rootCmd.AddCommand(repoCommand())
-	rootCmd.AddCommand(registryCommand())
-	rootCmd.AddCommand(pluginCommand())
-	// rootCmd.AddCommand(scaffoldCmd())
-	rootCmd.AddCommand(ScaffoldNew)
 
 	logger.AddFlagsToCommand(rootCmd, &logger.Config{})
 

@@ -38,7 +38,7 @@ func (p *SpacecorePluginIm) GRPCClient(ctx context.Context, broker *plugin.GRPCB
 func (p *GRPCClient) Start(ctx context.Context, req *proto.StartRequest) (*proto.StartResponse, error) {
 	logger := log.GetLogger(ctx)
 	msg, err := p.client.Start(ctx, req)
-	logger.Infof("plugin start msg: %v\n", msg)
+	logger.Infof("plugin start msg: %v\n %v", msg, err)
 	return msg, err
 }
 
@@ -68,7 +68,7 @@ func GetPluginClient(pluginPath string) *plugin.Client {
 			MagicCookieValue: "v1",
 		},
 		Plugins:          pluginMap,
-		Cmd:              exec.Command(pluginPath),
+		Cmd:              exec.Command("sh", "-c", pluginPath),
 		AllowedProtocols: []plugin.Protocol{plugin.ProtocolGRPC},
 	}
 

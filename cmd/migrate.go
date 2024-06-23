@@ -16,7 +16,7 @@ import (
 func migrateCommand() *cobra.Command {
 	migrateCmd := &cobra.Command{
 		Use:   "migrate",
-		Short: "upgrade vimana to latest version",
+		Short: "Upgrade vimana to latest version",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("vimana version: ", Version)
 			upgradeVimana()

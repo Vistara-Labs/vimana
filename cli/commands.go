@@ -139,7 +139,7 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 	// start command
 	startCmd := &cobra.Command{
 		Use:   "start",
-		Short: "start a spacecore",
+		Short: "Start a Spacecore",
 	}
 	for spacecore, nodeTypes := range config.Spacecores {
 		currentSpacecore := spacecore
@@ -184,7 +184,7 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 	// stop command
 	stopCmd := &cobra.Command{
 		Use:   "stop",
-		Short: "stop spacecore",
+		Short: "Stop a Spacecore",
 	}
 	for spacecore, nodeTypes := range config.Spacecores {
 		currentSpacecore := spacecore
@@ -229,7 +229,7 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 	// status command
 	statusCmd := &cobra.Command{
 		Use:   "status",
-		Short: "show spacecore status",
+		Short: "Show status of a Spacecore",
 	}
 	for spacecore, nodeTypes := range config.Spacecores {
 		currentSpacecore := spacecore
@@ -274,7 +274,7 @@ func GetCommandsFromConfig(path string, commanderRegistry map[string]NodeCommand
 	// logs command
 	logsCmd := &cobra.Command{
 		Use:   "logs",
-		Short: "show spacecore logs",
+		Short: "Show logs of running Spacecore",
 	}
 	for spacecore, nodeTypes := range config.Spacecores {
 		currentSpacecore := spacecore

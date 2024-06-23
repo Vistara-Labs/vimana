@@ -30,10 +30,6 @@ var ScaffoldNew = &cobra.Command{
 	Run:   run,
 }
 
-func init() {
-	ScaffoldNew.Flags().StringVarP(&repoURL, "repo-url", "r", repoURL, "spacecore repo")
-
-}
 func NewProject() *Project {
 	return &Project{}
 }
@@ -41,16 +37,21 @@ func NewProject() *Project {
 // go-nunu/nunu new and create does it well, used here as a reference
 func run(cmd *cobra.Command, args []string) {
 	logger := log.GetLogger(cmd.Context())
-	logger.Info("scaffold repo")
+	logger.Info("scaffolding repo")
+	var spacecore string
+	cmd.Flags().StringVarP(&spacecore, "spacecore-name", "s", "", "Name of the spacecore")
 
 	p := NewProject()
+	if repoURL != "" {
+		p.ProjectName = spacecore
+	}
 	prompter := utils.NewPrompter()
 
 	if len(args) == 0 {
 		spacecore, err := prompter.InputString(
 			"Name your Spacecore:",
-			"",
-			"",
+			"fancy-spacecore",
+			"Please enter a valid name for your Spacecore",
 			func(s string) error {
 				return nil
 			},
@@ -98,6 +99,7 @@ func run(cmd *cobra.Command, args []string) {
 
 	// TODO: pass file names dynamically as more templates get added
 	applyTemplate("grpc", p.ProjectName)
+	// applyTemplate("hac.toml", p.ProjectName)
 
 	err = p.modTidy()
 	if err != nil || !yes {
@@ -135,7 +137,9 @@ func applyTemplate(filename string, spacecore string) {
 		return
 	}
 
-	filePath := fmt.Sprintf("%s/%s.go", spacecore, filename)
+	// get filepath extension and remove .gotmpl or .tomltmpl, only remove tmpl
+	// filename = filename[:len(filename)-5]
+	filePath := fmt.Sprintf("%s/%s", spacecore, filename)
 	fmt.Printf("Creating %s\n", filePath)
 	err = scaffold.WriteBytes(filePath, formattedScBytes)
 	if err != nil {

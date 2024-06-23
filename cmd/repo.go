@@ -19,7 +19,7 @@ func repoCommand() *cobra.Command {
 
 	repoCmd := &cobra.Command{
 		Use:   "repo",
-		Short: "add repo to vimana",
+		Short: "Add repo to vimana",
 	}
 
 	addCmd := &cobra.Command{
@@ -159,45 +159,45 @@ func repoCommand() *cobra.Command {
 
 	repoCmd.AddCommand(addCmd)
 
-	importCmd := &cobra.Command{
-		Use:   "import",
-		Short: "import repo from vimana",
-		Run: func(cmd *cobra.Command, args []string) {
-			logger := log.GetLogger(cmd.Context())
-			logger.Info("import repo")
-			// prompt user input repo url
+	// importCmd := &cobra.Command{
+	// 	Use:   "import",
+	// 	Short: "import repo from vimana",
+	// 	Run: func(cmd *cobra.Command, args []string) {
+	// 		logger := log.GetLogger(cmd.Context())
+	// 		logger.Info("import repo")
+	// 		// prompt user input repo url
 
-			prompter := utils.NewPrompter()
-			repo_url, err := prompter.InputString(
-				"Enter your github repo address:",
-				"",
-				"",
-				func(s string) error {
-					return nil
-				},
-			)
-			if err != nil {
-				return
-			}
-			logger.Info(repo_url)
+	// 		prompter := utils.NewPrompter()
+	// 		repo_url, err := prompter.InputString(
+	// 			"Enter your github repo address:",
+	// 			"",
+	// 			"",
+	// 			func(s string) error {
+	// 				return nil
+	// 			},
+	// 		)
+	// 		if err != nil {
+	// 			return
+	// 		}
+	// 		logger.Info(repo_url)
 
-			// Download the spaceocre from the source url
-			// Verify the downloaded content (checksum)
-			// Register the spacecore in the Vimana system
-			// Add the spacecore to the config.toml file
-			// Return a success message to the user and any errors
+	// 		// Download the spaceocre from the source url
+	// 		// Verify the downloaded content (checksum)
+	// 		// Register the spacecore in the Vimana system
+	// 		// Add the spacecore to the config.toml file
+	// 		// Return a success message to the user and any errors
 
-			// this is the approach used for vimana repo add cmd.
-			// res, err := http.Get(repo_url + "/init.sh")
-			// if err != nil {
-			// 	fmt.Errorf("file init.sh download error, check file address: %v", err)
-			// 	return
-			// }
-			// os.MkdirAll("/tmp/vimana/"+repo_url, 0755)
+	// 		// this is the approach used for vimana repo add cmd.
+	// 		// res, err := http.Get(repo_url + "/init.sh")
+	// 		// if err != nil {
+	// 		// 	fmt.Errorf("file init.sh download error, check file address: %v", err)
+	// 		// 	return
+	// 		// }
+	// 		// os.MkdirAll("/tmp/vimana/"+repo_url, 0755)
 
-		},
-	}
+	// 	},
+	// }
 
-	repoCmd.AddCommand(importCmd)
+	// repoCmd.AddCommand(importCmd)
 	return repoCmd
 }

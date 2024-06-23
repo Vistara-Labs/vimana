@@ -34,7 +34,7 @@ func registryCommand() *cobra.Command {
 
 	registryCmd := &cobra.Command{
 		Use:   "registry",
-		Short: "registry search/list command",
+		Short: "Registry search/list command",
 	}
 
 	searchCmd := &cobra.Command{

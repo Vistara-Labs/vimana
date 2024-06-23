@@ -1,0 +1,20 @@
+[spacecore]
+name = "{{.PackageName}}-spacecore"
+description = "A {{.PackageName}} Spacecore for running a custom service"
+version = "1.0.0"
+container_image = "{{.PackageName}}-spacecore:latest"
+backend = "binary" # options can be "containerd" or "binary" (default: "binary")
+
+[resources]
+cpu = "1"
+memory = "512MB"
+disk = "1GB"
+
+# These commands are optional. If provided, they will be executed.
+# on linux, containerd commands are executed using runc, you can override these commands
+# check `runc.md` for more information
+# [commands]
+# start = "docker run -d --name ipfs-sc -p 4001:4001 -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/kubo:latest"
+# stop = "docker stop ipfs-sc"
+# status = "docker ps -a | grep ipfs-sc"
+# logs = "docker logs ipfs-sc -f"
