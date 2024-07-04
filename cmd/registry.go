@@ -133,12 +133,13 @@ func connect() (*grpc.ClientConn, pb.PluginRegistryClient) {
 	logger := log.GetLogger(context.Background())
 	// get url and port from config file. TODO Create it if it doesn't exist
 	configFile := os.Getenv("HOME") + "/.vimana/registry.toml"
+	// set to localhost if running registry locally
 	url := os.Getenv("PLUGIN_REGISTRY_URL")
 	port := "50051"
 
 	// if url is not set, use default value
 	if url == "" {
-		url = "localhost"
+		url = "registry.vistara.dev"
 	}
 
 	if _, err := os.Stat(configFile); os.IsExist(err) {
