@@ -3,3 +3,4 @@ __MACOSX
 vimana*
 .DS_Store
 .vscode
+.env

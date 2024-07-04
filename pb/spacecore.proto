@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pb";
+
+service PluginRegistry {
+    rpc RegisterPlugin (RegisterPluginRequest) returns (RegisterPluginResponse);
+    rpc DiscoverPlugins (DiscoverPluginsRequest) returns (DiscoverPluginsResponse);
+    rpc GetPlugin (GetPluginRequest) returns (GetPluginResponse);
+}
+message Plugin {
+    string name = 1;
+    string version = 2;
+    string cid = 3;
+    string path = 4;
+}
+
+message RegisterPluginRequest {
+    string name = 1;
+    string version = 2;
+    string plugin = 3;
+}
+
+message RegisterPluginResponse {
+    string message = 1;
+    string cid = 2;
+}
+
+message DiscoverPluginsRequest {
+    optional string name = 1;
+    optional string cid = 2;
+}
+
+message DiscoverPluginsResponse {
+    repeated Plugin plugins = 1;
+}
+
+
+message GetPluginRequest {
+    string name = 1;
+    string version = 2;
+}
+
+message GetPluginResponse {
+    Plugin plugin = 1;
+}

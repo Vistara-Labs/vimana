@@ -51,7 +51,18 @@ func InitCLI() error {
 		Output:    "stderr",
 	})
 
-	rootCmd = &cobra.Command{Use: "vimana"}
+	rootCmd = &cobra.Command{
+		Use:   "vimana",
+		Short: "Orchestration client for running spacecores",
+		Long:  "Vimana is an orchestration client and a cli for managing spacecore plugins.",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 {
+				vimanaFig := figure.NewFigure("vimana", "isometric1", true)
+				vimanaFig.Print()
+				cmd.Help()
+			}
+		},
+	}
 
 	commands, err := GetCommandsFromConfig(configFile, CommanderRegistry)
 	if err != nil {
@@ -59,24 +70,34 @@ func InitCLI() error {
 		return err
 	}
 
+	rootCmd.AddCommand(initVimana())
 	rootCmd.AddCommand(commands...)
 	rootCmd.AddCommand(ScaffoldNew)
 	rootCmd.AddCommand(pluginCommand())
-	rootCmd.AddCommand(registryCommand())
-	rootCmd.AddCommand(initVimana())
-	rootCmd.AddCommand(repoCommand())
+	// rootCmd.AddCommand(agentCommand())
 	rootCmd.AddCommand(versionCommand())
-	rootCmd.AddCommand(migrateCommand())
+	// rootCmd.AddCommand(migrateCommand())
+
+	rootCmd.AddCommand(registryCommands()...)
 
 	logger.AddFlagsToCommand(rootCmd, &logger.Config{})
 
+	rootCmd.Aliases = []string{"v"}
+
+	rootCmd.Example = `
+	  vimana scaffold fancy-ai-agent
+	  vimana register <spacecore> <plugin_path>
+	  vimana search <spacecore>
+	  vimana get <plugin_name>
+	  vimana plugin <plugin_path> start
+	  vimana plugin <plugin_path> status
+	  vimana plugin <plugin_path> stop
+	  vimana plugin <plugin_path> logs
+	`
 	return rootCmd.Execute()
 }
 
 func init() {
-	vimanaFig := figure.NewFigure("vimana", "isometric1", true)
-	vimanaFig.Print()
-
 	if err := InitCLI(); err != nil {
 		log.Fatalf("Failed to initialize CLI: %s", err)
 	}
