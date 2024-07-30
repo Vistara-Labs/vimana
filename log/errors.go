@@ -16,7 +16,7 @@ func (e invalidLogFormatError) Error() string {
 	return fmt.Sprintf("logger format %s is invalid", e.format)
 }
 
-// IsInvalidLogFormat tests an error to see if its a invalid log format error.
+// IsInvalidLogFormat tests an error to see if it's an invalid log format error.
 func IsInvalidLogFormat(err error) bool {
 	var e invalidLogFormatError
 
