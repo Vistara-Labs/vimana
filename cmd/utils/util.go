@@ -70,7 +70,7 @@ func ExtractTarGz(gzipStream io.Reader) error {
 				return fmt.Errorf("ExtractTarGz: Close() failed: %w", err)
 			}
 		default:
-			return fmt.Errorf("ExtractTarGz: uknown type: %b in %s", header.Typeflag, header.Name)
+			return fmt.Errorf("ExtractTarGz: unknown type: %b in %s", header.Typeflag, header.Name)
 		}
 	}
 	if err != io.EOF {
