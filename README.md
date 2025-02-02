@@ -61,7 +61,7 @@ This makes it super easy for developers to focus on the business logic of how th
 To start, developers can `scaffold` a new Spacecore using Vimana. This creates a new Spacecore with a programming plugin that can be deployed anywhere. Developers can then use Vimana to manage the lifecycle of the Spacecore, including starting, stopping, checking status, and viewing logs.
 You can build a Spacecore in any modern programming language. Currently, scaffold command bootstraps a new Spacecore as a Go project. It clones the Spacecore template from https://github.com/vistara-labs/spacecore-template and customizes it with your environment.
 
-Scalfolding a new Spacecore:
+Scaffolding a new Spacecore:
 
 ```sh
 vimana scaffold
