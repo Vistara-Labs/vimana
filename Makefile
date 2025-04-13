@@ -24,7 +24,22 @@ build:
 clean:
 	@echo "Cleaning..."
 	go clean
-	rm -f ${BINARY_NAME}
+	@if [ -f "$(BINARY_NAME)" ]; then \
+		echo "File $(BINARY_NAME) exists. Deleting..."; \
+		rm -f "$(BINARY_NAME)"; \
+	fi
+	@if [ -d "${BINARY_NAME}-darwin-arm64" ]; then \
+    echo "Directory ${BINARY_NAME}-darwin-arm64 exists. Deleting..."; \
+    rm -rf "${BINARY_NAME}-darwin-arm64"; \
+	fi
+	@if [ -d "${BINARY_NAME}-linux-amd64" ]; then \
+    echo "Directory ${BINARY_NAME}-linux-amd64 exists. Deleting..."; \
+    rm -rf "${BINARY_NAME}-linux-amd64"; \
+	fi
+	@if [ -d "${BINARY_NAME}-linux-arm64" ]; then \
+    echo "Directory ${BINARY_NAME}-linux-arm64 exists. Deleting..."; \
+    rm -rf "${BINARY_NAME}-linux-arm64"; \
+	fi
 
 # Runs tests
 test:
