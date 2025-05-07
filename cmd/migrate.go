@@ -35,7 +35,7 @@ func upgradeVimana() {
 		fmt.Println("Downloading vimana error: status code =", resp.R.StatusCode)
 		return
 	}
-	// reponse
+	// response
 	// println(resp.Text())
 
 	type person struct {
@@ -149,7 +149,7 @@ func upgradeVimana() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		fmt.Println("Upgrade vimana succesfully")
+		fmt.Println("Upgrade vimana successfully")
 	}
 	os.Chmod(VIMANA_BIN_PATH, os.FileMode(0755))
 	os.RemoveAll("./vimana-" + OS + "-" + ARCH + "/")
