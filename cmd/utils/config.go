@@ -45,7 +45,7 @@ func LoadVimanaConfig(configFile string) (*InitConfig, error) {
 }
 
 func SaveConfig(config *InitConfig, initPath string) error {
-	// conver the configuration to TOML
+	// convert the configuration to TOML
 	var buffer bytes.Buffer
 
 	encoder := toml.NewEncoder(&buffer)
