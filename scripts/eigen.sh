@@ -400,9 +400,9 @@ completions() {
     BASH_COMPLETION_SCRIPTS_DIR=~/.local/share/bash-completion/completions
     BASH_COMPLETION_SCRIPT_PATH=$BASH_COMPLETION_SCRIPTS_DIR/eigenlayer.sh
     mkdir -p $BASH_COMPLETION_SCRIPTS_DIR
-    COBRA_COMPLETION_SUCCEDED=false
-    $BINDIR/$BINARY completion bash > $BASH_COMPLETION_SCRIPT_PATH 2> /dev/null && COBRA_COMPLETION_SUCCEDED=true
-    if [ $COBRA_COMPLETION_SUCCEDED = true ]
+    COBRA_COMPLETION_SUCCEEDED=false
+    $BINDIR/$BINARY completion bash > $BASH_COMPLETION_SCRIPT_PATH 2> /dev/null && COBRA_COMPLETION_SUCCEEDED=true
+    if [ $COBRA_COMPLETION_SUCCEEDED = true ]
     then
       touch $BASH_COMPLETION_MAIN
       sed_in_place "/.*# eigenlayer completion/d" $BASH_COMPLETION_MAIN
@@ -441,9 +441,9 @@ completions() {
     ZSH_COMPLETION_SCRIPTS_DIR=~/.local/share/zsh-completion/completions
     ZSH_COMPLETION_SCRIPT_PATH=$ZSH_COMPLETION_SCRIPTS_DIR/_eigenlayer
     mkdir -p $ZSH_COMPLETION_SCRIPTS_DIR
-    COBRA_COMPLETION_SUCCEDED=false
-    $BINDIR/$BINARY completion zsh > $BASH_COMPLETION_SCRIPT_PATH 2> /dev/null && COBRA_COMPLETION_SUCCEDED=true
-    if [ $COBRA_COMPLETION_SUCCEDED = true ]
+    COBRA_COMPLETION_SUCCEEDED=false
+    $BINDIR/$BINARY completion zsh > $BASH_COMPLETION_SCRIPT_PATH 2> /dev/null && COBRA_COMPLETION_SUCCEEDED=true
+    if [ $COBRA_COMPLETION_SUCCEEDED = true ]
     then
       touch $ZSH_COMPLETION_MAIN
       sed_in_place "/.*# eigenlayer completion/d" $ZSH_COMPLETION_MAIN
