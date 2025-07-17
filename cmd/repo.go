@@ -181,7 +181,7 @@ func repoCommand() *cobra.Command {
 	// 		}
 	// 		logger.Info(repo_url)
 
-	// 		// Download the spaceocre from the source url
+	// 		// Download the spacecore from the source url
 	// 		// Verify the downloaded content (checksum)
 	// 		// Register the spacecore in the Vimana system
 	// 		// Add the spacecore to the config.toml file
