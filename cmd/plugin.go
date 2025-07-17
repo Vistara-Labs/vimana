@@ -43,7 +43,7 @@ func pluginCommand() *cobra.Command {
 			pluginName := filepath.Base(pluginPath)
 			logger := setupLogger(pluginName)
 
-			// Start the goroutine to hande the plugin command
+			// Start the goroutine to handle the plugin command
 			go func() {
 				for cmd := range commands {
 					response := executePluginCommand(cmd, logger)
