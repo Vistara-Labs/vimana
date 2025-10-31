@@ -1,5 +1,6 @@
 # Vimana
 
+[![release](https://img.shields.io/github/v/release/Vistara-Labs/vimana)](https://github.com/Vistara-Labs/vimana/releases)
 [![build](https://github.com/Vistara-Labs/vimana/actions/workflows/buildcicd.yml/badge.svg)](https://github.com/Vistara-Labs/vimana/actions/workflows/buildcicd.yml)
 
 Vimana is an orchestration client that enables developers to build and deploy networks in the Vistara ecosystem. It simplifies network orchestration by abstracting the complexities of network management and providing a simple interface for developers to build and deploy networks in the Vistara ecosystem.
